@@ -21,8 +21,8 @@ router.post('/resume', upload.single('file'), (req, res) => {
     const filename = `${uuidv4()}${file.mimetype.replace('application/', '.')}`;
 
     pipeline(
-      // `${file.buffer}`,
-      file.stream,
+      `${file.buffer}`,
+      // file.stream,
       fs.createWriteStream(`${__dirname}/../public/resume/${filename}`)
     )
       .then(() => {
@@ -50,8 +50,8 @@ router.post('/profile', upload.single('file'), (req, res) => {
     const filename = `${uuidv4()}${file.mimetype.replace('image/', '.')}`;
 
     pipeline(
-      // `${file.buffer}`,
-      file.stream,
+      `${file.buffer}`,
+      // file.stream,
       fs.createWriteStream(`${__dirname}/../public/profile/${filename}`)
     )
       .then(() => {
