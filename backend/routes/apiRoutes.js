@@ -886,7 +886,7 @@ router.put("/applications/:id", jwtAuth, (req, res) => {
 });
 
 // get a list of final applicants for current job : recruiter
-// get a list of final applicants for all his jobs : recuiter
+// get a list of final applicants for all his jobs : recruiter
 router.get("/applicants", jwtAuth, (req, res) => {
   const user = req.user;
   if (user.type === "recruiter") {
