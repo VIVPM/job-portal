@@ -107,7 +107,7 @@ const Profile = (props) => {
   const classes = useStyles();
   const setPopup = useContext(SetPopupContext);
   // const [userData, setUserData] = useState();
-  const [setOpen] = useState(false);
+  // const [setOpen] = useState(false);
 
   const [profileDetails, setProfileDetails] = useState({
     name: "",
@@ -212,7 +212,7 @@ const Profile = (props) => {
         });
         console.log(err.response);
       });
-    setOpen(false);
+    // setOpen(false);
   };
 
   return (
