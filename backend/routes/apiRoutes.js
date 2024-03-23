@@ -34,6 +34,7 @@ router.post("/jobs", jwtAuth, (req, res) => {
     skillsets: data.skillsets,
     jobType: data.jobType,
     location: data.location,
+    companyName:data.companyName,
     duration: data.duration,
     salary: data.salary,
     rating: data.rating,
@@ -98,6 +99,15 @@ router.get("/jobs", jwtAuth, (req, res) => {
       ...findParams,
       location: {
         $regex: new RegExp(req.query.locationq, "i"),
+      },
+    };
+  }
+
+  if (req.query.companyName) {
+    findParams = {
+      ...findParams,
+      location: {
+        $regex: new RegExp(req.query.companyNameq, "i"),
       },
     };
   }
