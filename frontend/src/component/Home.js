@@ -352,7 +352,7 @@ const FilterPopup = (props) => {
                 label="Company Name"
                 variant="outlined"
                 fullWidth
-                value={searchOptions.location}
+                value={searchOptions.companyName}
                 onChange={(event) =>
                   setSearchOptions({
                     ...searchOptions,

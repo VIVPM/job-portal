@@ -98,7 +98,7 @@ router.get("/jobs", jwtAuth, (req, res) => {
     findParams = {
       ...findParams,
       location: {
-        $regex: new RegExp(req.query.locationq, "i"),
+        $regex: new RegExp(req.query.location, "i"),
       },
     };
   }
@@ -106,8 +106,8 @@ router.get("/jobs", jwtAuth, (req, res) => {
   if (req.query.companyName) {
     findParams = {
       ...findParams,
-      location: {
-        $regex: new RegExp(req.query.companyNameq, "i"),
+      companyName: {
+        $regex: new RegExp(req.query.companyName, "i"),
       },
     };
   }
