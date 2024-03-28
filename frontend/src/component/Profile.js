@@ -7,6 +7,7 @@ import {
   Paper,
   makeStyles,
   TextField,
+  Avatar,
 } from "@material-ui/core";
 import axios from "axios";
 import ChipInput from "material-ui-chip-input";
@@ -28,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     // padding: "30px",
+  },
+  avatar: {
+    width: theme.spacing(17), // 136px
+    height: theme.spacing(17), // 136px
   },
 }));
 
@@ -215,6 +220,34 @@ const Profile = (props) => {
     // setOpen(false);
   };
 
+  const getResume = () => {
+    if (profileDetails.resume && profileDetails.resume !== "") {
+      axios(profileDetails.resume, {
+        method: "GET",
+        responseType: "blob",
+      })
+        .then((response) => {
+          const file = new Blob([response.data], { type: "application/pdf" });
+          const fileURL = URL.createObjectURL(file);
+          window.open(fileURL);
+        })
+        .catch((error) => {
+          console.log(error);
+          setPopup({
+            open: true,
+            severity: "error",
+            message: "Error downloading resume",
+          });
+        });
+    } else {
+      setPopup({
+        open: true,
+        severity: "error",
+        message: "No resume found",
+      });
+    }
+  };
+
   return (
     <>
       <Grid
@@ -238,6 +271,11 @@ const Profile = (props) => {
               alignItems: "center",
             }}
           >
+            <Avatar
+              src={profileDetails.profile} 
+              alt="Profile Image"
+              className={classes.avatar}
+            />
             <Grid container direction="column" alignItems="stretch" spacing={3}>
               <Grid item>
                 <TextField
@@ -247,6 +285,7 @@ const Profile = (props) => {
                   className={classes.inputBox}
                   variant="outlined"
                   fullWidth
+                  style={{ marginTop: "20px" }}
                 />
               </Grid>
               <MultifieldInput
@@ -275,8 +314,13 @@ const Profile = (props) => {
                     });
                   }}
                   fullWidth
+                  
                 />
+                
               </Grid>
+           
+              
+            
               <Grid item>
                 <FileUploadInput
                   className={classes.inputBox}
@@ -301,7 +345,15 @@ const Profile = (props) => {
             <Button
               variant="contained"
               color="primary"
-              style={{ padding: "10px 50px", marginTop: "30px" }}
+              style={{ marginTop: "15px", padding:"10px" }}
+              onClick={getResume}
+            >
+              Download Resume
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ padding: "10px 50px", marginTop: "20px" }}
               onClick={() => handleUpdate()}
             >
               Update Details
