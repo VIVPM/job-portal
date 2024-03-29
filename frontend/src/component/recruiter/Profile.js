@@ -6,11 +6,14 @@ import {
   // Modal,
   Paper,
   makeStyles,
+  Avatar,
   TextField,
 } from "@material-ui/core";
 import axios from "axios";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
+import FileUploadInput from "../../lib/FileUploadInput";
+import FaceIcon from "@material-ui/icons/Face";
 
 import { SetPopupContext } from "../../App";
 
@@ -27,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     // padding: "30px",
   },
+  avatar: {
+    width: theme.spacing(17), // 136px
+    height: theme.spacing(17), // 136px
+  },
 }));
 
 const Profile = (props) => {
@@ -37,6 +44,7 @@ const Profile = (props) => {
     name: "",
     bio: "",
     contactNumber: "",
+    profile: "",
   });
 
   const [phone, setPhone] = useState("");
@@ -139,6 +147,11 @@ const Profile = (props) => {
               //   width: "60%",
             }}
           >
+            <Avatar
+              src={profileDetails.profile}
+              alt="Profile Image"
+              className={classes.avatar}
+            />
             <Grid container direction="column" alignItems="stretch" spacing={3}>
               <Grid item>
                 <TextField
@@ -182,6 +195,16 @@ const Profile = (props) => {
                   value={phone}
                   onChange={(phone) => setPhone(phone)}
                   style={{ width: "auto" }}
+                />
+              </Grid>
+              <Grid item>
+                <FileUploadInput
+                  className={classes.inputBox}
+                  label="Profile Photo (.jpg/.png)"
+                  icon={<FaceIcon />}
+                  uploadTo={apiList.uploadProfileImage}
+                  handleInput={handleInput}
+                  identifier={"profile"}
                 />
               </Grid>
             </Grid>

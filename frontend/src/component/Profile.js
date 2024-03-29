@@ -24,7 +24,7 @@ import apiList from "../lib/apiList";
 const useStyles = makeStyles((theme) => ({
   body: {
     height: "inherit",
-    width:"200px"
+    // width:"200px"
   },
   popupDialog: {
     height: "100%",
@@ -106,17 +106,21 @@ const MultifieldInput = (props) => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() =>
-            setEducation([
-              ...education,
-              {
-                institutionName: "",
-                startYear: "",
-                endYear: "",
-                Percentage:"",
-              },
-            ])
-          }
+          // onClick={() =>
+          //   setEducation([
+          //     ...education,
+          //     {
+          //       institutionName: "",
+          //       startYear: "",
+          //       endYear: "",
+          //       Percentage:"",
+          //     },
+          //   ])
+          // }
+          onClick={() => setEducation(currentEducation => [
+            ...currentEducation,
+            { institutionName: "", startYear: "", endYear: "", Percentage: "" },
+          ])}
           className={classes.inputBox}
         >
           Add another institution details

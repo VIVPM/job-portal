@@ -22,6 +22,8 @@ import Rating from "@material-ui/lab/Rating";
 import axios from "axios";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+// import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/material.css";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 
 import { SetPopupContext } from "../../App";
@@ -56,7 +58,23 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(17),
     height: theme.spacing(17),
   },
+  sopBlock: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    marginBottom: theme.spacing(1), 
+    maxWidth: '90%', 
+  },
+  sopLabel: {
+    marginRight: theme.spacing(1), 
+    whiteSpace: 'nowrap', 
+  },
+  sopContent: {
+    wordBreak: 'break-word',
+  },
+
 }));
+
+
 
 const FilterPopup = (props) => {
   const classes = useStyles();
@@ -349,6 +367,14 @@ const ApplicationTile = (props) => {
     setOpen(false);
   };
 
+  const getFormattedNumber = (contactNumber) => {
+    const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
+    const countryCode = cleanedNumber.slice(0, -10);
+    const lastTenDigits = cleanedNumber.slice(-10);
+    return `${countryCode} ${lastTenDigits}`;
+  };
+
+
   const colorSet = {
     applied: "#3454D1",
     shortlisted: "#DC851F",
@@ -590,19 +616,30 @@ const ApplicationTile = (props) => {
               return `${edu.Percentage}%`
             })}
           </Grid>
-          {/* <Grid item>
-            Contact Number: {application.jobApplicant.contactNumber !== "" ? application.jobApplicant.contactNumber : ""}
-          </Grid> */}
           <Grid item>
-            SOP: {application.sop !== "" ? application.sop : "Not Submitted"}
+            Contact Number: {getFormattedNumber(application.jobApplicant.contactNumber)}
+            {/* <PhoneInput
+              value={getFormattedNumber(application.jobApplicant.contactNumber)}
+              onChange={() => { }}
+              disabled={true} // This makes the PhoneInput read-only
+            /> */}
           </Grid>
-          <Grid item> Skill sets:    
+          <Grid item>
+            <div className={classes.sopBlock}>
+              <Typography variant="body1" className={classes.sopLabel}>
+                SOP:{" "}
+              </Typography>
+              <Typography variant="body1" className={classes.sopContent}>
+                {application.sop !== "" ? application.sop : "Not Submitted"}
+              </Typography>
+            </div>
+          </Grid>
+         
+          <Grid item>
+            Skill sets:{" "}
             {application.jobApplicant.skills.map((skill) => (
               <Chip label={skill} style={{ marginRight: "5px" }} />
             ))}
-            {/* {application.jobApplicant.skills.map((skill, index) => (
-              <Chip key={index} label={skill} style={{ marginRight: "2px", marginBottom: "10px" }} />
-            ))} */}
           </Grid>
         </Grid>
         <Grid item container direction="column" xs={3}>

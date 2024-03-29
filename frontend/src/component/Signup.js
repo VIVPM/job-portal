@@ -504,6 +504,24 @@ const Login = (props) => {
                 onChange={(phone) => setPhone(phone)}
               />
             </Grid>
+          
+          <Grid item>
+              <FileUploadInput
+                className={classes.inputBox}
+                label="Profile Photo (.jpg/.png)"
+                icon={<FaceIcon />}
+                // value={files.profileImage}
+                // onChange={(event) =>
+                //   setFiles({
+                //     ...files,
+                //     profileImage: event.target.files[0],
+                //   })
+                // }
+                uploadTo={apiList.uploadProfileImage}
+                handleInput={handleInput}
+                identifier={"profile"}
+              />
+            </Grid>
           </>
         )}
 
