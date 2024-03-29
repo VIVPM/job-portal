@@ -63,7 +63,7 @@ const MultifieldInput = (props) => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <TextField
               label="Start Year"
               value={obj.startYear}
@@ -76,7 +76,7 @@ const MultifieldInput = (props) => {
               }}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <TextField
               label="End Year"
               value={obj.endYear}
@@ -85,6 +85,19 @@ const MultifieldInput = (props) => {
               onChange={(event) => {
                 const newEdu = [...education];
                 newEdu[key].endYear = event.target.value;
+                setEducation(newEdu);
+              }}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              label="Percentage"
+              value={obj.Percentage}
+              variant="outlined"
+              type="number"
+              onChange={(event) => {
+                const newEdu = [...education];
+                newEdu[key].Percentage = event.target.value;
                 setEducation(newEdu);
               }}
             />
@@ -102,6 +115,7 @@ const MultifieldInput = (props) => {
                 institutionName: "",
                 startYear: "",
                 endYear: "",
+                Percentage:"",
               },
             ])
           }
@@ -140,6 +154,7 @@ const Login = (props) => {
       institutionName: "",
       startYear: "",
       endYear: "",
+      Percentage:"",
     },
   ]);
 

@@ -586,6 +586,11 @@ const ApplicationTile = (props) => {
               .join(", ")}
           </Grid>
           <Grid item>
+            Percentage:{" "}{application.jobApplicant.education.map((edu,index) => {
+              return `${edu.Percentage}%`
+            })}
+          </Grid>
+          <Grid item>
             SOP: {application.sop !== "" ? application.sop : "Not Submitted"}
           </Grid>
           <Grid item>

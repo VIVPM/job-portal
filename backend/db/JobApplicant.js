@@ -36,6 +36,11 @@ let schema = new mongoose.Schema(
             },
           ],
         },
+        Percentage:{
+          type:Number,
+          required:true,
+          max:100.0,
+        }
       },
     ],
     skills: [String],

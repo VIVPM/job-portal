@@ -22,6 +22,7 @@ import apiList from "../lib/apiList";
 const useStyles = makeStyles((theme) => ({
   body: {
     height: "inherit",
+    width:"200px"
   },
   popupDialog: {
     height: "100%",
@@ -44,7 +45,7 @@ const MultifieldInput = (props) => {
     <>
       {education.map((obj, key) => (
         <Grid item container className={classes.inputBox} key={key}>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <TextField
               label={`Institution Name #${key + 1}`}
               value={education[key].institutionName}
@@ -81,6 +82,20 @@ const MultifieldInput = (props) => {
                 newEdu[key].endYear = event.target.value;
                 setEducation(newEdu);
               }}
+              // style={{ marginTop: "10px" }}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              label="Percentage"
+              value={obj.Percentage}
+              variant="outlined"
+              type="number"
+              onChange={(event) => {
+                const newEdu = [...education];
+                newEdu[key].Percentage = event.target.value;
+                setEducation(newEdu);
+              }}
             />
           </Grid>
         </Grid>
@@ -96,6 +111,7 @@ const MultifieldInput = (props) => {
                 institutionName: "",
                 startYear: "",
                 endYear: "",
+                Percentage:"",
               },
             ])
           }
@@ -127,6 +143,7 @@ const Profile = (props) => {
       institutionName: "",
       startYear: "",
       endYear: "",
+      Percentage:"",
     },
   ]);
 
@@ -158,6 +175,7 @@ const Profile = (props) => {
               institutionName: edu.institutionName ? edu.institutionName : "",
               startYear: edu.startYear ? edu.startYear : "",
               endYear: edu.endYear ? edu.endYear : "",
+              Percentage: edu.Percentage ? edu.Percentage : "",
             }))
           );
         }
@@ -348,7 +366,7 @@ const Profile = (props) => {
               style={{ marginTop: "15px", padding:"10px" }}
               onClick={getResume}
             >
-              Download Resume
+              View Resume
             </Button>
             <Button
               variant="contained"
