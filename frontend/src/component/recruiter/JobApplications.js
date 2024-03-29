@@ -590,13 +590,19 @@ const ApplicationTile = (props) => {
               return `${edu.Percentage}%`
             })}
           </Grid>
+          {/* <Grid item>
+            Contact Number: {application.jobApplicant.contactNumber !== "" ? application.jobApplicant.contactNumber : ""}
+          </Grid> */}
           <Grid item>
             SOP: {application.sop !== "" ? application.sop : "Not Submitted"}
           </Grid>
-          <Grid item>
+          <Grid item> Skill sets:    
             {application.jobApplicant.skills.map((skill) => (
-              <Chip label={skill} style={{ marginRight: "2px" }} />
+              <Chip label={skill} style={{ marginRight: "5px" }} />
             ))}
+            {/* {application.jobApplicant.skills.map((skill, index) => (
+              <Chip key={index} label={skill} style={{ marginRight: "2px", marginBottom: "10px" }} />
+            ))} */}
           </Grid>
         </Grid>
         <Grid item container direction="column" xs={3}>

@@ -10,6 +10,8 @@ import {
   Avatar,
 } from "@material-ui/core";
 import axios from "axios";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/material.css";
 import ChipInput from "material-ui-chip-input";
 import FileUploadInput from "../lib/FileUploadInput";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -129,7 +131,7 @@ const Profile = (props) => {
   const setPopup = useContext(SetPopupContext);
   // const [userData, setUserData] = useState();
   // const [setOpen] = useState(false);
-
+  const [phone, setPhone] = useState("");
   const [profileDetails, setProfileDetails] = useState({
     name: "",
     education: [],
@@ -169,6 +171,7 @@ const Profile = (props) => {
       .then((response) => {
         console.log(response.data);
         setProfileDetails(response.data);
+        setPhone(response.data.contactNumber);
         if (response.data.education.length > 0) {
           setEducation(
             response.data.education.map((edu) => ({
@@ -212,6 +215,17 @@ const Profile = (props) => {
           return obj;
         }),
     };
+    if (phone !== "") {
+      updatedDetails = {
+        ...profileDetails,
+        contactNumber: `+${phone}`,
+      };
+    } else {
+      updatedDetails = {
+        ...profileDetails,
+        contactNumber: "",
+      };
+    }
 
     axios
       .put(apiList.user, updatedDetails, {
@@ -335,6 +349,20 @@ const Profile = (props) => {
                   
                 />
                 
+              </Grid>
+              <Grid
+                item
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <PhoneInput
+                  country={"in"}
+                  value={phone}
+                  onChange={(phone) => setPhone(phone)}
+                  style={{ width: "auto" }}
+                />
               </Grid>
            
               

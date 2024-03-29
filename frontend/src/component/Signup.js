@@ -226,6 +226,17 @@ const Login = (props) => {
           return obj;
         }),
     };
+    if (phone !== "") {
+      updatedDetails = {
+        ...signupDetails,
+        contactNumber: `+${phone}`,
+      };
+    } else {
+      updatedDetails = {
+        ...signupDetails,
+        contactNumber: "",
+      };
+    }
 
     setSignupDetails(updatedDetails);
 
@@ -423,6 +434,13 @@ const Login = (props) => {
                 }
               />
             </Grid>
+              <Grid item>
+                <PhoneInput
+                  country={"in"}
+                  value={phone}
+                  onChange={(phone) => setPhone(phone)}
+                />
+              </Grid>
             <Grid item>
               <FileUploadInput
                 className={classes.inputBox}

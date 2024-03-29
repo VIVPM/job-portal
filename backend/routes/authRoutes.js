@@ -33,6 +33,7 @@ router.post("/signup", (req, res) => {
               name: data.name,
               education: data.education,
               skills: data.skills,
+              contactNumber: data.contactNumber,
               rating: data.rating,
               resume: data.resume,
               profile: data.profile,
