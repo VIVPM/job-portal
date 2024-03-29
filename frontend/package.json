@@ -17,7 +17,15 @@
     "react-phone-input-2": "^2.13.9",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "bootstrap": "^5.2.0",
+    "file-saver": "^2.0.5",
+    "jspdf": "^2.5.1",
+    "react-bootstrap": "^2.5.0",
+    "react-icons": "^4.4.0",
+    "react-redux": "^8.0.2",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.1"
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",

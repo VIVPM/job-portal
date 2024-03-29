@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passportConfig = require('./lib/passportConfig');
 const cors = require('cors');
+const pdf = require('html-pdf');
 const fs = require('fs');
+const pdfTemplate = require('./documents');
 require('dotenv').config();
 
 // MongoDB
@@ -43,6 +45,21 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(passportConfig.initialize());
+
+app.post('/create-pdf', (req, res) => {
+  pdf.create(pdfTemplate(req.body), {}).toFile('result.pdf', (err) => {
+    if (err) {
+      res.send(Promise.reject());
+    }
+
+    res.send(Promise.resolve());
+  });
+});
+
+app.get('/fetch-pdf', (req, res) => {
+  res.sendFile(`${__dirname}/result.pdf`)
+})
+
 
 // Routing
 app.use('/auth', require('./routes/authRoutes'));

@@ -17,6 +17,8 @@ import AcceptedApplicants from "./component/recruiter/AcceptedApplicants";
 import RecruiterProfile from "./component/recruiter/Profile";
 import MessagePopup from "./lib/MessagePopup";
 import { userType } from "./lib/isAuth";
+import Resume1 from "./Resume1";
+import PdfComponent from './components/PdfComponent';
 
 const useStyles = makeStyles((theme) => ({
   body: {
@@ -85,6 +87,12 @@ function App() {
               </Route>
               <Route exact path="/employees">
                 <AcceptedApplicants />
+              </Route>
+              <Route exact path="/resume1">
+                <Resume1/>
+              </Route>
+              <Route exact path="/preview">
+                <PdfComponent/>
               </Route>
               <Route>
                 <ErrorPage />
