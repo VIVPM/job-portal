@@ -10,8 +10,8 @@ import {
   Avatar,
 } from "@material-ui/core";
 import axios from "axios";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/material.css";
+// import PhoneInput from "react-phone-input-2";
+// import "react-phone-input-2/lib/material.css";
 import ChipInput from "material-ui-chip-input";
 import FileUploadInput from "../lib/FileUploadInput";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -47,7 +47,7 @@ const MultifieldInput = (props) => {
     <>
       {education.map((obj, key) => (
         <Grid item container className={classes.inputBox} key={key}>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <TextField
               label={`Institution Name #${key + 1}`}
               value={education[key].institutionName}
@@ -86,6 +86,19 @@ const MultifieldInput = (props) => {
               }}
             />
           </Grid>
+          <Grid item xs={3}>
+            <TextField
+              label="Percentage"
+              value={obj.Percentage}
+              variant="outlined"
+              type="number"
+              onChange={(event) => {
+                const newEdu = [...education];
+                newEdu[key].Percentage = event.target.value;
+                setEducation(newEdu);
+              }}
+            />
+          </Grid>
         </Grid>
       ))}
       <Grid item style={{ alignSelf: "center" }}>
@@ -99,6 +112,7 @@ const MultifieldInput = (props) => {
                 institutionName: "",
                 startYear: "",
                 endYear: "",
+                Percentage:"",
               },
             ])
           }
@@ -116,14 +130,14 @@ const Profile = (props) => {
   const setPopup = useContext(SetPopupContext);
   // const [userData, setUserData] = useState();
   // const [setOpen] = useState(false);
-  const [phone, setPhone] = useState("");
+  // const [phone, setPhone] = useState("");
   const [profileDetails, setProfileDetails] = useState({
     name: "",
     education: [],
     skills: [],
     resume: "",
     profile: "",
-    contactNumber1:"",
+    // contactNumber1:"",
   });
 
   const [education, setEducation] = useState([
@@ -131,6 +145,7 @@ const Profile = (props) => {
       institutionName: "",
       startYear: "",
       endYear: "",
+      Percentage:"",
     },
   ]);
 
@@ -162,10 +177,11 @@ const Profile = (props) => {
               institutionName: edu.institutionName ? edu.institutionName : "",
               startYear: edu.startYear ? edu.startYear : "",
               endYear: edu.endYear ? edu.endYear : "",
+              Percentage: edu.Percentage ? edu.Percentage:"",
             }))
           );
         }
-        setPhone(response.data.contactNumber1);
+        // setPhone(response.data.contactNumber1);
       })
       .catch((err) => {
         console.log(err.response.data);
@@ -200,17 +216,17 @@ const Profile = (props) => {
           return obj;
         }),
     };
-    if (phone !== "") {
-      updatedDetails = {
-        ...profileDetails,
-        contactNumber1: `+${phone}`,
-      };
-    } else {
-      updatedDetails = {
-        ...profileDetails,
-        contactNumber1: "",
-      };
-    }
+    // if (phone !== "") {
+    //   updatedDetails = {
+    //     ...profileDetails,
+    //     contactNumber1: `+${phone}`,
+    //   };
+    // } else {
+    //   updatedDetails = {
+    //     ...profileDetails,
+    //     contactNumber1: "",
+    //   };
+    // }
 
     axios
       .put(apiList.user, updatedDetails, {
@@ -336,7 +352,7 @@ const Profile = (props) => {
                 />
                 
               </Grid>
-              <Grid
+              {/* <Grid
                 item
                 style={{
                   display: "flex",
@@ -349,7 +365,7 @@ const Profile = (props) => {
                   onChange={(phone) => setPhone(phone)}
                   style={{ width: "auto" }}
                 />
-              </Grid>
+              </Grid> */}
            
               
             

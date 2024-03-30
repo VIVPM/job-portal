@@ -36,11 +36,11 @@ let schema = new mongoose.Schema(
             },
           ],
         },
-        // Percentage:{
-        //   type:Number,
-        //   required:true,
-        //   max:100.0,
-        // }
+        Percentage:{
+          type:Number,
+          required:true,
+          max:100.0,
+        }
       },
     ],
     contactNumber1: {

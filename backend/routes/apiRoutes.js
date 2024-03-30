@@ -466,11 +466,11 @@ router.put("/user", jwtAuth, (req, res) => {
         if (data.education) {
           jobApplicant.education = data.education;
         }
+        if (data.contactNumber1){
+          jobApplicant.contactNumber1 = data.contactNumber1
+        }
         if (data.skills) {
           jobApplicant.skills = data.skills;
-        }
-        if (data.contactNumber1) {
-          jobApplicant.contactNumber1 = data.contactNumber1;
         }
         if (data.resume) {
           jobApplicant.resume = data.resume;

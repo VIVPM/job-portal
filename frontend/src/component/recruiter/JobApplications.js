@@ -611,11 +611,11 @@ const ApplicationTile = (props) => {
               })
               .join(", ")}
           </Grid>
-          {/* <Grid item>
+          <Grid item>
             Percentage:{" "}{application.jobApplicant.education.map((edu,index) => {
               return `${edu.Percentage}%`
             })}
-          </Grid> */}
+          </Grid>
           <Grid item>
             Contact Number: {getFormattedNumber(application.jobApplicant.contactNumber1)}
             {/* <PhoneInput

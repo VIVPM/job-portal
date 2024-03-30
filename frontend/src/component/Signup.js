@@ -51,7 +51,7 @@ const MultifieldInput = (props) => {
           key={key}
           style={{ paddingLeft: 0, paddingRight: 0 }}
         >
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <TextField
               label={`Institution Name #${key + 1}`}
               value={education[key].institutionName}
@@ -89,6 +89,19 @@ const MultifieldInput = (props) => {
               }}
             />
           </Grid>
+          <Grid item xs={3}>
+            <TextField
+              label="Percentage"
+              value={obj.Percentage}
+              variant="outlined"
+              type="number"
+              onChange={(event) => {
+                const newEdu = [...education];
+                newEdu[key].Percentage = event.target.value;
+                setEducation(newEdu);
+              }}
+            />
+          </Grid>
         </Grid>
       ))}
       <Grid item>
@@ -102,6 +115,7 @@ const MultifieldInput = (props) => {
                 institutionName: "",
                 startYear: "",
                 endYear: "",
+                Percentage:"",
               },
             ])
           }
@@ -135,13 +149,14 @@ const Login = (props) => {
   });
 
   const [phone, setPhone] = useState("");
-  const [phone1,setPhone1] = useState("");
+  // const [phone1,setPhone1] = useState("");
 
   const [education, setEducation] = useState([
     {
       institutionName: "",
       startYear: "",
       endYear: "",
+      Percentage:"",
     },
   ]);
 
@@ -213,17 +228,17 @@ const Login = (props) => {
           return obj;
         }),
     };
-    if (phone !== "") {
-      updatedDetails = {
-        ...signupDetails,
-        contactNumber1: `+${phone}`,
-      };
-    } else {
-      updatedDetails = {
-        ...signupDetails,
-        contactNumber1: "",
-      };
-    }
+    // if (phone !== "") {
+    //   updatedDetails = {
+    //     ...signupDetails,
+    //     contactNumber1: `+${phone}`,
+    //   };
+    // } else {
+    //   updatedDetails = {
+    //     ...signupDetails,
+    //     contactNumber1: "",
+    //   };
+    // }
 
     setSignupDetails(updatedDetails);
 
@@ -423,13 +438,13 @@ const Login = (props) => {
                 }
               />
             </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <PhoneInput
                   country={"in"}
                   value={phone1}
                   onChange={(phone1) => setPhone1(phone1)}
                 />
-              </Grid>
+              </Grid> */}
             <Grid item>
               <FileUploadInput
                 className={classes.inputBox}
