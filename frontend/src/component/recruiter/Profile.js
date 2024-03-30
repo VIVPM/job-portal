@@ -135,7 +135,7 @@ const Profile = (props) => {
         <Grid item>
           <Typography variant="h2">Profile</Typography>
         </Grid>
-        <Grid item xs style={{ width: "100%" }}>
+        <Grid item xs style={{ width: "600px" }}>
           <Paper
             style={{
               padding: "20px",
@@ -155,13 +155,14 @@ const Profile = (props) => {
             <Grid container direction="column" alignItems="stretch" spacing={3}>
               <Grid item>
                 <TextField
+                  style={{
+                    marginTop: "20px"}}
                   label="Name"
                   value={profileDetails.name}
                   onChange={(event) => handleInput("name", event.target.value)}
                   className={classes.inputBox}
                   variant="outlined"
                   fullWidth
-                  style={{ width: "100%" }}
                 />
               </Grid>
               <Grid item>

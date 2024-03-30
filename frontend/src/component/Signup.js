@@ -63,7 +63,7 @@ const MultifieldInput = (props) => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <TextField
               label="Start Year"
               value={obj.startYear}
@@ -76,7 +76,7 @@ const MultifieldInput = (props) => {
               }}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <TextField
               label="End Year"
               value={obj.endYear}
@@ -85,19 +85,6 @@ const MultifieldInput = (props) => {
               onChange={(event) => {
                 const newEdu = [...education];
                 newEdu[key].endYear = event.target.value;
-                setEducation(newEdu);
-              }}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Percentage"
-              value={obj.Percentage}
-              variant="outlined"
-              type="number"
-              onChange={(event) => {
-                const newEdu = [...education];
-                newEdu[key].Percentage = event.target.value;
                 setEducation(newEdu);
               }}
             />
@@ -115,7 +102,6 @@ const MultifieldInput = (props) => {
                 institutionName: "",
                 startYear: "",
                 endYear: "",
-                Percentage:"",
               },
             ])
           }
@@ -145,16 +131,17 @@ const Login = (props) => {
     profile: "",
     bio: "",
     contactNumber: "",
+    contactNumber1:"",
   });
 
   const [phone, setPhone] = useState("");
+  const [phone1,setPhone1] = useState("");
 
   const [education, setEducation] = useState([
     {
       institutionName: "",
       startYear: "",
       endYear: "",
-      Percentage:"",
     },
   ]);
 
@@ -229,16 +216,17 @@ const Login = (props) => {
     if (phone !== "") {
       updatedDetails = {
         ...signupDetails,
-        contactNumber: `+${phone}`,
+        contactNumber1: `+${phone}`,
       };
     } else {
       updatedDetails = {
         ...signupDetails,
-        contactNumber: "",
+        contactNumber1: "",
       };
     }
 
     setSignupDetails(updatedDetails);
+
 
     const verified = !Object.keys(tmpErrorHandler).some((obj) => {
       return tmpErrorHandler[obj].error;
@@ -275,6 +263,7 @@ const Login = (props) => {
       });
     }
   };
+
 
   const handleLoginRecruiter = () => {
     const tmpErrorHandler = {};
@@ -419,10 +408,10 @@ const Login = (props) => {
         </Grid>
         {signupDetails.type === "applicant" ? (
           <>
-            <MultifieldInput
-              education={education}
-              setEducation={setEducation}
-            />
+              <MultifieldInput
+                education={education}
+                setEducation={setEducation}
+              />
             <Grid item>
               <ChipInput
                 className={classes.inputBox}
@@ -437,8 +426,8 @@ const Login = (props) => {
               <Grid item>
                 <PhoneInput
                   country={"in"}
-                  value={phone}
-                  onChange={(phone) => setPhone(phone)}
+                  value={phone1}
+                  onChange={(phone1) => setPhone1(phone1)}
                 />
               </Grid>
             <Grid item>

@@ -47,7 +47,7 @@ const MultifieldInput = (props) => {
     <>
       {education.map((obj, key) => (
         <Grid item container className={classes.inputBox} key={key}>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <TextField
               label={`Institution Name #${key + 1}`}
               value={education[key].institutionName}
@@ -84,20 +84,6 @@ const MultifieldInput = (props) => {
                 newEdu[key].endYear = event.target.value;
                 setEducation(newEdu);
               }}
-              // style={{ marginTop: "10px" }}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Percentage"
-              value={obj.Percentage}
-              variant="outlined"
-              type="number"
-              onChange={(event) => {
-                const newEdu = [...education];
-                newEdu[key].Percentage = event.target.value;
-                setEducation(newEdu);
-              }}
             />
           </Grid>
         </Grid>
@@ -106,21 +92,16 @@ const MultifieldInput = (props) => {
         <Button
           variant="contained"
           color="secondary"
-          // onClick={() =>
-          //   setEducation([
-          //     ...education,
-          //     {
-          //       institutionName: "",
-          //       startYear: "",
-          //       endYear: "",
-          //       Percentage:"",
-          //     },
-          //   ])
-          // }
-          onClick={() => setEducation(currentEducation => [
-            ...currentEducation,
-            { institutionName: "", startYear: "", endYear: "", Percentage: "" },
-          ])}
+          onClick={() =>
+            setEducation([
+              ...education,
+              {
+                institutionName: "",
+                startYear: "",
+                endYear: "",
+              },
+            ])
+          }
           className={classes.inputBox}
         >
           Add another institution details
@@ -142,6 +123,7 @@ const Profile = (props) => {
     skills: [],
     resume: "",
     profile: "",
+    contactNumber1:"",
   });
 
   const [education, setEducation] = useState([
@@ -149,7 +131,6 @@ const Profile = (props) => {
       institutionName: "",
       startYear: "",
       endYear: "",
-      Percentage:"",
     },
   ]);
 
@@ -175,17 +156,16 @@ const Profile = (props) => {
       .then((response) => {
         console.log(response.data);
         setProfileDetails(response.data);
-        setPhone(response.data.contactNumber);
         if (response.data.education.length > 0) {
           setEducation(
             response.data.education.map((edu) => ({
               institutionName: edu.institutionName ? edu.institutionName : "",
               startYear: edu.startYear ? edu.startYear : "",
               endYear: edu.endYear ? edu.endYear : "",
-              Percentage: edu.Percentage ? edu.Percentage : "",
             }))
           );
         }
+        setPhone(response.data.contactNumber1);
       })
       .catch((err) => {
         console.log(err.response.data);
@@ -196,6 +176,7 @@ const Profile = (props) => {
         });
       });
   };
+
 
   // const handleClose = () => {
   //   setOpen(false);
@@ -222,12 +203,12 @@ const Profile = (props) => {
     if (phone !== "") {
       updatedDetails = {
         ...profileDetails,
-        contactNumber: `+${phone}`,
+        contactNumber1: `+${phone}`,
       };
     } else {
       updatedDetails = {
         ...profileDetails,
-        contactNumber: "",
+        contactNumber1: "",
       };
     }
 
@@ -255,6 +236,7 @@ const Profile = (props) => {
       });
     // setOpen(false);
   };
+
 
   const getResume = () => {
     if (profileDetails.resume && profileDetails.resume !== "") {
