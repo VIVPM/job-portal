@@ -43,7 +43,7 @@ let schema = new mongoose.Schema(
         }
       },
     ],
-    contactNumber1: {
+    contactNumber: {
       type: String,
       validate: {
         validator: function (v) {

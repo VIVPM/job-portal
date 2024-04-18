@@ -42,6 +42,9 @@ const Profile = (props) => {
 
   const [profileDetails, setProfileDetails] = useState({
     name: "",
+    email:"",
+    Company:"",
+    YearsExperience:"",
     bio: "",
     contactNumber: "",
     profile: "",
@@ -98,9 +101,10 @@ const Profile = (props) => {
         contactNumber: "",
       };
     }
-
+    console.log(updatedDetails)
     axios
       .put(apiList.user, updatedDetails, {
+        
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -164,6 +168,48 @@ const Profile = (props) => {
                   variant="outlined"
                   fullWidth
                 />
+              </Grid>
+              <Grid item>
+                <TextField
+                  style={{
+                    marginTop: "20px"
+                  }}
+                  label="Email"
+                  value={profileDetails.email}
+                  onChange={(event) => handleInput("email", event.target.value)}
+                  className={classes.inputBox}
+                  variant="outlined"
+                  fullWidth
+                />
+              </Grid>
+              <Grid
+                item
+                container
+                className={classes.inputBox}
+                // style={{ paddingLeft: 0, paddingRight: 0 }}
+              >
+                  <Grid item xs= {6}>
+                    <TextField
+                    style={{ marginTop: "5px" }}
+                      label="Company Name"
+                      value={profileDetails.Company}
+                      onChange={(event) => handleInput("Company", event.target.value)}
+                      className={classes.inputBox}
+                      variant="outlined"
+                      fullWidth
+                    />
+                </Grid>
+                <Grid item xs = {6}>
+                  <TextField
+                    style={{ marginTop: "5px" }}
+                    label="Years of Experience"
+                    value={profileDetails.YearsExperience}
+                    onChange={(event) => handleInput("YearsExperience", event.target.value)}
+                    className={classes.inputBox}
+                    variant="outlined"
+                    fullWidth
+                  />
+                </Grid>
               </Grid>
               <Grid item>
                 <TextField

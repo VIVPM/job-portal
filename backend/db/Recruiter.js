@@ -19,6 +19,15 @@ let schema = new mongoose.Schema(
         msg: "Phone number is invalid!",
       },
     },
+    Company:{
+      type:String,
+      required:true,
+    },
+    YearsExperience:{
+      type:Number,
+      required:true,
+      validator:Number.isInteger,
+    },
     bio: {
       type: String,
     },

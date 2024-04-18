@@ -1,11 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
 html,
 body {
   font-family: "Poppins", sans-serif;
 }
+
 .color-blue {
   color: #17a2b8;
 }
+
+
 .bg-grey {
   background-color: #F8F9FA;
 }

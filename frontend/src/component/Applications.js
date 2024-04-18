@@ -141,6 +141,10 @@ const ApplicationTile = (props) => {
           <Grid item>Location : {application.job.location}</Grid>
           <Grid item>Company Name : {application.job.companyName}</Grid>
           <Grid item>Salary : &#8377; {application.job.salary} per month</Grid>
+          {/* <Grid item>job Description : &#8377; {application.job.jobDescription} </Grid> */}
+          <Grid item>
+            job Description: {application.job.jobDescription !== "" ? application.job.jobDescription : ""}
+          </Grid>
           <Grid item>
             Duration :{" "}
             {application.job.duration !== 0

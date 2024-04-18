@@ -35,6 +35,7 @@ const CreateJobs = (props) => {
 
   const [jobDetails, setJobDetails] = useState({
     title: "",
+    jobDescription:"",
     location: "",
     companyName:"",
     maxApplicants: 100,
@@ -243,6 +244,25 @@ const CreateJobs = (props) => {
                     }}
                     variant="outlined"
                     fullWidth
+                  />
+                </Grid>
+                <Grid item style={{ width: "100%" }}>
+                  <TextField
+                    label="job Description (upto 250 words)"
+                    multiline
+                    minRows={8}
+                    style={{ width: "100%" }}
+                    variant="outlined"
+                    value={jobDetails.jobDescription}
+                    onChange={(event) => {
+                      if (
+                        event.target.value.split(" ").filter(function (n) {
+                          return n !== "";
+                        }).length <= 250
+                      ) {
+                        handleInput("jobDescription", event.target.value);
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item>

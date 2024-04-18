@@ -161,6 +161,7 @@ const JobTile = (props) => {
           <Grid item>Location : {job.location}</Grid>
           <Grid item>Company Name : {job.companyName}</Grid>
           <Grid item>Salary : &#8377; {job.salary} per month</Grid>
+          <Grid item>Job Description: {job.jobDescription}</Grid>
           <Grid item>
             Duration :{" "}
             {job.duration !== 0 ? `${job.duration} month` : `Flexible`}

@@ -360,19 +360,45 @@ const ApplicationTile = (props) => {
   const { application, getData } = props;
   const setPopup = useContext(SetPopupContext);
   const [open, setOpen] = useState(false);
-
   const appliedOn = new Date(application.dateOfApplication);
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const getFormattedNumber = (contactNumber) => {
-    const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
-    const countryCode = cleanedNumber.slice(0, -10);
-    const lastTenDigits = cleanedNumber.slice(-10);
-    return `${countryCode} ${lastTenDigits}`;
-  };
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const userId = application.jobApplicant.userId; 
+        const url = `${apiList.user}/${userId}`;
+
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        
+        setUserEmail(response.data.email);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+        
+      }
+    };
+
+    if (application.jobApplicant.userId) {
+      fetchUserDetails();
+    }
+  }, [application.jobApplicant.userId]);
+
+  // const getFormattedNumber = (contactNumber) => {
+  //   const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
+  //   const countryCode = cleanedNumber.slice(0, -10);
+  //   const lastTenDigits = cleanedNumber.slice(-10);
+  //   return `${countryCode} ${lastTenDigits}`;
+  // };
 
 
   const colorSet = {
@@ -614,15 +640,18 @@ const ApplicationTile = (props) => {
           <Grid item>
             Percentage:{" "}{application.jobApplicant.education.map((edu,index) => {
               return `${edu.Percentage}%`
-            })}
+            }).join(", ")}
           </Grid>
-          <Grid item>
-            Contact Number: {getFormattedNumber(application.jobApplicant.contactNumber1)}
+          {/* <Grid item>
+            Contact Number: {getFormattedNumber(application.jobApplicant.contactNumber1)}  </Grid> */}
             {/* <PhoneInput
               value={getFormattedNumber(application.jobApplicant.contactNumber)}
               onChange={() => { }}
               disabled={true} // This makes the PhoneInput read-only
             /> */}
+        
+          <Grid item>
+            Email: {userEmail}
           </Grid>
           <Grid item>
             <div className={classes.sopBlock}>

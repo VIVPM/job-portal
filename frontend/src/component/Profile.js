@@ -10,8 +10,8 @@ import {
   Avatar,
 } from "@material-ui/core";
 import axios from "axios";
-// import PhoneInput from "react-phone-input-2";
-// import "react-phone-input-2/lib/material.css";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/material.css";
 import ChipInput from "material-ui-chip-input";
 import FileUploadInput from "../lib/FileUploadInput";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -42,6 +42,21 @@ const useStyles = makeStyles((theme) => ({
 const MultifieldInput = (props) => {
   const classes = useStyles();
   const { education, setEducation } = props;
+
+  const handleDeleteLastInstitution = () => {
+    if (education.length <= 1) return; // Prevent deleting if only one entry exists
+
+    const lastEntry = education[education.length - 1];
+    const isLastEntryEmpty = Object.values(lastEntry).some(value => value === "");
+
+    if (isLastEntryEmpty) {
+      // Remove the last entry from the education array
+      const updatedEducation = education.slice(0, -1);
+      setEducation(updatedEducation);
+    } else {
+      alert("The last entry is filled. Cannot delete a filled entry.");
+    }
+  };
 
   return (
     <>
@@ -101,7 +116,7 @@ const MultifieldInput = (props) => {
           </Grid>
         </Grid>
       ))}
-      <Grid item style={{ alignSelf: "center" }}>
+      {/* <Grid item style={{ alignSelf: "center" }}>
         <Button
           variant="contained"
           color="secondary"
@@ -121,6 +136,50 @@ const MultifieldInput = (props) => {
           Add another institution details
         </Button>
       </Grid>
+      <Grid item style={{ alignSelf: "center" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleDeleteLastInstitution}
+          className={classes.inputBox}
+        >
+          Delete Institution Details
+        </Button>
+      </Grid> */}
+      <Grid item container style={{ justifyContent: "center", marginTop: "5px" }}>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() =>
+              setEducation([
+                ...education,
+                {
+                  institutionName: "",
+                  startYear: "",
+                  endYear: "",
+                  Percentage: "",
+                },
+              ])
+            }
+            className={classes.inputBox}
+            style={{ marginRight: "10px" }} // Add some spacing between the buttons
+          >
+            Add another institution details
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleDeleteLastInstitution}
+            className={classes.inputBox}
+          >
+            Delete Institution Details
+          </Button>
+        </Grid>
+      </Grid>
+
     </>
   );
 };
@@ -130,14 +189,15 @@ const Profile = (props) => {
   const setPopup = useContext(SetPopupContext);
   // const [userData, setUserData] = useState();
   // const [setOpen] = useState(false);
-  // const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("");
   const [profileDetails, setProfileDetails] = useState({
     name: "",
+    email: "",
     education: [],
     skills: [],
     resume: "",
     profile: "",
-    // contactNumber1:"",
+    contactNumber:"",
   });
 
   const [education, setEducation] = useState([
@@ -169,7 +229,7 @@ const Profile = (props) => {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setProfileDetails(response.data);
         if (response.data.education.length > 0) {
           setEducation(
@@ -181,7 +241,7 @@ const Profile = (props) => {
             }))
           );
         }
-        // setPhone(response.data.contactNumber1);
+        setPhone(response.data.contactNumber);
       })
       .catch((err) => {
         console.log(err.response.data);
@@ -203,10 +263,11 @@ const Profile = (props) => {
   // };
 
   const handleUpdate = () => {
-    console.log(education);
+    console.log(profileDetails);
 
     let updatedDetails = {
       ...profileDetails,
+      contactNumber: phone ? `+${phone}` : "",
       education: education
         .filter((obj) => obj.institutionName.trim() !== "")
         .map((obj) => {
@@ -219,15 +280,16 @@ const Profile = (props) => {
     // if (phone !== "") {
     //   updatedDetails = {
     //     ...profileDetails,
-    //     contactNumber1: `+${phone}`,
+    //     contactNumber: `+${phone}`,
     //   };
     // } else {
     //   updatedDetails = {
     //     ...profileDetails,
-    //     contactNumber1: "",
+    //     contactNumber: "",
     //   };
     // }
-
+    // console.log(profileDetails)
+    console.log(updatedDetails)
     axios
       .put(apiList.user, updatedDetails, {
         headers: {
@@ -322,6 +384,18 @@ const Profile = (props) => {
                   style={{ marginTop: "20px" }}
                 />
               </Grid>
+              <Grid item>
+                <TextField
+                  label="Email"
+                  value={profileDetails.email}
+                  onChange={(event) => handleInput("email", event.target.value)}
+                  className={classes.inputBox}
+                  variant="outlined"
+                  fullWidth
+                  style={{ marginTop: "20px" }}
+                />
+              </Grid>
+              
               <MultifieldInput
                 education={education}
                 setEducation={setEducation}
@@ -352,7 +426,7 @@ const Profile = (props) => {
                 />
                 
               </Grid>
-              {/* <Grid
+              <Grid
                 item
                 style={{
                   display: "flex",
@@ -365,7 +439,7 @@ const Profile = (props) => {
                   onChange={(phone) => setPhone(phone)}
                   style={{ width: "auto" }}
                 />
-              </Grid> */}
+              </Grid>
            
               
             

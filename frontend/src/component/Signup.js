@@ -41,6 +41,21 @@ const MultifieldInput = (props) => {
   const classes = useStyles();
   const { education, setEducation } = props;
 
+  const handleDeleteLastInstitution = () => {
+    if (education.length <= 1) return; // Prevent deleting if only one entry exists
+
+    const lastEntry = education[education.length - 1];
+    const isLastEntryEmpty = Object.values(lastEntry).some(value => value === "");
+
+    if (isLastEntryEmpty) {
+      // Remove the last entry from the education array
+      const updatedEducation = education.slice(0, -1);
+      setEducation(updatedEducation);
+    } else {
+      alert("The last entry is filled. Cannot delete a filled entry.");
+    }
+  };
+
   return (
     <>
       {education.map((obj, key) => (
@@ -51,7 +66,7 @@ const MultifieldInput = (props) => {
           key={key}
           style={{ paddingLeft: 0, paddingRight: 0 }}
         >
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <TextField
               label={`Institution Name #${key + 1}`}
               value={education[key].institutionName}
@@ -63,7 +78,7 @@ const MultifieldInput = (props) => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <TextField
               label="Start Year"
               value={obj.startYear}
@@ -76,12 +91,13 @@ const MultifieldInput = (props) => {
               }}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <TextField
               label="End Year"
               value={obj.endYear}
               variant="outlined"
               type="number"
+              style={{ marginTop: "20px" }}
               onChange={(event) => {
                 const newEdu = [...education];
                 newEdu[key].endYear = event.target.value;
@@ -89,22 +105,25 @@ const MultifieldInput = (props) => {
               }}
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <TextField
+              
               label="Percentage"
               value={obj.Percentage}
               variant="outlined"
               type="number"
+              style={{ marginTop: "20px" }}
               onChange={(event) => {
                 const newEdu = [...education];
                 newEdu[key].Percentage = event.target.value;
                 setEducation(newEdu);
+                
               }}
             />
           </Grid>
         </Grid>
       ))}
-      <Grid item>
+      {/* <Grid item>
         <Button
           variant="contained"
           color="secondary"
@@ -123,7 +142,44 @@ const MultifieldInput = (props) => {
         >
           Add another institution details
         </Button>
+      </Grid> */}
+      <Grid item container style={{ justifyContent: "center" }}>
+        <Grid item>
+          <Button
+          // style = {{blockSize:"5px"}}
+            variant="contained"
+            color="secondary"
+            onClick={() =>
+              setEducation([
+                ...education,
+                {
+                  institutionName: "",
+                  startYear: "",
+                  endYear: "",
+                  Percentage: "",
+                },
+              ])
+            }
+            className={classes.inputBox}
+            style={{ marginRight: "10px", width: "200px" }} // Add some spacing between the buttons
+          >
+            Add another institution details
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            style={{ marginRight: "10px", width: "200px" }}
+            variant="contained"
+            color="primary"
+            onClick={handleDeleteLastInstitution}
+            className={classes.inputBox}
+            
+          >
+            Delete Institution Details
+          </Button>
+        </Grid>
       </Grid>
+
     </>
   );
 };
@@ -139,13 +195,14 @@ const Login = (props) => {
     email: "",
     password: "",
     name: "",
+    contactNumber: "",
     education: [],
     skills: [],
     resume: "",
     profile: "",
     bio: "",
-    contactNumber: "",
-    contactNumber1:"",
+    Company:"",
+    YearsExperience:"",
   });
 
   const [phone, setPhone] = useState("");
@@ -179,6 +236,19 @@ const Login = (props) => {
       error: false,
       message: "",
     },
+    //  Company: {
+    //    untouched: true,
+    //    required: true,
+    //    error: false,
+    //    message: "",
+    //  },
+    //  YearsExperience: {
+    //    untouched: true,
+    //    required: false,
+    //    error: false,
+    //    message: "",
+    //  },
+    
   });
 
   const handleInput = (key, value) => {
@@ -219,6 +289,7 @@ const Login = (props) => {
 
     let updatedDetails = {
       ...signupDetails,
+      contactNumber: phone ? `+${phone}` : "",
       education: education
         .filter((obj) => obj.institutionName.trim() !== "")
         .map((obj) => {
@@ -231,12 +302,12 @@ const Login = (props) => {
     // if (phone !== "") {
     //   updatedDetails = {
     //     ...signupDetails,
-    //     contactNumber1: `+${phone}`,
+    //     contactNumber: `+${phone}`,
     //   };
     // } else {
     //   updatedDetails = {
     //     ...signupDetails,
-    //     contactNumber1: "",
+    //     contactNumber: "",
     //   };
     // }
 
@@ -438,13 +509,13 @@ const Login = (props) => {
                 }
               />
             </Grid>
-              {/* <Grid item>
+              <Grid item>
                 <PhoneInput
                   country={"in"}
-                  value={phone1}
-                  onChange={(phone1) => setPhone1(phone1)}
+                  value={phone}
+                  onChange={(phone) => setPhone(phone)}
                 />
-              </Grid> */}
+              </Grid>
             <Grid item>
               <FileUploadInput
                 className={classes.inputBox}
@@ -482,6 +553,50 @@ const Login = (props) => {
           </>
         ) : (
           <>
+                <Grid
+                  item
+                  container
+                  className={classes.inputBox}
+                  style={{ paddingLeft: 0, paddingRight: 0 }}
+                >
+                <Grid item>
+                  <TextField
+                    label="Company Name"
+                    value={signupDetails.Company}
+                    onChange={(event) => handleInput("Company", event.target.value)}
+                    className={classes.inputBox}
+                    //  error={inputErrorHandler.Company.error}
+                    //  helperText={inputErrorHandler.Company.message}
+                    //  onBlur={(event) => {
+                    //    if (event.target.value === "") {
+                    //      handleInputError("Company", true, "Company Name is required");
+                    //    } else {
+                    //      handleInputError("Company", false, "");
+                    //    }
+                    //  }}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                  style={{marginTop:"30px"}}
+                    label="Years of Experience"
+                    value={signupDetails.YearsExperience}
+                    onChange={(event) => handleInput("YearsExperience", event.target.value)}
+                    className={classes.inputBox}
+                    //  error={inputErrorHandler.YearsExperience.error}
+                    //  helperText={inputErrorHandler.YearsExperience.message}
+                    //  onBlur={(event) => {
+                    //    if (event.target.value === "") {
+                    //      handleInputError("YearsExperience", true, "Years of Experience is required");
+                    //    } else {
+                    //      handleInputError("YearsExperience", false, "");
+                    //    }
+                    //  }}
+                    variant="outlined"
+                  />
+                </Grid>
+                </Grid>
             <Grid item style={{ width: "100%" }}>
               <TextField
                 label="Bio (upto 250 words)"

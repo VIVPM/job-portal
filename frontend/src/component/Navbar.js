@@ -31,7 +31,7 @@ const Navbar = (props) => {
   };
 
   return (
-    <AppBar position="fixed">
+    <AppBar>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
           Job Portal
@@ -50,6 +50,9 @@ const Navbar = (props) => {
               </Button>
               <Button color="inherit" onClick={() => handleClick("/employees")}>
                 Employees
+              </Button>
+              <Button color="inherit" onClick={() => handleClick("/analytics")}>
+                Analytics
               </Button>
               <Button color="inherit" onClick={() => handleClick("/profile")}>
                 Profile
