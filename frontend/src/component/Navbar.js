@@ -74,7 +74,7 @@ const Navbar = (props) => {
               </Button>
                 {/* <Button
                   color="inherit"
-                  onClick={() => handleClick("/resume1")}
+                  onClick={() => handleClick("/resume")}
                 >
                   Resume Builder
                 </Button> */}
