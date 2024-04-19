@@ -652,7 +652,6 @@ router.put("/user", jwtAuth, (req, res) => {
       // Prepare the updates for the profile model
       const updates = {
         name: data.name,
-        profile: data.profile,
       };
 
       if (user.type === "recruiter") {
@@ -661,12 +660,14 @@ router.put("/user", jwtAuth, (req, res) => {
         if (data.Company) updates.Company = data.Company;
         if (data.YearsExperience) updates.YearsExperience = data.YearsExperience;
         if (data.bio) updates.bio = data.bio;
+        if (data.profile) updates.profile = data.profile;
       } else {
         // Job applicant specific updates
         if (data.contactNumber) updates.contactNumber = data.contactNumber;
         if (data.education) updates.education = data.education;
         if (data.skills) updates.skills = data.skills;
         if (data.resume) updates.resume = data.resume;
+        if (data.profile) updates.profile = data.profile;
       }
 
       // Now update the appropriate profile model

@@ -56,6 +56,20 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(17),
     height: theme.spacing(17),
   },
+  sopBlock: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    marginBottom: theme.spacing(1),
+    maxWidth: '90%',
+    // justifyContent:'center'
+  },
+  sopLabel: {
+    marginRight: theme.spacing(1),
+    whiteSpace: 'nowrap',
+  },
+  sopContent: {
+    wordBreak: 'break-word',
+  },
 }));
 
 const FilterPopup = (props) => {
@@ -560,11 +574,21 @@ const ApplicationTile = (props) => {
           <Grid item>Location: {application.job.location}</Grid>
           <Grid item>Company Name: {application.job.companyName}</Grid>
           <Grid item>Applied On: {appliedOn.toLocaleDateString()}</Grid>
-          <Grid item>
+          {/* <Grid item>
             SOP: {application.sop !== "" ? application.sop : "Not Submitted"}
+          </Grid> */}
+          <Grid item>
+            <div className={classes.sopBlock}>
+              <Typography variant="body1" className={classes.sopLabel}>
+                SOP:{" "}
+              </Typography>
+              {/* <Typography variant="body1" className={classes.sopContent}> */}
+              {application.sop !== "" ? application.sop : "Not Submitted"}
+              {/* </Typography> */}
+            </div>
           </Grid>
           <Grid item>
-            {application.jobApplicant.skills.map((skill,index) => (
+            Skill sets:{" "} {application.jobApplicant.skills.map((skill,index) => (
               <Chip label={skill} style={{ marginRight: "2px" }} />
             ))}
           </Grid>

@@ -49,6 +49,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function JobDescription({ description }) {
+  if (!description) {
+    // Return some default UI or null if no description
+    return <p>No job description available.</p>;
+  }
+
+  // Use the splitting logic only if description is a valid string
+  const points = description.split(/(?<=\d\.) /);
+
+  return (
+    <Grid container direction="column">
+      {points.map((point, index) => (
+        <Grid item key={index}>
+          {point.trim()}
+        </Grid>
+      ))}
+    </Grid>
+  );
+}
+
 const ApplicationTile = (props) => {
   const classes = useStyles();
   const { application } = props;
@@ -129,6 +149,8 @@ const ApplicationTile = (props) => {
     finished: "#4EA5D9",
   };
 
+
+
   return (
     <Paper className={classes.jobTileOuter} elevation={3}>
       <Grid container>
@@ -143,7 +165,7 @@ const ApplicationTile = (props) => {
           <Grid item>Salary : &#8377; {application.job.salary} per month</Grid>
           {/* <Grid item>job Description : &#8377; {application.job.jobDescription} </Grid> */}
           <Grid item>
-            job Description: {application.job.jobDescription !== "" ? application.job.jobDescription : ""}
+            Job Description: {application.job.jobDescription !== "" ? application.job.jobDescription : ""}
           </Grid>
           <Grid item>
             Duration :{" "}
@@ -151,7 +173,7 @@ const ApplicationTile = (props) => {
               ? `${application.job.duration} month`
               : `Flexible`}
           </Grid>
-          <Grid item>
+          <Grid item>Skills Required: {" "}
             {application.job.skillsets.map((skill) => (
               <Chip label={skill} style={{ marginRight: "2px" }} />
             ))}

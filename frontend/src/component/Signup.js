@@ -107,7 +107,7 @@ const MultifieldInput = (props) => {
           </Grid>
           <Grid item xs={6}>
             <TextField
-              
+
               label="Percentage"
               value={obj.Percentage}
               variant="outlined"
@@ -117,7 +117,7 @@ const MultifieldInput = (props) => {
                 const newEdu = [...education];
                 newEdu[key].Percentage = event.target.value;
                 setEducation(newEdu);
-                
+
               }}
             />
           </Grid>
@@ -146,7 +146,7 @@ const MultifieldInput = (props) => {
       <Grid item container style={{ justifyContent: "center" }}>
         <Grid item>
           <Button
-          // style = {{blockSize:"5px"}}
+            // style = {{blockSize:"5px"}}
             variant="contained"
             color="secondary"
             onClick={() =>
@@ -173,7 +173,7 @@ const MultifieldInput = (props) => {
             color="primary"
             onClick={handleDeleteLastInstitution}
             className={classes.inputBox}
-            
+
           >
             Delete Institution Details
           </Button>
@@ -201,8 +201,8 @@ const Login = (props) => {
     resume: "",
     profile: "",
     bio: "",
-    Company:"",
-    YearsExperience:"",
+    Company: "",
+    YearsExperience: "",
   });
 
   const [phone, setPhone] = useState("");
@@ -213,7 +213,7 @@ const Login = (props) => {
       institutionName: "",
       startYear: "",
       endYear: "",
-      Percentage:"",
+      Percentage: "",
     },
   ]);
 
@@ -248,7 +248,7 @@ const Login = (props) => {
     //    error: false,
     //    message: "",
     //  },
-    
+
   });
 
   const handleInput = (key, value) => {
@@ -257,6 +257,13 @@ const Login = (props) => {
       [key]: value,
     });
   };
+  // const handleInput = (key, value) => {
+  //   setSignupDetails(prevDetails => ({
+  //     ...prevDetails,
+  //     [key]: value,
+  //   }));
+  // };
+
 
   const handleInputError = (key, status, message) => {
     setInputErrorHandler({
@@ -494,10 +501,10 @@ const Login = (props) => {
         </Grid>
         {signupDetails.type === "applicant" ? (
           <>
-              <MultifieldInput
-                education={education}
-                setEducation={setEducation}
-              />
+            <MultifieldInput
+              education={education}
+              setEducation={setEducation}
+            />
             <Grid item>
               <ChipInput
                 className={classes.inputBox}
@@ -509,13 +516,13 @@ const Login = (props) => {
                 }
               />
             </Grid>
-              <Grid item>
-                <PhoneInput
-                  country={"in"}
-                  value={phone}
-                  onChange={(phone) => setPhone(phone)}
-                />
-              </Grid>
+            <Grid item>
+              <PhoneInput
+                country={"in"}
+                value={phone}
+                onChange={(phone) => setPhone(phone)}
+              />
+            </Grid>
             <Grid item>
               <FileUploadInput
                 className={classes.inputBox}
@@ -553,55 +560,37 @@ const Login = (props) => {
           </>
         ) : (
           <>
-                <Grid
-                  item
-                  container
+            <Grid
+              item
+              container
+              className={classes.inputBox}
+              style={{ paddingLeft: 0, paddingRight: 0 }}
+            >
+              <Grid item>
+                <TextField
+                  label="Company Name"
+                  value={signupDetails.Company}
+                  onChange={(event) => handleInput("Company", event.target.value)}
                   className={classes.inputBox}
-                  style={{ paddingLeft: 0, paddingRight: 0 }}
-                >
-                <Grid item>
-                  <TextField
-                    label="Company Name"
-                    value={signupDetails.Company}
-                    onChange={(event) => handleInput("Company", event.target.value)}
-                    className={classes.inputBox}
-                    //  error={inputErrorHandler.Company.error}
-                    //  helperText={inputErrorHandler.Company.message}
-                    //  onBlur={(event) => {
-                    //    if (event.target.value === "") {
-                    //      handleInputError("Company", true, "Company Name is required");
-                    //    } else {
-                    //      handleInputError("Company", false, "");
-                    //    }
-                    //  }}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item>
-                  <TextField
-                  style={{marginTop:"30px"}}
-                    label="Years of Experience"
-                    value={signupDetails.YearsExperience}
-                    onChange={(event) => handleInput("YearsExperience", event.target.value)}
-                    className={classes.inputBox}
-                    //  error={inputErrorHandler.YearsExperience.error}
-                    //  helperText={inputErrorHandler.YearsExperience.message}
-                    //  onBlur={(event) => {
-                    //    if (event.target.value === "") {
-                    //      handleInputError("YearsExperience", true, "Years of Experience is required");
-                    //    } else {
-                    //      handleInputError("YearsExperience", false, "");
-                    //    }
-                    //  }}
-                    variant="outlined"
-                  />
-                </Grid>
-                </Grid>
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  style={{ marginTop: "30px" }}
+                  label="Years of Experience"
+                  value={signupDetails.YearsExperience}
+                  onChange={(event) => handleInput("YearsExperience", event.target.value)}
+                  className={classes.inputBox}
+                  variant="outlined"
+                />
+              </Grid>
+            </Grid>
             <Grid item style={{ width: "100%" }}>
               <TextField
                 label="Bio (upto 250 words)"
                 multiline
-                    minRows={8}
+                minRows={8}
                 style={{ width: "100%" }}
                 variant="outlined"
                 value={signupDetails.bio}
@@ -623,8 +612,8 @@ const Login = (props) => {
                 onChange={(phone) => setPhone(phone)}
               />
             </Grid>
-          
-          <Grid item>
+
+            <Grid item>
               <FileUploadInput
                 className={classes.inputBox}
                 label="Profile Photo (.jpg/.png)"
@@ -664,24 +653,3 @@ const Login = (props) => {
 };
 
 export default Login;
-
-// {/* <Grid item>
-//           <PasswordInput
-//             label="Re-enter Password"
-//             value={signupDetails.tmpPassword}
-//             onChange={(event) => handleInput("tmpPassword", event.target.value)}
-//             className={classes.inputBox}
-//             labelWidth={140}
-//             helperText={inputErrorHandler.tmpPassword.message}
-//             error={inputErrorHandler.tmpPassword.error}
-//             onBlur={(event) => {
-//               if (event.target.value !== signupDetails.password) {
-//                 handleInputError(
-//                   "tmpPassword",
-//                   true,
-//                   "Passwords are not same."
-//                 );
-//               }
-//             }}
-//           />
-//         </Grid> */}

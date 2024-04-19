@@ -118,6 +118,26 @@ const JobTile = (props) => {
       });
   };
 
+  function JobDescription({ description }) {
+    if (!description) {
+      // Return some default UI or null if no description
+      return <p>No job description available.</p>;
+    }
+
+    // Use the splitting logic only if description is a valid string
+    const points = description.split(/(?<=\d\.) /);
+
+    return (
+      <Grid container direction="column">
+        {points.map((point, index) => (
+          <Grid item key={index}>
+            {point.trim()}
+          </Grid>
+        ))}
+      </Grid>
+    );
+  }
+
   const handleJobUpdate = () => {
     axios
       .put(`${apiList.jobs}/${job._id}`, jobDetails, {
@@ -173,6 +193,7 @@ const JobTile = (props) => {
             {job.maxPositions - job.acceptedCandidates}
           </Grid>
           <Grid item>
+            Skills Required: {" "}
             {job.skillsets.map((skill) => (
               <Chip label={skill} style={{ marginRight: "2px" }} />
             ))}

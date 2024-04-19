@@ -171,9 +171,9 @@ const Profile = (props) => {
               </Grid>
               <Grid item>
                 <TextField
-                  style={{
-                    marginTop: "20px"
-                  }}
+                  // style={{
+                  //   marginTop: "5px"
+                  // }}
                   label="Email"
                   value={profileDetails.email}
                   onChange={(event) => handleInput("email", event.target.value)}
