@@ -248,7 +248,7 @@ const CreateJobs = (props) => {
                 </Grid>
                 <Grid item style={{ width: "100%" }}>
                   <TextField
-                    label="job Description (upto 250 words)"
+                    label="Job Description (upto 250 words)"
                     multiline
                     minRows={8}
                     style={{ width: "100%" }}

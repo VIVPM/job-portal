@@ -7,7 +7,7 @@ const Welcome = (props) => {
       item
       direction="column"
       alignItems="center"
-      justifyContent="center"
+      justify="center"
       style={{ padding: "30px", minHeight: "93vh" }}
     >
       <Grid item>
@@ -24,7 +24,7 @@ export const ErrorPage = (props) => {
       item
       direction="column"
       alignItems="center"
-      justifyContent="center"
+      justify="center"
       style={{ padding: "30px", minHeight: "93vh" }}
     >
       <Grid item>

@@ -51,6 +51,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function JobDescription({ jobDescriptions }) {
+  return (
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <strong>Job Description:</strong>
+      </Grid>
+      {jobDescriptions.map((desc, index) => (
+        <Grid item xs={12} key={index}>
+          {index + 1}. {desc}.
+        </Grid>
+      ))}
+    </Grid>
+  );
+}
+
+
 const JobTile = (props) => {
   const classes = useStyles();
   const { job } = props;
@@ -111,20 +127,15 @@ const JobTile = (props) => {
             <Rating value={job.rating !== -1 ? job.rating : null} readOnly />
           </Grid>
           <Grid item>Role : {job.jobType}</Grid>
-          <Grid item>Location : {job.location}</Grid>
-          <Grid item>Company Name  : {job.companyName}</Grid>
           <Grid item>Salary : &#8377; {job.salary} per month</Grid>
           <Grid item>
             Duration :{" "}
             {job.duration !== 0 ? `${job.duration} month` : `Flexible`}
           </Grid>
-          <Grid item>
-            job Description: {job.jobDescription !== "" ? job.jobDescription : ""}
-          </Grid>
           <Grid item>Posted By : {job.recruiter.name}</Grid>
           <Grid item>Application Deadline : {deadline}</Grid>
-
-          <Grid item>
+          <Grid item>Job Description: {job.jobDescription}</Grid>
+          <Grid item>Skills Required: {" "}
             {job.skillsets.map((skill) => (
               <Chip label={skill} style={{ marginRight: "2px" }} />
             ))}
@@ -159,7 +170,7 @@ const JobTile = (props) => {
           <TextField
             label="Write SOP (upto 250 words)"
             multiline
-            minRows={8}
+            rows={8}
             style={{ width: "100%", marginBottom: "30px" }}
             variant="outlined"
             value={sop}
@@ -208,7 +219,7 @@ const FilterPopup = (props) => {
               container
               item
               xs={9}
-              justifyContent="space-around"
+              justify="space-around"
               // alignItems="center"
             >
               <Grid item>
@@ -328,46 +339,6 @@ const FilterPopup = (props) => {
           </Grid>
           <Grid container item alignItems="center">
             <Grid item xs={3}>
-              Location
-            </Grid>
-            <Grid item xs={9}>
-              <TextField
-                label="Location"
-                variant="outlined"
-                fullWidth
-                value={searchOptions.location}
-                onChange={(event) =>
-                  setSearchOptions({
-                    ...searchOptions,
-                    location: event.target.value,
-                  })
-                }
-              >
-              </TextField>
-            </Grid>
-          </Grid>
-          <Grid container item alignItems="center">
-            <Grid item xs={3}>
-              Company Name
-            </Grid>
-            <Grid item xs={9}>
-              <TextField
-                label="Company Name"
-                variant="outlined"
-                fullWidth
-                value={searchOptions.companyName}
-                onChange={(event) =>
-                  setSearchOptions({
-                    ...searchOptions,
-                    companyName: event.target.value,
-                  })
-                }
-              >
-              </TextField>
-            </Grid>
-          </Grid>
-          <Grid container item alignItems="center">
-            <Grid item xs={3}>
               Sort
             </Grid>
             <Grid item container direction="row" xs={9}>
@@ -375,7 +346,7 @@ const FilterPopup = (props) => {
                 item
                 container
                 xs={4}
-                justifyContent="space-around"
+                justify="space-around"
                 alignItems="center"
                 style={{ border: "1px solid #D1D1D1", borderRadius: "5px" }}
               >
@@ -431,7 +402,7 @@ const FilterPopup = (props) => {
                 item
                 container
                 xs={4}
-                justifyContent="space-around"
+                justify="space-around"
                 alignItems="center"
                 style={{ border: "1px solid #D1D1D1", borderRadius: "5px" }}
               >
@@ -487,7 +458,7 @@ const FilterPopup = (props) => {
                 item
                 container
                 xs={4}
-                justifyContent="space-around"
+                justify="space-around"
                 alignItems="center"
                 style={{ border: "1px solid #D1D1D1", borderRadius: "5px" }}
               >
@@ -568,8 +539,6 @@ const Home = (props) => {
       partTime: false,
       wfh: false,
     },
-    location: "",
-    companyName:"",
     salary: [0, 100],
     duration: "0",
     sort: {
@@ -601,12 +570,6 @@ const Home = (props) => {
     }
     if (searchOptions.jobType.fullTime) {
       searchParams = [...searchParams, `jobType=Full%20Time`];
-    }
-    if (searchOptions.location) {
-      searchParams = [...searchParams, `location=${searchOptions.location}`];
-    }
-    if (searchOptions.companyName) {
-      searchParams = [...searchParams, `companyName=${searchOptions.companyName}`];
     }
     if (searchOptions.jobType.partTime) {
       searchParams = [...searchParams, `jobType=Part%20Time`];
@@ -690,7 +653,7 @@ const Home = (props) => {
           item
           container
           direction="column"
-          justifyContent="center"
+          justify="center"
           alignItems="center"
         >
           <Grid item xs>
@@ -737,7 +700,7 @@ const Home = (props) => {
           xs
           direction="column"
           alignItems="stretch"
-          justifyContent="center"
+          justify="center"
         >
           {jobs.length > 0 ? (
             jobs.map((job) => {

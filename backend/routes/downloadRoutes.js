@@ -25,7 +25,7 @@ router.get("/resume/:file", (req, res) => {
 
   file.getSignedUrl({
     action: 'read',
-    expires: '23-03-2024'
+    expires: '23-03-2025'
   }).then(signedUrls => {
     // signedUrls[0] contains the file's public URL
     res.redirect(signedUrls[0]);
@@ -54,7 +54,7 @@ router.get("/profile/:file", (req, res) => {
 
   file.getSignedUrl({
     action: 'read',
-    expires: '23-03-2024' // Set an appropriate expiration time
+    expires: '23-03-2025' // Set an appropriate expiration time
   }).then(signedUrls => {
     // signedUrls[0] contains the file's public URL
     res.redirect(signedUrls[0]);

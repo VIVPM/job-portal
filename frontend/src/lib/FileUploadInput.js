@@ -86,7 +86,7 @@ const FileUploadInput = (props) => {
               readOnly: true,
             }}
             variant="outlined"
-            style={{ width: "100%",marginTop:"5px" }}
+            style={{ width: "100%" }}
           />
         </Grid>
         <Grid item xs={3}>

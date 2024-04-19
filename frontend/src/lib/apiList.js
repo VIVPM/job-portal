@@ -1,5 +1,5 @@
 export const server = "http://localhost:4444";
-// export const server1 = "https://console.firebase.google.com/project/job-portal-4e7b4/storage";
+
 const apiList = {
   login: `${server}/auth/login`,
   signup: `${server}/auth/signup`,

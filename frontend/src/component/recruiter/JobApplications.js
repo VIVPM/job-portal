@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import {
   Button,
-  Chip,
+  // Chip,
   Grid,
   IconButton,
   // InputAdornment,
@@ -393,12 +393,12 @@ const ApplicationTile = (props) => {
     }
   }, [application.jobApplicant.userId]);
 
-  // const getFormattedNumber = (contactNumber) => {
-  //   const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
-  //   const countryCode = cleanedNumber.slice(0, -10);
-  //   const lastTenDigits = cleanedNumber.slice(-10);
-  //   return `${countryCode} ${lastTenDigits}`;
-  // };
+  const getFormattedNumber = (contactNumber) => {
+    const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
+    const countryCode = cleanedNumber.slice(0, -10);
+    const lastTenDigits = cleanedNumber.slice(-10);
+    return `${countryCode} ${lastTenDigits}`;
+  };
 
 
   const colorSet = {
@@ -593,6 +593,8 @@ const ApplicationTile = (props) => {
     ),
   };
 
+
+
   return (
     <Paper className={classes.jobTileOuter} elevation={3}>
       <Grid container>
@@ -642,8 +644,8 @@ const ApplicationTile = (props) => {
               return `${edu.Percentage}%`
             }).join(", ")}
           </Grid>
-          {/* <Grid item>
-            Contact Number: {getFormattedNumber(application.jobApplicant.contactNumber1)}  </Grid> */}
+          <Grid item>
+            Contact Number: {getFormattedNumber(application.jobApplicant.contactNumber)}  </Grid>
             {/* <PhoneInput
               value={getFormattedNumber(application.jobApplicant.contactNumber)}
               onChange={() => { }}
@@ -658,18 +660,18 @@ const ApplicationTile = (props) => {
               <Typography variant="body1" className={classes.sopLabel}>
                 SOP:{" "}
               </Typography>
-              <Typography variant="body1" className={classes.sopContent}>
+              {/* <Typography variant="body1" className={classes.sopContent}> */}
                 {application.sop !== "" ? application.sop : "Not Submitted"}
-              </Typography>
+              {/* </Typography> */}
             </div>
           </Grid>
          
-          <Grid item>
+          {/* <Grid item>
             Skill sets:{" "}
             {application.jobApplicant.skills.map((skill) => (
               <Chip label={skill} style={{ marginRight: "5px" }} />
             ))}
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid item container direction="column" xs={3}>
           <Grid item>
