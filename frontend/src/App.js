@@ -1,11 +1,6 @@
 import { createContext, useState } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Grid, makeStyles } from "@material-ui/core";
-<<<<<<< HEAD
-
-=======
-// import { ChakraProvider } from '@chakra-ui/react'
->>>>>>> 0ee198ce7f1572962fe4ee735b68ac6913e2c17a
 import Welcome, { ErrorPage } from "./component/Welcome";
 import Navbar from "./component/Navbar";
 import Login from "./component/Login";
@@ -22,10 +17,8 @@ import RecruiterProfile from "./component/recruiter/Profile";
 import MessagePopup from "./lib/MessagePopup";
 import { userType } from "./lib/isAuth";
 import ApplicationStatusPieChart from "./component/recruiter/ApplicationStatusPieChart";
-<<<<<<< HEAD
-=======
-// import Resume from './Resume';
->>>>>>> 0ee198ce7f1572962fe4ee735b68ac6913e2c17a
+import Body from './components/Body/Body';
+import Context from './context/Context';
 
 const useStyles = makeStyles((theme) => ({
   body: {
@@ -112,15 +105,12 @@ function App() {
                 <Navbar />
                 <AcceptedApplicants />
               </Route>
-<<<<<<< HEAD
-=======
-              {/* <ChakraProvider>
-              <Route exaxt path = "/resume">
-                <Navbar/>
-                <Resume/>
+              <Route exact path = "/resume">
+                <Navbar />
+                <Context>
+                <Body/>
+                </Context>
               </Route>
-              </ChakraProvider> */}
->>>>>>> 0ee198ce7f1572962fe4ee735b68ac6913e2c17a
               <Route>
                 <Navbar />
                 <ErrorPage />
