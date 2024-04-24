@@ -20,6 +20,7 @@ import {
 // import { useParams } from "react-router-dom";
 import Rating from "@material-ui/lab/Rating";
 import axios from "axios";
+import emailjs from 'emailjs-com';
 import FilterListIcon from "@material-ui/icons/FilterList";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
@@ -414,6 +415,7 @@ const ApplicationTile = (props) => {
   const [open, setOpen] = useState(false);
   const [openEndJob, setOpenEndJob] = useState(false);
   const [rating, setRating] = useState(application.jobApplicant.rating);
+  const [userEmail, setUserEmail] = useState('');
 
   const appliedOn = new Date(application.dateOfApplication);
 
@@ -471,38 +473,38 @@ const ApplicationTile = (props) => {
   //   finished: "#4EA5D9",
   // };
 
-  const getResume = () => {
-    if (
-      application.jobApplicant.resume &&
-      application.jobApplicant.resume !== ""
-    ) {
-      const address = `${application.jobApplicant.resume}`;
-      console.log(address);
-      axios(address, {
-        method: "GET",
-        responseType: "blob",
-      })
-        .then((response) => {
-          const file = new Blob([response.data], { type: "application/pdf" });
-          const fileURL = URL.createObjectURL(file);
-          window.open(fileURL);
-        })
-        .catch((error) => {
-          console.log(error);
-          setPopup({
-            open: true,
-            severity: "error",
-            message: "Error",
-          });
-        });
-    } else {
-      setPopup({
-        open: true,
-        severity: "error",
-        message: "No resume found",
-      });
-    }
-  };
+  // const getResume = () => {
+  //   if (
+  //     application.jobApplicant.resume &&
+  //     application.jobApplicant.resume !== ""
+  //   ) {
+  //     const address = `${application.jobApplicant.resume}`;
+  //     console.log(address);
+  //     axios(address, {
+  //       method: "GET",
+  //       responseType: "blob",
+  //     })
+  //       .then((response) => {
+  //         const file = new Blob([response.data], { type: "application/pdf" });
+  //         const fileURL = URL.createObjectURL(file);
+  //         window.open(fileURL);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         setPopup({
+  //           open: true,
+  //           severity: "error",
+  //           message: "Error",
+  //         });
+  //       });
+  //   } else {
+  //     setPopup({
+  //       open: true,
+  //       severity: "error",
+  //       message: "No resume found",
+  //     });
+  //   }
+  // };
 
   const updateStatus = (status) => {
     const address = `${apiList.applications}/${application._id}`;
@@ -535,6 +537,61 @@ const ApplicationTile = (props) => {
         handleCloseEndJob();
       });
   };
+
+  
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const userId = application.jobApplicant.userId;
+        const url = `${apiList.user}/${userId}`;
+
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+
+        setUserEmail(response.data.email);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+
+      }
+    };
+
+    if (application.jobApplicant.userId) {
+      fetchUserDetails();
+    }
+  }, [application.jobApplicant.userId]);
+
+  const sendEmail = () => {
+    console.log(userEmail)
+    const templateParams = {
+      from_name: application.jobApplicant.name,
+      from_email: userEmail, // Make sure you have email in your data
+      message: `Hi ${application.jobApplicant.name}, Congratulations, your application is ${application.status}. `,
+      // Add more parameters as needed
+    };
+
+    emailjs.send('service_fvk9p8i', 'template_yidqktp', templateParams, 'W3x8uLN-ChNS8QQKb')
+      .then((response) => {
+        console.log('Email successfully sent!', response);
+        setPopup({
+          open: true,
+          severity: "success",
+          message: "Email sent successfully",
+        });
+      }, (err) => {
+        console.error('Failed to send email. Error: ', err);
+        setPopup({
+          open: true,
+          severity: "error",
+          message: "Failed to send email",
+        });
+      });
+  };
+
 
   return (
     <Paper className={classes.jobTileOuter} elevation={3}>
@@ -573,6 +630,7 @@ const ApplicationTile = (props) => {
           <Grid item>Role: {application.job.jobType}</Grid>
           <Grid item>Location: {application.job.location}</Grid>
           <Grid item>Company Name: {application.job.companyName}</Grid>
+          <Grid item>Email: {userEmail}</Grid>
           <Grid item>Applied On: {appliedOn.toLocaleDateString()}</Grid>
           {/* <Grid item>
             SOP: {application.sop !== "" ? application.sop : "Not Submitted"}
@@ -595,14 +653,23 @@ const ApplicationTile = (props) => {
         </Grid>
         <Grid item container direction="column" xs={3}>
           <Grid item>
-            <Button
+            {/* <Button
               variant="contained"
               className={classes.statusBlock}
               color="primary"
               onClick={() => getResume()}
             >
               Download Resume
+            </Button> */}
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.statusBlock}
+              onClick={sendEmail}
+            >
+              Send Email
             </Button>
+
           </Grid>
           <Grid item container xs>
             {/* {buttonSet[application.status]} */}

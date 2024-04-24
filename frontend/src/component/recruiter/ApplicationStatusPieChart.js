@@ -3,11 +3,10 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import axios from 'axios';
 import apiList  from '../../lib/apiList'; // Assuming apiConfig is the file name where apiList is defined
 
+
 const ApplicationStatusPieChart = () => {
+
     const [applicationData, setApplicationData] = useState([]);
-
-    
-
     useEffect(() => {
         axios.get(apiList.applications, {
             headers: {

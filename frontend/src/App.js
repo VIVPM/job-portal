@@ -17,8 +17,11 @@ import RecruiterProfile from "./component/recruiter/Profile";
 import MessagePopup from "./lib/MessagePopup";
 import { userType } from "./lib/isAuth";
 import ApplicationStatusPieChart from "./component/recruiter/ApplicationStatusPieChart";
-import Body from './components/Body/Body';
+// import Body from './components/Body/Body';
+import JobTableWithDateFilter from './component/recruiter/JobTableWithDateFilter';
 import Context from './context/Context';
+import JobStats from "./component/recruiter/JobStats";
+import App1 from './App1';
 
 const useStyles = makeStyles((theme) => ({
   body: {
@@ -92,6 +95,8 @@ function App() {
               <Route exact path = "/analytics">
                 <Navbar />
                 <ApplicationStatusPieChart />
+                <JobStats/>
+                <JobTableWithDateFilter/>
               </Route>
               <Route exact path="/myjobs">
                 <Navbar />
@@ -108,7 +113,7 @@ function App() {
               <Route exact path = "/resume">
                 <Navbar />
                 <Context>
-                <Body/>
+                <App1/>
                 </Context>
               </Route>
               <Route>
