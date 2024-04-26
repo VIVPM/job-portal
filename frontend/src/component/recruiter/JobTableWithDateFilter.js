@@ -124,23 +124,31 @@ const JobTableWithDateFilter = () => {
     };
 
     const exportToCSV = () => {
-        const csvHeader = "Sl. No,Title,Salary,Location,Company Name,Role,Duration,Number of Applicants,Remaining Positions\n";
-        const csvRows = jobs.map((job, index) => [
-            index + 1,
-            job.title,
-            job.salary,
-            job.location,
-            job.companyName,
-            job.jobType,
-            job.duration !== 0 ? `${job.duration} month(s)` : 'Flexible',
-            job.maxApplicants,
-            job.maxPositions - job.acceptedCandidates,
-        ].join(",")).join("\n");
+        const csvHeader = "Sl. No,Title,Salary,Location,Company Name,Role,Duration,Number of Applicants,Remaining Positions,Skill sets\n";
+        const csvRows = jobs.map((job, index) => {
+
+            const skillsetString = job.skillsets.join(', ');
+
+            
+            return [
+                index + 1,
+                job.title,
+                job.salary,
+                job.location,
+                job.companyName,
+                job.jobType,
+                job.duration !== 0 ? `${job.duration} month(s)` : 'Flexible',
+                job.maxApplicants,
+                job.maxPositions - job.acceptedCandidates,
+                `"${skillsetString}"` // Encapsulate in quotes to handle commas in skills
+            ].join(",");
+        }).join("\n");
 
         const csvContent = csvHeader + csvRows;
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
         saveAs(blob, "jobs_export.csv");
     };
+
 
     const filterJobsByDate = () => {
         const filteredJobs = jobs.filter(job => {
@@ -199,6 +207,7 @@ const JobTableWithDateFilter = () => {
                                 <TableCell>Duration</TableCell>
                                 <TableCell>Number of Applicants</TableCell>
                                 <TableCell>Remaining Positions</TableCell>
+                                <TableCell>Skill sets</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -213,6 +222,7 @@ const JobTableWithDateFilter = () => {
                                     <TableCell>{job.duration !== 0 ? `${job.duration} months` : 'Flexible'}</TableCell>
                                     <TableCell>{job.maxApplicants}</TableCell>
                                     <TableCell>{job.maxPositions - job.acceptedCandidates}</TableCell>
+                                    <TableCell>{job.skillsets.join(', ')}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
