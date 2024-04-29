@@ -145,6 +145,31 @@ router.get("/jobs", jwtAuth, (req, res) => {
     };
   }
 
+  if (req.query.startDate && req.query.endDate) {
+    findParams = {
+      ...findParams,
+      dateOfPosting: {
+        $gte: new Date(req.query.startDate),
+        $lte: new Date(req.query.endDate)
+      },
+    };
+  } else if (req.query.startDate) {
+    findParams = {
+      ...findParams,
+      dateOfPosting: {
+        $gte: new Date(req.query.startDate)
+      },
+    };
+  } else if (req.query.endDate) {
+    findParams = {
+      ...findParams,
+      dateOfPosting: {
+        $lte: new Date(req.query.endDate)
+      },
+    };
+  }
+
+
   if (req.query.duration) {
     findParams = {
       ...findParams,

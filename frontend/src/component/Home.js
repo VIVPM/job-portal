@@ -51,20 +51,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function JobDescription({ jobDescriptions }) {
-  return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <strong>Job Description:</strong>
-      </Grid>
-      {jobDescriptions.map((desc, index) => (
-        <Grid item xs={12} key={index}>
-          {index + 1}. {desc}.
-        </Grid>
-      ))}
-    </Grid>
-  );
-}
+// function JobDescription({ jobDescriptions }) {
+//   return (
+//     <Grid container spacing={2}>
+//       <Grid item xs={12}>
+//         <strong>Job Description:</strong>
+//       </Grid>
+//       {jobDescriptions.map((desc, index) => (
+//         <Grid item xs={12} key={index}>
+//           {index + 1}. {desc}.
+//         </Grid>
+//       ))}
+//     </Grid>
+//   );
+// }
 
 
 const JobTile = (props) => {

@@ -118,25 +118,25 @@ const JobTile = (props) => {
       });
   };
 
-  function JobDescription({ description }) {
-    if (!description) {
-      // Return some default UI or null if no description
-      return <p>No job description available.</p>;
-    }
+  // function JobDescription({ description }) {
+  //   if (!description) {
+  //     // Return some default UI or null if no description
+  //     return <p>No job description available.</p>;
+  //   }
 
-    // Use the splitting logic only if description is a valid string
-    const points = description.split(/(?<=\d\.) /);
+  //   // Use the splitting logic only if description is a valid string
+  //   const points = description.split(/(?<=\d\.) /);
 
-    return (
-      <Grid container direction="column">
-        {points.map((point, index) => (
-          <Grid item key={index}>
-            {point.trim()}
-          </Grid>
-        ))}
-      </Grid>
-    );
-  }
+  //   return (
+  //     <Grid container direction="column">
+  //       {points.map((point, index) => (
+  //         <Grid item key={index}>
+  //           {point.trim()}
+  //         </Grid>
+  //       ))}
+  //     </Grid>
+  //   );
+  // }
 
   const handleJobUpdate = () => {
     axios
@@ -554,6 +554,53 @@ const FilterPopup = (props) => {
           </Grid>
           <Grid container item alignItems="center">
             <Grid item xs={3}>
+              Start Date
+            </Grid>
+            <Grid item xs={9}>
+              <TextField
+                label="Start Date"
+                type="date"
+                variant="outlined"
+                fullWidth
+                value={searchOptions.startDate}
+                onChange={(event) =>
+                  setSearchOptions({
+                    ...searchOptions,
+                    startDate: event.target.value,
+                  })
+                }
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid container item alignItems="center">
+            <Grid item xs={3}>
+              End Date
+            </Grid>
+            <Grid item xs={9}>
+              <TextField
+                label="End Date"
+                type="date"
+                variant="outlined"
+                fullWidth
+                value={searchOptions.endDate}
+                onChange={(event) =>
+                  setSearchOptions({
+                    ...searchOptions,
+                    endDate: event.target.value,
+                  })
+                }
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container item alignItems="center">
+            <Grid item xs={3}>
               Sort
             </Grid>
             <Grid item container direction="row" xs={9}>
@@ -771,6 +818,8 @@ const MyJobs = (props) => {
         status: false,
         desc: false,
       },
+      startDate: "",
+      endDate: "",
     },
   });
 
@@ -815,6 +864,13 @@ const MyJobs = (props) => {
     if (searchOptions.duration !== "0") {
       searchParams = [...searchParams, `duration=${searchOptions.duration}`];
     }
+    if (searchOptions.startDate) {
+      searchParams = [...searchParams, `startDate=${searchOptions.startDate}`];
+    }
+    if (searchOptions.endDate) {
+      searchParams = [...searchParams, `endDate=${searchOptions.endDate}`];
+    }
+
 
     let asc = [],
       desc = [];

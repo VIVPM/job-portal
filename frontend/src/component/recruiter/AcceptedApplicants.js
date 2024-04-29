@@ -416,8 +416,8 @@ const ApplicationTile = (props) => {
   const [openEndJob, setOpenEndJob] = useState(false);
   const [rating, setRating] = useState(application.jobApplicant.rating);
   const [userEmail, setUserEmail] = useState('');
-  // const [userEmail1, setUserEmail1] = useState('');
-  // const [userName,setUserName] = useState('');
+  const [userEmail1, setUserEmail1] = useState('');
+  const [userName,setUserName] = useState('');
 
   const appliedOn = new Date(application.dateOfApplication);
 
@@ -567,37 +567,37 @@ const ApplicationTile = (props) => {
     }
   }, [application.jobApplicant.userId]);
 
-  // useEffect(() => {
-  //   const fetchUserDetails1 = async () => {
-  //     try {
-  //       const userId = application.recruiterId;
-  //       const url = `${apiList.user}/${userId}`;
+  useEffect(() => {
+    const fetchUserDetails1 = async () => {
+      try {
+        const userId = application.recruiterId;
+        const url = `${apiList.user}/${userId}`;
 
-  //       const response = await axios.get(url, {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //         },
-  //       });
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
 
 
-  //       setUserEmail1(response.data.email);
-  //       setUserName(response.data.name);
-  //     } catch (error) {
-  //       console.error('Error fetching user details:', error);
+        setUserEmail1(response.data.email);
+        setUserName(response.data.name);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
 
-  //     }
-  //   };
+      }
+    };
 
-  //   if (application.recruiterId) {
-  //     fetchUserDetails1();
-  //   }
-  // }, [application.recruiterId]);
+    if (application.recruiterId) {
+      fetchUserDetails1();
+    }
+  }, [application.recruiterId]);
 
   const sendEmail = () => {
     // console.log(userEmail,userEmail1)
     const templateParams = {
-      // from_name: userName,
-      // from_email: userEmail1,
+      from_name: userName,
+      from_email: userEmail1,
       to_name: application.jobApplicant.name,
       to_email:userEmail,
       message: `Hi ${application.jobApplicant.name}, Congratulations, your application is ${application.status}. `,

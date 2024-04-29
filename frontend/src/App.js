@@ -18,10 +18,11 @@ import MessagePopup from "./lib/MessagePopup";
 import { userType } from "./lib/isAuth";
 import ApplicationStatusPieChart from "./component/recruiter/ApplicationStatusPieChart";
 // import Body from './components/Body/Body';
-import JobTableWithDateFilter from './component/recruiter/JobTableWithDateFilter';
+// import JobTableWithDateFilter from './component/recruiter/JobTableWithDateFilter';
 import Context from './context/Context';
-import JobStats from "./component/recruiter/JobStats";
+// import JobStats from "./component/recruiter/JobStats";
 import App1 from './App1';
+import JobStatsAndTableWithDateFilter from './component/recruiter/JobStatsAndTableWithDateFilter';
 
 const useStyles = makeStyles((theme) => ({
   body: {
@@ -95,8 +96,9 @@ function App() {
               <Route exact path = "/analytics">
                 <Navbar />
                 <ApplicationStatusPieChart />
-                <JobStats/>
-                <JobTableWithDateFilter/>
+                {/* <JobStats/>
+                <JobTableWithDateFilter/> */}
+                <JobStatsAndTableWithDateFilter/>
               </Route>
               <Route exact path="/myjobs">
                 <Navbar />
