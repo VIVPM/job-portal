@@ -554,9 +554,9 @@ const FilterPopup = (props) => {
           </Grid>
           <Grid container item alignItems="center">
             <Grid item xs={3}>
-              Start Date
+              Select Date
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={4}>
               <TextField
                 label="Start Date"
                 type="date"
@@ -574,12 +574,7 @@ const FilterPopup = (props) => {
                 }}
               />
             </Grid>
-          </Grid>
-          <Grid container item alignItems="center">
-            <Grid item xs={3}>
-              End Date
-            </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={5}>
               <TextField
                 label="End Date"
                 type="date"
@@ -598,6 +593,7 @@ const FilterPopup = (props) => {
               />
             </Grid>
           </Grid>
+          
 
           <Grid container item alignItems="center">
             <Grid item xs={3}>
