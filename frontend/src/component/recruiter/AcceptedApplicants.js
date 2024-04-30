@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 // import { useParams } from "react-router-dom";
 import Rating from "@material-ui/lab/Rating";
+import { saveAs } from 'file-saver';
 import axios from "axios";
 import emailjs from 'emailjs-com';
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -840,6 +841,35 @@ const AcceptedApplicants = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const exportToCSV = () => {
+    const csvHeader = "Sl. No,Applicant Name,Phone number,Date of Joining,Rating,Resume,Title,Salary,Location,Company Name,Role,Duration,Status,Skill sets\n";
+    const csvRows = applications.map((app, index) => {
+      const skillsetString = app.jobApplicant.skills.join(', ');
+      return [
+        index + 1,
+        app.jobApplicant.name,
+        `+ ${app.jobApplicant.contactNumber}`,
+        app.dateOfJoining,
+        app.jobApplicant.rating,
+        app.jobApplicant.resume,
+        app.job.title,
+        app.job.salary,
+        app.job.location,
+        app.job.companyName,
+        app.job.jobType,
+        app.job.duration !== 0 ? `${app.job.duration} months` : 'Flexible',
+        app.status,
+        // applications.job.maxApplicants,
+        // applications.job.maxPositions - applications.job.acceptedCandidates,
+        `"${skillsetString}"`
+      ].join(",");
+    }).join("\n");
+
+    const csvContent = csvHeader + csvRows;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, "applications_export.csv");
+  };
+
   const getData = () => {
     let searchParams = [];
     searchParams = [...searchParams, `status=accepted`];
@@ -906,6 +936,9 @@ const AcceptedApplicants = (props) => {
           <IconButton onClick={() => setFilterOpen(true)}>
             <FilterListIcon />
           </IconButton>
+          <Button variant="contained" color="primary" onClick={exportToCSV}>
+            Export to CSV
+          </Button>
         </Grid>
         <Grid
           container

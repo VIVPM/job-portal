@@ -16,6 +16,7 @@ import {
   MenuItem,
   Checkbox,
 } from "@material-ui/core";
+import { saveAs } from 'file-saver';
 import { useHistory } from "react-router-dom";
 import Rating from "@material-ui/lab/Rating";
 // import Pagination from "@material-ui/lab/Pagination";
@@ -819,6 +820,29 @@ const MyJobs = (props) => {
     },
   });
 
+  const exportToCSV = () => {
+    const csvHeader = "Sl. No,Title,Salary,Location,Company Name,Role,Duration,Number of Applicants,Remaining Positions,Skill sets\n";
+    const csvRows = jobs.map((job, index) => {
+      const skillsetString = job.skillsets.join(', ');
+      return [
+        index + 1,
+        job.title,
+        job.salary,
+        job.location,
+        job.companyName,
+        job.jobType,
+        job.duration !== 0 ? `${job.duration} month(s)` : 'Flexible',
+        job.maxApplicants,
+        job.maxPositions - job.acceptedCandidates,
+        `"${skillsetString}"`
+      ].join(",");
+    }).join("\n");
+
+    const csvContent = csvHeader + csvRows;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, "jobs_export.csv");
+  };
+
   const setPopup = useContext(SetPopupContext);
   useEffect(() => {
     getData();
@@ -961,6 +985,9 @@ const MyJobs = (props) => {
             <IconButton onClick={() => setFilterOpen(true)}>
               <FilterListIcon />
             </IconButton>
+            <Button variant="contained" color="primary" onClick={exportToCSV}>
+              Export to CSV
+            </Button>
           </Grid>
         </Grid>
 
