@@ -17,6 +17,7 @@ import {
   Checkbox,
 } from "@material-ui/core";
 import { saveAs } from 'file-saver';
+// import Pagination from '@material-ui/lab/Pagination';
 import { useHistory } from "react-router-dom";
 import Rating from "@material-ui/lab/Rating";
 // import Pagination from "@material-ui/lab/Pagination";
@@ -790,6 +791,8 @@ const FilterPopup = (props) => {
 
 const MyJobs = (props) => {
   const [jobs, setJobs] = useState([]);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(0);
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchOptions, setSearchOptions] = useState({
     query: "",
@@ -850,7 +853,8 @@ const MyJobs = (props) => {
   }, []);
 
   const getData = () => {
-    let searchParams = [`myjobs=1`];
+    // let searchParams = [`myjobs=1`, `page=${currentPage}`, `limit=5`];
+    let searchParams = [`myjobs=1`]
     if (searchOptions.query !== "") {
       searchParams = [...searchParams, `q=${searchOptions.query}`];
     }
@@ -923,6 +927,7 @@ const MyJobs = (props) => {
       .then((response) => {
         console.log(response.data);
         setJobs(response.data);
+        // setTotalPages(response.data.totalPages);
       })
       .catch((err) => {
         console.log(err.response.data);
@@ -933,6 +938,10 @@ const MyJobs = (props) => {
         });
       });
   };
+  
+  // const handlePageChange = (event, page) => {
+  //   setCurrentPage(page);
+  // };
 
   return (
     <>
@@ -1009,6 +1018,14 @@ const MyJobs = (props) => {
             </Typography>
           )}
         </Grid>
+        {/* <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+          showFirstButton
+          showLastButton
+        /> */}
       </Grid>
       <FilterPopup
         open={filterOpen}

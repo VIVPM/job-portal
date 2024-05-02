@@ -62,6 +62,10 @@ router.get("/jobs", jwtAuth, (req, res) => {
   // const limit = parseInt(req.query.limit) ? parseInt(req.query.limit) : 10;
   // const skip = page - 1 >= 0 ? (page - 1) * limit : 0;
 
+  // const page = parseInt(req.query.page) || 1; // Default to first page
+  // const limit = parseInt(req.query.limit) || 20; // Default limit to 10 items
+  // const skip = (page - 1) * limit; // Calculate skip value
+
   // to list down jobs posted by a particular recruiter
   if (user.type === "recruiter" && req.query.myjobs) {
     findParams = {
@@ -248,6 +252,9 @@ router.get("/jobs", jwtAuth, (req, res) => {
       },
     ];
   }
+
+  // arr.push({ $skip: skip });
+  // arr.push({ $limit: limit});
 
   console.log(arr);
 

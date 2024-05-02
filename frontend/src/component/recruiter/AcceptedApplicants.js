@@ -419,8 +419,10 @@ const ApplicationTile = (props) => {
   const [userEmail, setUserEmail] = useState('');
   const [userEmail1, setUserEmail1] = useState('');
   const [userName,setUserName] = useState('');
+  const [phoneNumber,setPhoneNumber] = useState('');
 
   const appliedOn = new Date(application.dateOfApplication);
+  const dateofJoining = new Date(application.dateOfJoining);
 
   const changeRating = () => {
     axios
@@ -583,6 +585,7 @@ const ApplicationTile = (props) => {
 
         setUserEmail1(response.data.email);
         setUserName(response.data.name);
+        setPhoneNumber(response.data.contactNumber);
       } catch (error) {
         console.error('Error fetching user details:', error);
 
@@ -596,12 +599,21 @@ const ApplicationTile = (props) => {
 
   const sendEmail = () => {
     // console.log(userEmail,userEmail1)
+    const skillsetString = application.job.skillsets.join(', ');
     const templateParams = {
       from_name: userName,
       from_email: userEmail1,
       to_name: application.jobApplicant.name,
       to_email:userEmail,
-      message: `Hi ${application.jobApplicant.name}, Congratulations, your application is ${application.status}. `,
+      company:application.job.companyName,
+      jobType:application.job.jobType,
+      duration: application.job.duration !== 0 ? `${application.job.duration} month(s)` : 'Flexible', 
+      location:application.job.location,
+      salary:application.job.salary,
+      from_phoneNumber:phoneNumber,
+      skills: skillsetString,
+      jobDescription:application.job.jobDescription ,
+      dateOfJoining: dateofJoining.toLocaleDateString(),
       
     };
 
