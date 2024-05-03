@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { Document, Packer, Paragraph, Table, TableRow, TableCell } from "docx";
 import {
   Button,
   Chip,
@@ -823,6 +824,8 @@ const MyJobs = (props) => {
     },
   });
 
+  
+
   const exportToCSV = () => {
     const csvHeader = "Sl. No,Title,Salary,Location,Company Name,Role,Duration,Number of Applicants,Remaining Positions,Skill sets\n";
     const csvRows = jobs.map((job, index) => {
@@ -844,6 +847,103 @@ const MyJobs = (props) => {
     const csvContent = csvHeader + csvRows;
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
     saveAs(blob, "jobs_export.csv");
+  };
+
+  const exportToDocx = () => {
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new Paragraph({
+              text: "Job Details",
+              heading: "Heading1"
+            }),
+            // Creating a table
+            new Table({
+              rows: [
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("Sl. No")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Title")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Salary")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Location")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Company Name")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Role")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Duration")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Number of Applicants")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Remaining Positions")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Skill sets")],
+                    }),
+                  ],
+                }),
+                ...jobs.map((job, index) => {
+                  return new TableRow({
+                    children: [
+                      new TableCell({
+                        children: [new Paragraph(`${index + 1}`)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(job.title)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(`₹ ${job.salary}`)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(job.location)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(job.companyName)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(job.jobType)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(job.duration !== 0 ? `${job.duration} month(s)` : 'Flexible')],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(`${job.maxApplicants}`)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(`${job.maxPositions - job.acceptedCandidates}`)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(job.skillsets.join(', '))],
+                      }),
+                    ],
+                  });
+                }),
+              ],
+            }),
+          ],
+        },
+      ],
+    });
+
+
+    // Pack and download the document
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(blob, "jobs_export.docx");
+    });
   };
 
   const setPopup = useContext(SetPopupContext);
@@ -994,8 +1094,11 @@ const MyJobs = (props) => {
             <IconButton onClick={() => setFilterOpen(true)}>
               <FilterListIcon />
             </IconButton>
-            <Button variant="contained" color="primary" onClick={exportToCSV}>
+            <Button variant="contained" color="primary" onClick={exportToCSV} style = {{marginRight:"10px"}}>
               Export to CSV
+            </Button>
+            <Button variant="contained" color="primary" onClick={exportToDocx}>
+              Export to Word
             </Button>
           </Grid>
         </Grid>

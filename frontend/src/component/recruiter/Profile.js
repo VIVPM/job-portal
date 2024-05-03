@@ -93,7 +93,7 @@ const Profile = (props) => {
     if (phone !== "") {
       updatedDetails = {
         ...profileDetails,
-        contactNumber: `+${phone}`,
+        contactNumber: `${phone}`,
       };
     } else {
       updatedDetails = {

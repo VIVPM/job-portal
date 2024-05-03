@@ -267,7 +267,7 @@ const Profile = (props) => {
 
     let updatedDetails = {
       ...profileDetails,
-      contactNumber: phone ? `+${phone}` : "",
+      contactNumber: phone ? `${phone}` : "",
       education: education
         .filter((obj) => obj.institutionName.trim() !== "")
         .map((obj) => {

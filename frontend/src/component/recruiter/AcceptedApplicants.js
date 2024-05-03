@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { Document, Packer, Paragraph, Table, TableRow, TableCell } from "docx";
 import {
   Button,
   Chip,
@@ -597,6 +598,13 @@ const ApplicationTile = (props) => {
     }
   }, [application.recruiterId]);
 
+  const getFormattedNumber = (contactNumber) => {
+    const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
+    const countryCode = cleanedNumber.slice(0, -10);
+    const lastTenDigits = cleanedNumber.slice(-10);
+    return `${countryCode} ${lastTenDigits}`;
+  };
+
   const sendEmail = () => {
     // console.log(userEmail,userEmail1)
     const skillsetString = application.job.skillsets.join(', ');
@@ -605,12 +613,13 @@ const ApplicationTile = (props) => {
       from_email: userEmail1,
       to_name: application.jobApplicant.name,
       to_email:userEmail,
+      position:application.job.title,
       company:application.job.companyName,
       jobType:application.job.jobType,
       duration: application.job.duration !== 0 ? `${application.job.duration} month(s)` : 'Flexible', 
       location:application.job.location,
       salary:application.job.salary,
-      from_phoneNumber:phoneNumber,
+      from_phoneNumber:getFormattedNumber(phoneNumber),
       skills: skillsetString,
       jobDescription:application.job.jobDescription ,
       dateOfJoining: dateofJoining.toLocaleDateString(),
@@ -853,6 +862,13 @@ const AcceptedApplicants = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getFormattedNumber = (contactNumber) => {
+    const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
+    const countryCode = cleanedNumber.slice(0, -10);
+    const lastTenDigits = cleanedNumber.slice(-10);
+    return `${countryCode} ${lastTenDigits}`;
+  };
+
   const exportToCSV = () => {
     const csvHeader = "Sl. No,Applicant Name,Phone number,Date of Joining,Rating,Resume,Title,Salary,Location,Company Name,Role,Duration,Status,Skill sets\n";
     const csvRows = applications.map((app, index) => {
@@ -860,7 +876,7 @@ const AcceptedApplicants = (props) => {
       return [
         index + 1,
         app.jobApplicant.name,
-        `+ ${app.jobApplicant.contactNumber}`,
+        `${getFormattedNumber(app.jobApplicant.contactNumber)}`,
         app.dateOfJoining,
         app.jobApplicant.rating,
         app.jobApplicant.resume,
@@ -881,6 +897,126 @@ const AcceptedApplicants = (props) => {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
     saveAs(blob, "applications_export.csv");
   };
+
+  const exportToDocx = (applications) => {
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new Paragraph({
+              text: "Accepted Applicants Details",
+              heading: "Heading1"
+            }),
+            new Table({
+              rows: [
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("Sl. No")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Applicant Name")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Phone Number")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Date of Joining")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Rating")],
+                    }),
+                    // new TableCell({
+                    //   children: [new Paragraph("Resume Link")],
+                    // }),
+                    new TableCell({
+                      children: [new Paragraph("Job Title")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Salary")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Location")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Company Name")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Role")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Duration")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Status")],
+                    }),
+                    new TableCell({
+                      children: [new Paragraph("Skill Sets")],
+                    }),
+                  ],
+                }),
+                ...applications.map((app, index) => {
+                  return new TableRow({
+                    children: [
+                      new TableCell({
+                        children: [new Paragraph(`${index + 1}`)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(app.jobApplicant.name)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(`${getFormattedNumber(app.jobApplicant.contactNumber)}`)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(new Date(app.dateOfJoining).toLocaleDateString())],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(`${app.jobApplicant.rating}`)],
+                      }),
+                      // new TableCell({
+                      //   children: [new Paragraph(app.jobApplicant.resume)],
+                      // }),
+                      new TableCell({
+                        children: [new Paragraph(app.job.title)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(`₹${app.job.salary}`)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(app.job.location)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(app.job.companyName)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(app.job.jobType)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(app.job.duration !== 0 ? `${app.job.duration} month(s)` : 'Flexible')],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(app.status)],
+                      }),
+                      new TableCell({
+                        children: [new Paragraph(app.jobApplicant.skills.join(', '))],
+                      }),
+                    ],
+                  });
+                }),
+              ],
+            }),
+          ],
+        },
+      ],
+    });
+
+    // Pack and download the document
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(blob, "accepted_applicants.docx");
+    });
+  };
+
 
   const getData = () => {
     let searchParams = [];
@@ -948,9 +1084,13 @@ const AcceptedApplicants = (props) => {
           <IconButton onClick={() => setFilterOpen(true)}>
             <FilterListIcon />
           </IconButton>
-          <Button variant="contained" color="primary" onClick={exportToCSV}>
+          <Button variant="contained" color="primary" onClick={exportToCSV} style={{marginRight:"10px"}}>
             Export to CSV
           </Button>
+          <Button variant="contained" color="primary" onClick={() => exportToDocx(applications)}>
+            Export to Word
+          </Button>
+
         </Grid>
         <Grid
           container
