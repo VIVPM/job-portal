@@ -17,11 +17,11 @@ import RecruiterProfile from "./component/recruiter/Profile";
 import MessagePopup from "./lib/MessagePopup";
 import { userType } from "./lib/isAuth";
 import ApplicationStatusPieChart from "./component/recruiter/ApplicationStatusPieChart";
-// import Body from './components/Body/Body';
 // import JobTableWithDateFilter from './component/recruiter/JobTableWithDateFilter';
 import Context from './context/Context';
 // import JobStats from "./component/recruiter/JobStats";
-import App1 from './App1';
+import Body from "./components/Body/Body";
+
 import JobStatsAndTableWithDateFilter from './component/recruiter/JobStatsAndTableWithDateFilter';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,37 +51,30 @@ function App() {
     <BrowserRouter>
       <SetPopupContext.Provider value={setPopup}>
         <Grid container direction="column">
-          {/* <Grid item xs> */}
-            {/* <Navbar /> */}
-          {/* </Grid> */}
+          <Grid item xs>
+            <Navbar />
+          </Grid>
           <Grid item className={classes.body}>
             <Switch>
               <Route exact path="/">
-                <Navbar />
                 <Welcome />
               </Route>
               <Route exact path="/login">
-                <Navbar />
                 <Login />
               </Route>
               <Route exact path="/signup">
-                <Navbar />
                 <Signup />
               </Route>
               <Route exact path="/logout">
-                <Navbar />
                 <Logout />
               </Route>
               <Route exact path="/home">
-                <Navbar />
                 <Home />
               </Route>
               <Route exact path="/applications">
-                <Navbar />
                 <Applications />
               </Route>
               <Route exact path="/profile">
-                <Navbar />
                 {userType() === "recruiter" ? (
 
                   <RecruiterProfile />
@@ -90,36 +83,29 @@ function App() {
                 )}
               </Route>
               <Route exact path="/addjob">
-                <Navbar />
                 <CreateJobs />
               </Route>
               <Route exact path = "/analytics">
-                <Navbar />
                 <ApplicationStatusPieChart />
                 {/* <JobStats/>
                 <JobTableWithDateFilter/> */}
                 <JobStatsAndTableWithDateFilter/>
               </Route>
               <Route exact path="/myjobs">
-                <Navbar />
                 <MyJobs />
               </Route>
               <Route exact path="/job/applications/:jobId">
-                <Navbar />
                 <JobApplications />
               </Route>
               <Route exact path="/employees">
-                <Navbar />
                 <AcceptedApplicants />
               </Route>
               <Route exact path = "/resume">
-                <Navbar />
                 <Context>
-                <App1/>
+                <Body/>
                 </Context>
               </Route>
               <Route>
-                <Navbar />
                 <ErrorPage />
               </Route>
             </Switch>
