@@ -505,6 +505,13 @@ const Login = (props) => {
               education={education}
               setEducation={setEducation}
             />
+              <Grid item>
+                <PhoneInput
+                  country={"in"}
+                  value={phone}
+                  onChange={(phone) => setPhone(phone)}
+                />
+              </Grid>
             <Grid item>
               <ChipInput
                 className={classes.inputBox}
@@ -516,13 +523,7 @@ const Login = (props) => {
                 }
               />
             </Grid>
-            <Grid item>
-              <PhoneInput
-                country={"in"}
-                value={phone}
-                onChange={(phone) => setPhone(phone)}
-              />
-            </Grid>
+            
             <Grid item>
               <FileUploadInput
                 className={classes.inputBox}
