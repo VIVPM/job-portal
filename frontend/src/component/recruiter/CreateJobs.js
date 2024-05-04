@@ -137,30 +137,6 @@ const CreateJobs = (props) => {
                   />
                 </Grid>
                 <Grid item>
-                  <ChipInput
-                    className={classes.inputBox}
-                    label="Skills"
-                    variant="outlined"
-                    helperText="Press enter to add skills"
-                    value={jobDetails.skillsets}
-                    onAdd={(chip) =>
-                      setJobDetails({
-                        ...jobDetails,
-                        skillsets: [...jobDetails.skillsets, chip],
-                      })
-                    }
-                    onDelete={(chip, index) => {
-                      let skillsets = jobDetails.skillsets;
-                      skillsets.splice(index, 1);
-                      setJobDetails({
-                        ...jobDetails,
-                        skillsets: skillsets,
-                      });
-                    }}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item>
                   <TextField
                     label="Location"
                     value={jobDetails.location}
@@ -288,6 +264,30 @@ const CreateJobs = (props) => {
                       handleInput("maxPositions", event.target.value);
                     }}
                     InputProps={{ inputProps: { min: 1 } }}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item>
+                  <ChipInput
+                    className={classes.inputBox}
+                    label="Skills"
+                    variant="outlined"
+                    helperText="Press enter to add skills"
+                    value={jobDetails.skillsets}
+                    onAdd={(chip) =>
+                      setJobDetails({
+                        ...jobDetails,
+                        skillsets: [...jobDetails.skillsets, chip],
+                      })
+                    }
+                    onDelete={(chip, index) => {
+                      let skillsets = jobDetails.skillsets;
+                      skillsets.splice(index, 1);
+                      setJobDetails({
+                        ...jobDetails,
+                        skillsets: skillsets,
+                      });
+                    }}
                     fullWidth
                   />
                 </Grid>
