@@ -187,7 +187,7 @@ const JobTile = (props) => {
           <Grid item>Job Description: {job.jobDescription}</Grid>
           <Grid item>
             Duration :{" "}
-            {job.duration !== 0 ? `${job.duration} month` : `Flexible`}
+            {job.duration !== 0 ? `${job.duration} month(s)` : `Flexible`}
           </Grid>
           <Grid item>Date Of Posting: {postedOn.toLocaleDateString()}</Grid>
           <Grid item>Number of Applicants: {job.maxApplicants}</Grid>
@@ -827,16 +827,16 @@ const MyJobs = (props) => {
   
 
   const exportToCSV = () => {
-    const csvHeader = "Sl. No,Title,Salary,Location,Company Name,Role,Duration,Number of Applicants,Remaining Positions,Skill sets\n";
+    const csvHeader = "Sl. No,Title,Company Name,Location,Role,Salary,Duration,Number of Applicants,Remaining Positions,Skill sets\n";
     const csvRows = jobs.map((job, index) => {
       const skillsetString = job.skillsets.join(', ');
       return [
         index + 1,
         job.title,
-        job.salary,
-        job.location,
         job.companyName,
+        job.location,
         job.jobType,
+        job.salary,
         job.duration !== 0 ? `${job.duration} month(s)` : 'Flexible',
         job.maxApplicants,
         job.maxPositions - job.acceptedCandidates,
@@ -871,16 +871,16 @@ const MyJobs = (props) => {
                       children: [new Paragraph("Title")],
                     }),
                     new TableCell({
-                      children: [new Paragraph("Salary")],
+                      children: [new Paragraph("Company Name")],
                     }),
                     new TableCell({
                       children: [new Paragraph("Location")],
                     }),
                     new TableCell({
-                      children: [new Paragraph("Company Name")],
+                      children: [new Paragraph("Role")],
                     }),
                     new TableCell({
-                      children: [new Paragraph("Role")],
+                      children: [new Paragraph("Salary")],
                     }),
                     new TableCell({
                       children: [new Paragraph("Duration")],
@@ -906,16 +906,16 @@ const MyJobs = (props) => {
                         children: [new Paragraph(job.title)],
                       }),
                       new TableCell({
-                        children: [new Paragraph(`₹ ${job.salary}`)],
+                        children: [new Paragraph(job.companyName)],
                       }),
                       new TableCell({
                         children: [new Paragraph(job.location)],
                       }),
                       new TableCell({
-                        children: [new Paragraph(job.companyName)],
+                        children: [new Paragraph(job.jobType)],
                       }),
                       new TableCell({
-                        children: [new Paragraph(job.jobType)],
+                        children: [new Paragraph(`₹ ${job.salary}`)],
                       }),
                       new TableCell({
                         children: [new Paragraph(job.duration !== 0 ? `${job.duration} month(s)` : 'Flexible')],

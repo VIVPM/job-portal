@@ -644,6 +644,8 @@ const ApplicationTile = (props) => {
       });
   };
 
+  
+
 
   return (
     <Paper className={classes.jobTileOuter} elevation={3}>
@@ -684,19 +686,20 @@ const ApplicationTile = (props) => {
           <Grid item>Company Name: {application.job.companyName}</Grid>
           <Grid item>Email: {userEmail}</Grid>
           <Grid item>Applied On: {appliedOn.toLocaleDateString()}</Grid>
-          {/* <Grid item>
-            SOP: {application.sop !== "" ? application.sop : "Not Submitted"}
-          </Grid> */}
+          <Grid item>Phone number: {getFormattedNumber(application.jobApplicant.contactNumber)}</Grid>
           <Grid item>
-            <div className={classes.sopBlock}>
-              <Typography variant="body1" className={classes.sopLabel}>
-                SOP:{" "}
-              </Typography>
-              {/* <Typography variant="body1" className={classes.sopContent}> */}
-              {application.sop !== "" ? application.sop : "Not Submitted"}
-              {/* </Typography> */}
-            </div>
+            SOP: {" "}{application.sop !== "" ? application.sop : "Not Submitted"}
           </Grid>
+          {/* <Grid item> */}
+            {/* <div className={classes.sopBlock}> */}
+              {/* <Typography variant="body1" className={classes.sopLabel}> */}
+                {/* SOP:{" "} */}
+              {/* </Typography> */}
+              {/* <Typography variant="body1" className={classes.sopContent}> */}
+              {/* {application.sop !== "" ? application.sop : "Not Submitted"} */}
+              {/* </Typography> */}
+            {/* </div> */}
+          {/* </Grid> */}
           <Grid item>
             Skill sets:{" "} {application.jobApplicant.skills.map((skill,index) => (
               <Chip label={skill} style={{ marginRight: "2px" }} />
@@ -870,21 +873,22 @@ const AcceptedApplicants = (props) => {
   };
 
   const exportToCSV = () => {
-    const csvHeader = "Sl. No,Applicant Name,Phone number,Date of Joining,Rating,Resume,Title,Salary,Location,Company Name,Role,Duration,Status,Skill sets\n";
+    const csvHeader = "Sl. No,Applicant Name,Phone number,Date of Joining,Rating,Resume,Title,Company Name,Location,Role,Salary,Duration,Status,Skill sets\n";
     const csvRows = applications.map((app, index) => {
       const skillsetString = app.jobApplicant.skills.join(', ');
+      const dateofJoining = new Date(app.dateOfJoining);
       return [
         index + 1,
         app.jobApplicant.name,
         `${getFormattedNumber(app.jobApplicant.contactNumber)}`,
-        app.dateOfJoining,
+        dateofJoining.toLocaleDateString(),
         app.jobApplicant.rating,
         app.jobApplicant.resume,
         app.job.title,
-        app.job.salary,
-        app.job.location,
         app.job.companyName,
+        app.job.location,
         app.job.jobType,
+        app.job.salary,
         app.job.duration !== 0 ? `${app.job.duration} months` : 'Flexible',
         app.status,
         // applications.job.maxApplicants,
@@ -934,16 +938,16 @@ const AcceptedApplicants = (props) => {
                       children: [new Paragraph("Job Title")],
                     }),
                     new TableCell({
-                      children: [new Paragraph("Salary")],
+                      children: [new Paragraph("Company Name")],
                     }),
                     new TableCell({
                       children: [new Paragraph("Location")],
                     }),
                     new TableCell({
-                      children: [new Paragraph("Company Name")],
+                      children: [new Paragraph("Role")],
                     }),
                     new TableCell({
-                      children: [new Paragraph("Role")],
+                      children: [new Paragraph("Salary")],
                     }),
                     new TableCell({
                       children: [new Paragraph("Duration")],
@@ -981,16 +985,16 @@ const AcceptedApplicants = (props) => {
                         children: [new Paragraph(app.job.title)],
                       }),
                       new TableCell({
-                        children: [new Paragraph(`₹${app.job.salary}`)],
+                        children: [new Paragraph(app.job.companyName)],
                       }),
                       new TableCell({
                         children: [new Paragraph(app.job.location)],
                       }),
                       new TableCell({
-                        children: [new Paragraph(app.job.companyName)],
+                        children: [new Paragraph(app.job.jobType)],
                       }),
                       new TableCell({
-                        children: [new Paragraph(app.job.jobType)],
+                        children: [new Paragraph(`₹${app.job.salary}`)],
                       }),
                       new TableCell({
                         children: [new Paragraph(app.job.duration !== 0 ? `${app.job.duration} month(s)` : 'Flexible')],
