@@ -56,7 +56,7 @@ router.post("/signup", (req, res) => {
           user
             .delete()
             .then(() => {
-              res.status(400).json(err);
+              res.status(400).json({ message: "User already exists",err});
             })
             .catch((err) => {
               res.json({ error: err });
@@ -65,7 +65,8 @@ router.post("/signup", (req, res) => {
         });
     })
     .catch((err) => {
-      res.status(400).json(err);
+      // res.status(400).json(err);
+         res.status(400).json({ message: "User already exists", error: err });
     });
 });
 
