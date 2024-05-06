@@ -21,6 +21,7 @@ import ApplicationStatusPieChart from "./component/recruiter/ApplicationStatusPi
 import Context from './context/Context';
 // import JobStats from "./component/recruiter/JobStats";
 import Body from "./components/Body/Body";
+import './App.css'
 
 import JobStatsAndTableWithDateFilter from './component/recruiter/JobStatsAndTableWithDateFilter';
 
@@ -35,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: "border-box",
     margin:0,
     width: "100%",
+    // backgroundImage: `url('${require("../src/images/jobs-portal-new.png")}')`,
+    // backgroundSize: 'cover',  // Ensures the background covers the entire element area
+    // backgroundPosition: 'center',  // Centers the background image
+    // backgroundRepeat: 'no-repeat'  // Prevents repeating the background image
   },
 }));
 
