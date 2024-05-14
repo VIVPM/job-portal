@@ -20,6 +20,8 @@ import isAuth from "../lib/isAuth";
 const useStyles = makeStyles((theme) => ({
   body: {
     padding: "60px 60px",
+    // backgroundImage: `url('${require("../images/jobs-portal-new.png")}')`,
+    // backgroundColor:'#64b5f6'
   },
   inputBox: {
     width: "300px",

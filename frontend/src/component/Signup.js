@@ -28,6 +28,7 @@ import isAuth from "../lib/isAuth";
 const useStyles = makeStyles((theme) => ({
   body: {
     padding: "60px 60px",
+    // backgroundColor: '#64b5f6',
   },
   inputBox: {
     width: "400px",
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   submitButton: {
     width: "400px",
   },
+  
 }));
 
 const MultifieldInput = (props) => {

@@ -31,15 +31,16 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    minHeight: "98vh",
+    minHeight: "100vh",
     paddingTop: "64px",
     boxSizing: "border-box",
     margin:0,
     width: "100%",
-    // backgroundImage: `url('${require("../src/images/jobs-portal-new.png")}')`,
+    // backgroundImage: `url('${require("../src/images/job.jpeg")}')`,
     // backgroundSize: 'cover',  // Ensures the background covers the entire element area
     // backgroundPosition: 'center',  // Centers the background image
-    // backgroundRepeat: 'no-repeat'  // Prevents repeating the background image
+    backgroundRepeat: 'no-repeat',  // Prevents repeating the background image
+    backgroundColor: '#bbdefb',
   },
 }));
 
@@ -64,8 +65,8 @@ function App() {
               <Route exact path="/">
                 <Welcome />
               </Route>
-              <Route exact path="/login">
-                <Login />
+              <Route exact path="/login" >
+                <Login/>
               </Route>
               <Route exact path="/signup">
                 <Signup />

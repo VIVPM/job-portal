@@ -23,7 +23,9 @@ import apiList from "../lib/apiList";
 
 const useStyles = makeStyles((theme) => ({
   body: {
-    height: "inherit",
+    backgroundColor: '#64b5f6',
+    height: "100%",
+    
     // width:"200px"
   },
   popupDialog: {
@@ -356,7 +358,7 @@ const Profile = (props) => {
         <Grid item>
           <Typography variant="h2">Profile</Typography>
         </Grid>
-        <Grid item xs>
+        <Grid item xs >
           <Paper
             style={{
               padding: "20px",
@@ -365,6 +367,7 @@ const Profile = (props) => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
+              // backgroundColor: '#64b5f6',
             }}
           >
             <Avatar
@@ -381,7 +384,7 @@ const Profile = (props) => {
                   className={classes.inputBox}
                   variant="outlined"
                   fullWidth
-                  style={{ marginTop: "20px" }}
+                  style={{ marginTop: "10px" }}
                 />
               </Grid>
               <Grid item>
@@ -392,7 +395,7 @@ const Profile = (props) => {
                   className={classes.inputBox}
                   variant="outlined"
                   fullWidth
-                  style={{ marginTop: "20px" }}
+                  style={{ marginTop: "10px" }}
                 />
               </Grid>
               
