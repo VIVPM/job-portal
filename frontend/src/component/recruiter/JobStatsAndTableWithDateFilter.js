@@ -18,7 +18,7 @@ const JobStatsAndTableWithDateFilter = () => {
 
     const fetchJobs = async () => {
         try {
-            const response = await axios.get(apiList.jobs, {
+            const response = await axios.get(`${apiList.jobs}?myjobs=1`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
             setJobs(response.data);
