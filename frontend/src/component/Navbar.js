@@ -34,8 +34,15 @@ const Navbar = (props) => {
     <AppBar>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
-          CareerSpark
+          <Button color="inherit" onClick={() => handleClick("/")}>CareerSpark</Button>
         </Typography>
+        {/* <Button color="inherit" onClick={() => handleClick("/")}>
+          <Typography variant="h6" className={classes.title}>
+            CareerSpark
+          </Typography>
+          </Button> */}
+          
+        
         {isAuth() ? (
           userType() === "recruiter" ? (
             <>
