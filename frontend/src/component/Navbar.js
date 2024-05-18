@@ -34,7 +34,7 @@ const Navbar = (props) => {
     <AppBar>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
-          Job Portal
+          CareerSpark
         </Typography>
         {isAuth() ? (
           userType() === "recruiter" ? (
