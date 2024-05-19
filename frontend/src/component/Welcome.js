@@ -121,7 +121,8 @@ const Welcome = (props) => {
         </Grid>
         <Grid container justifyContent="center">
           <div style={{
-            backgroundImage: `url('${require("../images/careerSpark.png")}')`,
+            // backgroundImage: `url('${require("../images/careerSpark.png")}')`,
+            backgroundColor:'',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -132,15 +133,21 @@ const Welcome = (props) => {
             justifyContent: 'center' // Centers the box horizontally and vertically
           }}>
             <div style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent white background
-              padding: '20px',
-              borderRadius: '10px', // Rounded corners
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Subtle shadow for depth
+              // backgroundColor: '#e0e0e0', // Semi-transparent white background
+              padding: '10px',
+              // borderRadius: '10px', // Rounded corners
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)', // Subtle shadow for depth
               width: '1450px', // Limits the box width
               textAlign: 'center' // Center the text inside the box
             }}>
-              <Typography variant="h5" style={{ fontSize: '50px', fontWeight: '500', color: 'black' }}>
-                CareerSpark<br />Ignite Your Career Path Today
+              <Typography variant="h5" style={{
+                fontSize: '60px', fontWeight: '500', color: '#1a237e' }}>
+                CareerSpark
+              </Typography>
+              <br />
+              <Typography variant="h5" style={{
+                fontSize: '30px', fontWeight: '500', color: '#dd2c00' }}>
+                Ignite Your Career Path Today
               </Typography>
             </div>
           </div>
