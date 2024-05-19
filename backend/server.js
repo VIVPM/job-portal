@@ -46,21 +46,6 @@ app.use(cors());
 app.use(express.json());
 app.use(passportConfig.initialize());
 
-app.post('/create-pdf', (req, res) => {
-  pdf.create(pdfTemplate(req.body), {}).toFile('result.pdf', (err) => {
-    if (err) {
-      res.send(Promise.reject());
-    }
-
-    res.send(Promise.resolve());
-  });
-});
-
-app.get('/fetch-pdf', (req, res) => {
-  res.sendFile(`${__dirname}/result.pdf`)
-})
-
-
 // Routing
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/api', require('./routes/apiRoutes'));
