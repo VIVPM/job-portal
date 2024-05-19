@@ -7,6 +7,7 @@ const pdf = require('html-pdf');
 const fs = require('fs');
 const pdfTemplate = require('./documents');
 require('dotenv').config();
+const functions = require('firebase-functions');
 
 // MongoDB
 mongoose
@@ -42,7 +43,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 //   credentials: true,            //access-control-allow-credentials:true
 //   optionSuccessStatus: 200
 // }
-app.use(cors());
+app.use(cors({ origin: true }));
 app.use(express.json());
 app.use(passportConfig.initialize());
 
@@ -51,6 +52,8 @@ app.use('/auth', require('./routes/authRoutes'));
 app.use('/api', require('./routes/apiRoutes'));
 app.use('/upload', require('./routes/uploadRoutes'));
 app.use('/host', require('./routes/downloadRoutes'));
+
+exports.api = functions.https.onRequest(app);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}!`);

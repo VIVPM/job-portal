@@ -320,6 +320,7 @@ const Profile = (props) => {
 
   const getResume = () => {
     if (profileDetails.resume && profileDetails.resume !== "") {
+      console.log(profileDetails.resume,apiList.downloadResume)
       axios(profileDetails.resume, {
         method: "GET",
         responseType: "blob",
