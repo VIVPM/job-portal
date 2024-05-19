@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^12.6.2",
     "axios": "^1.6.8",
     "bootstrap": "^5.2.0",
+    "docx": "^8.5.0",
     "emailjs-com": "^3.2.0",
     "file-saver": "^2.0.5",
     "gh-pages": "^4.0.0",
