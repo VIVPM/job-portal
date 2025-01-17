@@ -397,7 +397,7 @@ const ApplicationTile = (props) => {
     const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
     const countryCode = cleanedNumber.slice(0, -10);
     const lastTenDigits = cleanedNumber.slice(-10);
-    return `${countryCode} ${lastTenDigits}`;
+    return `+${countryCode} ${lastTenDigits}`;
   };
 
 

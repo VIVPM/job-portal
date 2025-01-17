@@ -602,7 +602,7 @@ const ApplicationTile = (props) => {
     const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
     const countryCode = cleanedNumber.slice(0, -10);
     const lastTenDigits = cleanedNumber.slice(-10);
-    return `${countryCode} ${lastTenDigits}`;
+    return `+${countryCode} ${lastTenDigits}`;
   };
 
   const sendEmail = () => {
@@ -626,7 +626,7 @@ const ApplicationTile = (props) => {
       
     };
 
-    emailjs.send('service_fvk9p8i', 'template_yidqktp', templateParams, 'W3x8uLN-ChNS8QQKb')
+    emailjs.send('service_fvk9p8i', 'template_yidqktp', templateParams, '4ePreozVVNpMYU4ey')
       .then((response) => {
         console.log('Email successfully sent!', response);
         setPopup({

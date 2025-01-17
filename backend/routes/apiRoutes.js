@@ -709,12 +709,17 @@ router.put("/user", jwtAuth, (req, res) => {
         })
         .catch(err => {
           console.error("Error updating profile info:", err);
-          res.status(400).json(err);
+          res.json({ message: "Error updating profile info:" }).status(400);
         });
     })
     .catch(err => {
       console.error("Error updating user email:", err);
-      res.status(400).json(err);
+      // res.status(400).json(err);
+      if (err.code === 11000 && err.keyPattern?.email) {
+        res.status(400).json({ message: "Email already in use. Please use a different email." });
+      } else {
+        res.status(400).json(err);
+      }
     });
 });
 
