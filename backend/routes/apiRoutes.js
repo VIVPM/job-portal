@@ -274,95 +274,63 @@ router.get("/jobs", jwtAuth, (req, res) => {
 });
 
 // to get info about a particular job
-router.get("/jobs/:id", jwtAuth, (req, res) => {
-  Job.findOne({ _id: req.params.id })
-    .then((job) => {
-      if (job == null) {
-        res.status(400).json({
-          message: "Job does not exist",
-        });
-        return;
-      }
-      res.json(job);
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
+router.get("/jobs/:id", jwtAuth, async (req, res) => {
+  try {
+    const job = await Job.findOne({ _id: req.params.id });
+    if (!job) {
+      return res.status(400).json({ message: "Job does not exist" });
+    }
+    res.json(job);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
 
+
 // to update info of a particular job
-router.put("/jobs/:id", jwtAuth, (req, res) => {
+router.put("/jobs/:id", jwtAuth, async (req, res) => {
   const user = req.user;
-  if (user.type != "recruiter") {
-    res.status(401).json({
+  if (user.type !== "recruiter") {
+    return res.status(401).json({
       message: "You don't have permissions to change the job details",
     });
-    return;
   }
-  Job.findOne({
-    _id: req.params.id,
-    userId: user.id,
-  })
-    .then((job) => {
-      if (job == null) {
-        res.status(404).json({
-          message: "Job does not exist",
-        });
-        return;
-      }
-      const data = req.body;
-      if (data.maxApplicants) {
-        job.maxApplicants = data.maxApplicants;
-      }
-      if (data.maxPositions) {
-        job.maxPositions = data.maxPositions;
-      }
-      if (data.deadline) {
-        job.deadline = data.deadline;
-      }
-      job
-        .save()
-        .then(() => {
-          res.json({
-            message: "Job details updated successfully",
-          });
-        })
-        .catch((err) => {
-          res.status(400).json(err);
-        });
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
+  try {
+    const job = await Job.findOne({ _id: req.params.id, userId: user.id });
+    if (!job) {
+      return res.status(404).json({ message: "Job does not exist" });
+    }
+    const { maxApplicants, maxPositions, deadline } = req.body;
+    if (maxApplicants) job.maxApplicants = maxApplicants;
+    if (maxPositions) job.maxPositions = maxPositions;
+    if (deadline) job.deadline = deadline;
+
+    await job.save();
+    res.json({ message: "Job details updated successfully" });
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
 
 // to delete a job
-router.delete("/jobs/:id", jwtAuth, (req, res) => {
+router.delete("/jobs/:id", jwtAuth, async (req, res) => {
   const user = req.user;
-  if (user.type != "recruiter") {
-    res.status(401).json({
+  if (user.type !== "recruiter") {
+    return res.status(401).json({
       message: "You don't have permissions to delete the job",
     });
-    return;
   }
-  Job.findOneAndDelete({
-    _id: req.params.id,
-    userId: user.id,
-  })
-    .then((job) => {
-      if (job === null) {
-        res.status(401).json({
-          message: "You don't have permissions to delete the job",
-        });
-        return;
-      }
-      res.json({
-        message: "Job deleted successfully",
+  try {
+    const job = await Job.findOneAndDelete({ _id: req.params.id, userId: user.id });
+    if (!job) {
+      return res.status(401).json({
+        message: "You don't have permissions to delete the job",
       });
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
+    }
+    res.json({ message: "Job deleted successfully" });
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
 
 // get user's personal details
@@ -507,38 +475,29 @@ router.delete("/jobs/:id", jwtAuth, (req, res) => {
 // });
 
 // Helper function to fetch and merge user details
-function fetchAndMergeUserDetails(userId, callback) {
-  User.findOne({ _id: userId })
-    .then((userData) => {
-      if (!userData) {
-        return callback({ message: "User does not exist" }, null);
-      }
+async function fetchAndMergeUserDetails(userId, callback) {
+  try {
+    const userData = await User.findOne({ _id: userId });
+    if (!userData) {
+      return callback({ message: "User does not exist" }, null);
+    }
 
-      const userInfo = {
-        email: userData.email,
-        type: userData.type,
-      };
+    const userInfo = { email: userData.email, type: userData.type };
+    const profileModel = userData.type === "recruiter" ? Recruiter : JobApplicant;
 
-      const profileModel = userData.type === "recruiter" ? Recruiter : JobApplicant;
-      profileModel.findOne({ userId: userData._id })
-        .then((profile) => {
-          if (!profile) {
-            return callback({ message: `${userData.type} profile does not exist` }, null);
-          }
-          // Merge user info with profile details
-          const mergedDetails = {
-            ...userInfo,
-            ...profile.toObject(),
-          };
-          callback(null, mergedDetails);
-        })
-        .catch((err) => {
-          callback(err, null);
-        });
-    })
-    .catch((err) => {
-      callback(err, null);
-    });
+    const profile = await profileModel.findOne({ userId: userData._id });
+    if (!profile) {
+      return callback(
+        { message: `${userData.type} profile does not exist` },
+        null
+      );
+    }
+
+    const mergedDetails = { ...userInfo, ...profile.toObject() };
+    callback(null, mergedDetails);
+  } catch (err) {
+    callback(err, null);
+  }
 }
 
 // Route to get user details by user ID
@@ -666,177 +625,130 @@ router.get("/user", jwtAuth, (req, res) => {
 // });
 
 
-router.put("/user", jwtAuth, (req, res) => {
+router.put("/user", jwtAuth, async (req, res) => {
   const user = req.user;
   const data = req.body;
 
-  // First update the User model with the new email
-  User.findByIdAndUpdate(user._id, { email: data.email }, { new: true })
-    .then(updatedUser => {
-      if (!updatedUser) {
-        res.status(404).json({ message: "User not found" });
-        return;
-      }
+  try {
+    // Update the User model with the new email
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      { email: data.email },
+      { new: true }
+    );
 
-      // Determine the appropriate model based on the user type
-      const profileModel = user.type === "recruiter" ? Recruiter : JobApplicant;
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-      // Prepare the updates for the profile model
-      const updates = {
-        name: data.name,
-      };
+    // Determine the appropriate profile model
+    const profileModel = user.type === "recruiter" ? Recruiter : JobApplicant;
 
-      if (user.type === "recruiter") {
-        // Additional recruiter specific updates
-        if (data.contactNumber) updates.contactNumber = data.contactNumber;
-        if (data.Company) updates.Company = data.Company;
-        if (data.YearsExperience) updates.YearsExperience = data.YearsExperience;
-        if (data.bio) updates.bio = data.bio;
-        if (data.profile) updates.profile = data.profile;
-      } else {
-        // Job applicant specific updates
-        if (data.contactNumber) updates.contactNumber = data.contactNumber;
-        if (data.education) updates.education = data.education;
-        if (data.skills) updates.skills = data.skills;
-        if (data.resume) updates.resume = data.resume;
-        if (data.profile) updates.profile = data.profile;
-      }
+    // Prepare updates for the profile model
+    const updates = { name: data.name };
 
-      // Now update the appropriate profile model
-      profileModel.findOneAndUpdate({ userId: user._id }, updates, { new: true })
-        .then(() => {
-          res.json({ message: "User information updated successfully" });
-        })
-        .catch(err => {
-          console.error("Error updating profile info:", err);
-          res.json({ message: "Error updating profile info:" }).status(400);
-        });
-    })
-    .catch(err => {
-      console.error("Error updating user email:", err);
-      // res.status(400).json(err);
-      if (err.code === 11000 && err.keyPattern?.email) {
-        res.status(400).json({ message: "Email already in use. Please use a different email." });
-      } else {
-        res.status(400).json(err);
-      }
-    });
+    if (user.type === "recruiter") {
+      // Recruiter-specific updates
+      if (data.contactNumber) updates.contactNumber = data.contactNumber;
+      if (data.Company) updates.Company = data.Company;
+      if (data.YearsExperience) updates.YearsExperience = data.YearsExperience;
+      if (data.bio) updates.bio = data.bio;
+      if (data.profile) updates.profile = data.profile;
+    } else {
+      // Job applicant-specific updates
+      if (data.contactNumber) updates.contactNumber = data.contactNumber;
+      if (data.education) updates.education = data.education;
+      if (data.skills) updates.skills = data.skills;
+      if (data.resume) updates.resume = data.resume;
+      if (data.profile) updates.profile = data.profile;
+    }
+
+    // Update the appropriate profile model
+    await profileModel.findOneAndUpdate({ userId: user._id }, updates, { new: true });
+
+    res.json({ message: "User information updated successfully" });
+  } catch (err) {
+    console.error("Error updating user information:", err);
+    if (err.code === 11000 && err.keyPattern?.email) {
+      res.status(400).json({ message: "Email already in use. Please use a different email." });
+    } else {
+      res.status(400).json(err);
+    }
+  }
 });
 
 // apply for a job [todo: test: done]
-router.post("/jobs/:id/applications", jwtAuth, (req, res) => {
+router.post("/jobs/:id/applications", jwtAuth, async (req, res) => {
   const user = req.user;
-  if (user.type != "applicant") {
-    res.status(401).json({
+  if (user.type !== "applicant") {
+    return res.status(401).json({
       message: "You don't have permissions to apply for a job",
     });
-    return;
   }
-  const data = req.body;
-  const jobId = req.params.id;
+  try {
+    const { sop } = req.body;
+    const jobId = req.params.id;
 
-  // check whether applied previously
-  // find job
-  // check count of active applications < limit
-  // check user had < 10 active applications && check if user is not having any accepted jobs (user id)
-  // store the data in applications
-
-  Application.findOne({
-    userId: user._id,
-    jobId: jobId,
-    status: {
-      $nin: ["deleted", "accepted", "cancelled"],
-    },
-  })
-    .then((appliedApplication) => {
-      console.log(appliedApplication);
-      if (appliedApplication !== null) {
-        res.status(400).json({
-          message: "You have already applied for this job",
-        });
-        return;
-      }
-
-      Job.findOne({ _id: jobId })
-        .then((job) => {
-          if (job === null) {
-            res.status(404).json({
-              message: "Job does not exist",
-            });
-            return;
-          }
-          Application.countDocuments({
-            jobId: jobId,
-            status: {
-              $nin: ["rejected", "deleted", "cancelled", "finished"],
-            },
-          })
-            .then((activeApplicationCount) => {
-              if (activeApplicationCount < job.maxApplicants) {
-                Application.countDocuments({
-                  userId: user._id,
-                  status: {
-                    $nin: ["rejected", "deleted", "cancelled", "finished"],
-                  },
-                })
-                  .then((myActiveApplicationCount) => {
-                    if (myActiveApplicationCount < 10) {
-                      Application.countDocuments({
-                        userId: user._id,
-                        status: "accepted",
-                      }).then((acceptedJobs) => {
-                        if (acceptedJobs === 0) {
-                          const application = new Application({
-                            userId: user._id,
-                            recruiterId: job.userId,
-                            jobId: job._id,
-                            status: "applied",
-                            sop: data.sop,
-                          });
-                          application
-                            .save()
-                            .then(() => {
-                              res.json({
-                                message: "Job application successful",
-                              });
-                            })
-                            .catch((err) => {
-                              res.status(400).json(err);
-                            });
-                        } else {
-                          res.status(400).json({
-                            message:
-                              "You already have an accepted job. Hence you cannot apply.",
-                          });
-                        }
-                      });
-                    } else {
-                      res.status(400).json({
-                        message:
-                          "You have 10 active applications. Hence you cannot apply.",
-                      });
-                    }
-                  })
-                  .catch((err) => {
-                    res.status(400).json(err);
-                  });
-              } else {
-                res.status(400).json({
-                  message: "Application limit reached",
-                });
-              }
-            })
-            .catch((err) => {
-              res.status(400).json(err);
-            });
-        })
-        .catch((err) => {
-          res.status(400).json(err);
-        });
-    })
-    .catch((err) => {
-      res.json(400).json(err);
+    const appliedApplication = await Application.findOne({
+      userId: user._id,
+      jobId,
+      status: { $nin: ["deleted", "accepted", "cancelled"] },
     });
+    if (appliedApplication) {
+      return res.status(400).json({
+        message: "You have already applied for this job",
+      });
+    }
+
+    const job = await Job.findOne({ _id: jobId });
+    if (!job) {
+      return res.status(404).json({ message: "Job does not exist" });
+    }
+
+    const activeApplicationCount = await Application.countDocuments({
+      jobId,
+      status: { $nin: ["rejected", "deleted", "cancelled", "finished"] },
+    });
+
+    if (activeApplicationCount >= job.maxApplicants) {
+      return res.status(400).json({ message: "Application limit reached" });
+    }
+
+    const myActiveApplicationCount = await Application.countDocuments({
+      userId: user._id,
+      status: { $nin: ["rejected", "deleted", "cancelled", "finished"] },
+    });
+
+    if (myActiveApplicationCount >= 10) {
+      return res.status(400).json({
+        message: "You have 10 active applications. Hence you cannot apply.",
+      });
+    }
+
+    const acceptedJobs = await Application.countDocuments({
+      userId: user._id,
+      status: "accepted",
+    });
+
+    if (acceptedJobs > 0) {
+      return res.status(400).json({
+        message: "You already have an accepted job. Hence you cannot apply.",
+      });
+    }
+
+    const application = new Application({
+      userId: user._id,
+      recruiterId: job.userId,
+      jobId: job._id,
+      status: "applied",
+      sop,
+    });
+
+    await application.save();
+    res.json({ message: "Job application successful" });
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
 
 // recruiter gets applications for a particular job [pagination] [todo: test: done]
@@ -937,194 +849,95 @@ router.get("/applications", jwtAuth, (req, res) => {
 });
 
 // update status of application: [Applicant: Can cancel, Recruiter: Can do everything] [todo: test: done]
-router.put("/applications/:id", jwtAuth, (req, res) => {
+router.put("/applications/:id", jwtAuth, async (req, res) => {
   const user = req.user;
   const id = req.params.id;
   const status = req.body.status;
 
-  // "applied", // when a applicant is applied
-  // "shortlisted", // when a applicant is shortlisted
-  // "accepted", // when a applicant is accepted
-  // "rejected", // when a applicant is rejected
-  // "deleted", // when any job is deleted
-  // "cancelled", // an application is cancelled by its author or when other application is accepted
-  // "finished", // when job is over
+  try {
+    if (user.type === "recruiter") {
+      if (status === "accepted") {
+        const application = await Application.findOne({ _id: id, recruiterId: user._id });
 
-  if (user.type === "recruiter") {
-    if (status === "accepted") {
-      // get job id from application
-      // get job info for maxPositions count
-      // count applications that are already accepted
-      // compare and if condition is satisfied, then save
+        if (!application) {
+          return res.status(404).json({ message: "Application not found" });
+        }
 
-      Application.findOne({
-        _id: id,
-        recruiterId: user._id,
-      })
-        .then((application) => {
-          if (application === null) {
-            res.status(404).json({
-              message: "Application not found",
-            });
-            return;
-          }
+        const job = await Job.findOne({ _id: application.jobId, userId: user._id });
+        if (!job) {
+          return res.status(404).json({ message: "Job does not exist" });
+        }
 
-          Job.findOne({
-            _id: application.jobId,
-            userId: user._id,
-          }).then((job) => {
-            if (job === null) {
-              res.status(404).json({
-                message: "Job does not exist",
-              });
-              return;
-            }
-
-            Application.countDocuments({
-              recruiterId: user._id,
-              jobId: job._id,
-              status: "accepted",
-            }).then((activeApplicationCount) => {
-              if (activeApplicationCount < job.maxPositions) {
-                // accepted
-                application.status = status;
-                application.dateOfJoining = req.body.dateOfJoining;
-                application
-                  .save()
-                  .then(() => {
-                    Application.updateMany(
-                      {
-                        _id: {
-                          $ne: application._id,
-                        },
-                        userId: application.userId,
-                        status: {
-                          $nin: [
-                            "rejected",
-                            "deleted",
-                            "cancelled",
-                            "accepted",
-                            "finished",
-                          ],
-                        },
-                      },
-                      {
-                        $set: {
-                          status: "cancelled",
-                        },
-                      },
-                      { multi: true }
-                    )
-                      .then(() => {
-                        if (status === "accepted") {
-                          Job.findOneAndUpdate(
-                            {
-                              _id: job._id,
-                              userId: user._id,
-                            },
-                            {
-                              $set: {
-                                acceptedCandidates: activeApplicationCount + 1,
-                              },
-                            }
-                          )
-                            .then(() => {
-                              res.json({
-                                message: `Application ${status} successfully`,
-                              });
-                            })
-                            .catch((err) => {
-                              res.status(400).json(err);
-                            });
-                        } else {
-                          res.json({
-                            message: `Application ${status} successfully`,
-                          });
-                        }
-                      })
-                      .catch((err) => {
-                        res.status(400).json(err);
-                      });
-                  })
-                  .catch((err) => {
-                    res.status(400).json(err);
-                  });
-              } else {
-                res.status(400).json({
-                  message: "All positions for this job are already filled",
-                });
-              }
-            });
-          });
-        })
-        .catch((err) => {
-          res.status(400).json(err);
-        });
-    } else {
-      Application.findOneAndUpdate(
-        {
-          _id: id,
+        const activeApplicationCount = await Application.countDocuments({
           recruiterId: user._id,
-          status: {
-            $nin: ["rejected", "deleted", "cancelled"],
-          },
-        },
-        {
-          $set: {
-            status: status,
-          },
-        }
-      )
-        .then((application) => {
-          if (application === null) {
-            res.status(400).json({
-              message: "Application status cannot be updated",
-            });
-            return;
-          }
-          if (status === "finished") {
-            res.json({
-              message: `Job ${status} successfully`,
-            });
-          } else {
-            res.json({
-              message: `Application ${status} successfully`,
-            });
-          }
-        })
-        .catch((err) => {
-          res.status(400).json(err);
+          jobId: job._id,
+          status: "accepted",
         });
-    }
-  } else {
-    if (status === "cancelled") {
-      console.log(id);
-      console.log(user._id);
-      Application.findOneAndUpdate(
-        {
-          _id: id,
-          userId: user._id,
-        },
-        {
-          $set: {
-            status: status,
-          },
+
+        if (activeApplicationCount < job.maxPositions) {
+          application.status = status;
+          application.dateOfJoining = req.body.dateOfJoining;
+          await application.save();
+
+          await Application.updateMany(
+            {
+              _id: { $ne: application._id },
+              userId: application.userId,
+              status: { $nin: ["rejected", "deleted", "cancelled", "accepted", "finished"] },
+            },
+            { $set: { status: "cancelled" } }
+          );
+
+          if (status === "accepted") {
+            await Job.findOneAndUpdate(
+              { _id: job._id, userId: user._id },
+              { $set: { acceptedCandidates: activeApplicationCount + 1 } }
+            );
+          }
+
+          return res.json({ message: `Application ${status} successfully` });
+        } else {
+          return res.status(400).json({ message: "All positions for this job are already filled" });
         }
-      )
-        .then((tmp) => {
-          console.log(tmp);
-          res.json({
-            message: `Application ${status} successfully`,
-          });
-        })
-        .catch((err) => {
-          res.status(400).json(err);
-        });
+      } else {
+        const application = await Application.findOneAndUpdate(
+          {
+            _id: id,
+            recruiterId: user._id,
+            status: { $nin: ["rejected", "deleted", "cancelled"] },
+          },
+          { $set: { status } },
+          { new: true }
+        );
+
+        if (!application) {
+          return res.status(400).json({ message: "Application status cannot be updated" });
+        }
+
+        return res.json({ message: `Application ${status} successfully` });
+      }
     } else {
-      res.status(401).json({
-        message: "You don't have permissions to update job status",
-      });
+      if (status === "cancelled") {
+        const application = await Application.findOneAndUpdate(
+          { _id: id, userId: user._id },
+          { $set: { status } },
+          { new: true }
+        );
+
+        if (!application) {
+          return res.status(400).json({ message: "Application cannot be cancelled" });
+        }
+
+        return res.json({ message: `Application ${status} successfully` });
+      } else {
+        return res.status(401).json({
+          message: "You don't have permissions to update job status",
+        });
+      }
     }
+  } catch (err) {
+    console.error("Error updating application status:", err);
+    res.status(400).json(err);
   }
 });
 
@@ -1235,367 +1048,187 @@ router.get("/applicants", jwtAuth, (req, res) => {
 });
 
 // to add or update a rating [todo: test]
-router.put("/rating", jwtAuth, (req, res) => {
+
+router.put("/rating", jwtAuth, async (req, res) => {
   const user = req.user;
   const data = req.body;
-  if (user.type === "recruiter") {
-    // can rate applicant
-    Rating.findOne({
-      senderId: user._id,
-      receiverId: data.applicantId,
-      category: "applicant",
-    })
-      .then((rating) => {
-        if (rating === null) {
-          console.log("new rating");
-          Application.countDocuments({
-            userId: data.applicantId,
-            recruiterId: user._id,
-            status: {
-              $in: ["accepted", "finished"],
-            },
-          })
-            .then((acceptedApplicant) => {
-              if (acceptedApplicant > 0) {
-                // add a new rating
 
-                rating = new Rating({
-                  category: "applicant",
-                  receiverId: data.applicantId,
-                  senderId: user._id,
-                  rating: data.rating,
-                });
-
-                rating
-                  .save()
-                  .then(() => {
-                    // get the average of ratings
-                    Rating.aggregate([
-                      {
-                        $match: {
-                          receiverId: mongoose.Types.ObjectId(data.applicantId),
-                          category: "applicant",
-                        },
-                      },
-                      {
-                        $group: {
-                          _id: {},
-                          average: { $avg: "$rating" },
-                        },
-                      },
-                    ])
-                      .then((result) => {
-                        // update the user's rating
-                        if (result === null) {
-                          res.status(400).json({
-                            message: "Error while calculating rating",
-                          });
-                          return;
-                        }
-                        const avg = result[0].average;
-
-                        JobApplicant.findOneAndUpdate(
-                          {
-                            userId: data.applicantId,
-                          },
-                          {
-                            $set: {
-                              rating: avg,
-                            },
-                          }
-                        )
-                          .then((applicant) => {
-                            if (applicant === null) {
-                              res.status(400).json({
-                                message:
-                                  "Error while updating applicant's average rating",
-                              });
-                              return;
-                            }
-                            res.json({
-                              message: "Rating added successfully",
-                            });
-                          })
-                          .catch((err) => {
-                            res.status(400).json(err);
-                          });
-                      })
-                      .catch((err) => {
-                        res.status(400).json(err);
-                      });
-                  })
-                  .catch((err) => {
-                    res.status(400).json(err);
-                  });
-              } else {
-                // you cannot rate
-                res.status(400).json({
-                  message:
-                    "Applicant didn't worked under you. Hence you cannot give a rating.",
-                });
-              }
-            })
-            .catch((err) => {
-              res.status(400).json(err);
-            });
-        } else {
-          rating.rating = data.rating;
-          rating
-            .save()
-            .then(() => {
-              // get the average of ratings
-              Rating.aggregate([
-                {
-                  $match: {
-                    receiverId: mongoose.Types.ObjectId(data.applicantId),
-                    category: "applicant",
-                  },
-                },
-                {
-                  $group: {
-                    _id: {},
-                    average: { $avg: "$rating" },
-                  },
-                },
-              ])
-                .then((result) => {
-                  // update the user's rating
-                  if (result === null) {
-                    res.status(400).json({
-                      message: "Error while calculating rating",
-                    });
-                    return;
-                  }
-                  const avg = result[0].average;
-                  JobApplicant.findOneAndUpdate(
-                    {
-                      userId: data.applicantId,
-                    },
-                    {
-                      $set: {
-                        rating: avg,
-                      },
-                    }
-                  )
-                    .then((applicant) => {
-                      if (applicant === null) {
-                        res.status(400).json({
-                          message:
-                            "Error while updating applicant's average rating",
-                        });
-                        return;
-                      }
-                      res.json({
-                        message: "Rating updated successfully",
-                      });
-                    })
-                    .catch((err) => {
-                      res.status(400).json(err);
-                    });
-                })
-                .catch((err) => {
-                  res.status(400).json(err);
-                });
-            })
-            .catch((err) => {
-              res.status(400).json(err);
-            });
-        }
-      })
-      .catch((err) => {
-        res.status(400).json(err);
+  try {
+    if (user.type === "recruiter") {
+      // can rate applicant
+      let rating = await Rating.findOne({
+        senderId: user._id,
+        receiverId: new mongoose.Types.ObjectId(data.applicantId),
+        category: "applicant"
       });
-  } else {
-    // applicant can rate job
-    Rating.findOne({
-      senderId: user._id,
-      receiverId: data.jobId,
-      category: "job",
-    })
-      .then((rating) => {
-        console.log(user._id);
-        console.log(data.jobId);
-        console.log(rating);
-        if (rating === null) {
-          console.log(rating);
-          Application.countDocuments({
-            userId: user._id,
-            jobId: data.jobId,
-            status: {
-              $in: ["accepted", "finished"],
-            },
-          })
-            .then((acceptedApplicant) => {
-              if (acceptedApplicant > 0) {
-                // add a new rating
 
-                rating = new Rating({
-                  category: "job",
-                  receiverId: data.jobId,
-                  senderId: user._id,
-                  rating: data.rating,
-                });
+      if (!rating) {
+        const acceptedApplicantCount = await Application.countDocuments({
+          userId: data.applicantId,
+          recruiterId: user._id,
+          status: { $in: ["accepted", "finished"] }
+        });
 
-                rating
-                  .save()
-                  .then(() => {
-                    // get the average of ratings
-                    Rating.aggregate([
-                      {
-                        $match: {
-                          receiverId: mongoose.Types.ObjectId(data.jobId),
-                          category: "job",
-                        },
-                      },
-                      {
-                        $group: {
-                          _id: {},
-                          average: { $avg: "$rating" },
-                        },
-                      },
-                    ])
-                      .then((result) => {
-                        if (result === null) {
-                          res.status(400).json({
-                            message: "Error while calculating rating",
-                          });
-                          return;
-                        }
-                        const avg = result[0].average;
-                        Job.findOneAndUpdate(
-                          {
-                            _id: data.jobId,
-                          },
-                          {
-                            $set: {
-                              rating: avg,
-                            },
-                          }
-                        )
-                          .then((foundJob) => {
-                            if (foundJob === null) {
-                              res.status(400).json({
-                                message:
-                                  "Error while updating job's average rating",
-                              });
-                              return;
-                            }
-                            res.json({
-                              message: "Rating added successfully",
-                            });
-                          })
-                          .catch((err) => {
-                            res.status(400).json(err);
-                          });
-                      })
-                      .catch((err) => {
-                        res.status(400).json(err);
-                      });
-                  })
-                  .catch((err) => {
-                    res.status(400).json(err);
-                  });
-              } else {
-                // you cannot rate
-                res.status(400).json({
-                  message:
-                    "You haven't worked for this job. Hence you cannot give a rating.",
-                });
-              }
-            })
-            .catch((err) => {
-              res.status(400).json(err);
-            });
+        if (acceptedApplicantCount > 0) {
+          rating = new Rating({
+            category: "applicant",
+            receiverId: new mongoose.Types.ObjectId(data.applicantId),
+            senderId: user._id,
+            rating: data.rating,
+          });
+          await rating.save();
         } else {
-          // update the rating
-          rating.rating = data.rating;
-          rating
-            .save()
-            .then(() => {
-              // get the average of ratings
-              Rating.aggregate([
-                {
-                  $match: {
-                    receiverId: mongoose.Types.ObjectId(data.jobId),
-                    category: "job",
-                  },
-                },
-                {
-                  $group: {
-                    _id: {},
-                    average: { $avg: "$rating" },
-                  },
-                },
-              ])
-                .then((result) => {
-                  if (result === null) {
-                    res.status(400).json({
-                      message: "Error while calculating rating",
-                    });
-                    return;
-                  }
-                  const avg = result[0].average;
-                  console.log(avg);
-
-                  Job.findOneAndUpdate(
-                    {
-                      _id: data.jobId,
-                    },
-                    {
-                      $set: {
-                        rating: avg,
-                      },
-                    }
-                  )
-                    .then((foundJob) => {
-                      if (foundJob === null) {
-                        res.status(400).json({
-                          message: "Error while updating job's average rating",
-                        });
-                        return;
-                      }
-                      res.json({
-                        message: "Rating added successfully",
-                      });
-                    })
-                    .catch((err) => {
-                      res.status(400).json(err);
-                    });
-                })
-                .catch((err) => {
-                  res.status(400).json(err);
-                });
-            })
-            .catch((err) => {
-              res.status(400).json(err);
-            });
+          return res.status(400).json({
+            message: "Applicant didn't work under you. Hence you cannot give a rating.",
+          });
         }
-      })
-      .catch((err) => {
-        res.status(400).json(err);
+      } else {
+        rating.rating = data.rating;
+        await rating.save();
+      }
+
+      const result = await Rating.aggregate([
+        {
+          $match: {
+            receiverId: new mongoose.Types.ObjectId(data.applicantId),
+            category: "applicant",
+          },
+        },
+        {
+          $group: {
+            _id: {},
+            average: { $avg: "$rating" },
+          },
+        },
+      ]);
+
+      if (!result[0]) {
+        return res.status(400).json({
+          message: "Error while calculating rating",
+        });
+      }
+
+      const avg = result[0].average;
+
+      const applicant = await JobApplicant.findOneAndUpdate(
+        { userId: data.applicantId },
+        { $set: { rating: avg } },
+        { new: true } // Return the updated document
+      );
+
+      if (!applicant) {
+        return res.status(400).json({
+          message: "Error while updating applicant's average rating",
+        });
+      }
+
+      res.json({ message: "Rating added/updated successfully" });
+
+    } else {
+      // applicant can rate job
+      let rating = await Rating.findOne({
+        senderId: user._id,
+        receiverId: new mongoose.Types.ObjectId(data.jobId),
+        category: "job"
       });
+
+      if (!rating) {
+        const acceptedApplicantCount = await Application.countDocuments({
+          userId: user._id,
+          jobId: data.jobId,
+          status: { $in: ["accepted", "finished"] }
+        });
+
+        if (acceptedApplicantCount > 0) {
+          rating = new Rating({
+            category: "job",
+            receiverId: new mongoose.Types.ObjectId(data.jobId),
+            senderId: user._id,
+            rating: data.rating,
+          });
+          await rating.save();
+        } else {
+          return res.status(400).json({
+            message: "You haven't worked for this job. Hence you cannot give a rating.",
+          });
+        }
+      } else {
+        rating.rating = data.rating;
+        await rating.save();
+      }
+
+      const result = await Rating.aggregate([
+        {
+          $match: {
+            receiverId: new mongoose.Types.ObjectId(data.jobId),
+            category: "job",
+          },
+        },
+        {
+          $group: {
+            _id: {},
+            average: { $avg: "$rating" },
+          },
+        },
+      ]);
+
+      if (!result[0]) {
+        return res.status(400).json({
+          message: "Error while calculating rating",
+        });
+      }
+
+      const avg = result[0].average;
+
+      const foundJob = await Job.findOneAndUpdate(
+        { _id: data.jobId },
+        { $set: { rating: avg } },
+        { new: true } // Return the updated document
+      );
+
+      if (!foundJob) {
+        return res.status(400).json({
+          message: "Error while updating job's average rating",
+        });
+      }
+
+      res.json({ message: "Rating added/updated successfully" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ message: "An error occurred", error: err.message });
   }
 });
 
 // get personal rating
-router.get("/rating", jwtAuth, (req, res) => {
-  const user = req.user;
-  Rating.findOne({
-    senderId: user._id,
-    receiverId: req.query.id,
-    category: user.type === "recruiter" ? "applicant" : "job",
-  }).then((rating) => {
-    if (rating === null) {
-      res.json({
-        rating: -1,
-      });
-      return;
+router.get("/rating", jwtAuth, async (req, res) => {
+  try {
+    const user = req.user;
+    const { id } = req.query;
+
+    if (!id) {
+      return res.status(400).json({ message: "Receiver ID is required" });
     }
-    res.json({
-      rating: rating.rating,
+
+    const category = user.type === "recruiter" ? "applicant" : "job";
+
+    const rating = await Rating.findOne({
+      senderId: user._id,
+      receiverId: id,
+      category,
     });
-  });
+
+    if (!rating) {
+      return res.json({ rating: -1 });
+    }
+
+    res.json({ rating: rating.rating });
+  } catch (err) {
+    console.error("Error fetching rating:", err);
+    res.status(500).json({ message: "An error occurred while fetching the rating." });
+  }
 });
+
 
 // Application.findOne({
 //   _id: id,

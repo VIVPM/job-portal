@@ -11,12 +11,14 @@ const functions = require('firebase-functions');
 
 // MongoDB
 mongoose
-  .connect(process.env.mongo_url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
-  })
+  .connect(process.env.mongo_url
+    // ,{
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  //   useCreateIndex: true,
+  //   useFindAndModify: false
+  // }
+  )
   .then((res) => console.log('Connected to DB'))
   .catch((err) => console.log(err));
 

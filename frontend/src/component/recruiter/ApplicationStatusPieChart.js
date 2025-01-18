@@ -67,24 +67,28 @@ const ApplicationStatusPieChart = () => {
 
     const COLORS = ['#0088FE', '#FF8042', '#FFBB28'];
 
-    return (
-        <PieChart width={800} height={500}>
-            <Pie
-                data={chartData}
-                cx={400}
-                cy={250}
-                outerRadius={150}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-            >
-                {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-            </Pie>
-            <Tooltip />
-            <Legend align="center" verticalAlign="bottom" layout="horizontal" />
-        </PieChart>
+    
+        return (
+            <div style={{ textAlign: 'center' }}>
+            <h1>Job Acceptance Statistics</h1> 
+            <PieChart width={800} height={500}>
+                <Pie
+                    data={chartData}
+                    cx={400}
+                    cy={250}
+                    outerRadius={150}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                >
+                    {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                </Pie>
+                <Tooltip />
+                <Legend align="center" verticalAlign="bottom" layout="horizontal" />
+            </PieChart>
+        </div>
     );
 };
 
