@@ -40,7 +40,7 @@ const _dirname = path.resolve();
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-app.use(express.static(path.join(_dirname,"/frontend/build")));
+app.use(express.static(path.join(_dirname,"../frontend/build")));
 
 app.get('*',(req,res)=>{
   res.sendFile(path.resolve(_dirname,"frontend","build","index.html"))
