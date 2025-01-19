@@ -1,5 +1,5 @@
-// export const server = "http://localhost:4444";
-export const server =  "https://job-portal-internship.onrender.com";
+export const server = "http://localhost:4444";
+// export const server =  "https://job-portal-internship.onrender.com";
 const apiList = {
   login: `${server}/auth/login`,
   signup: `${server}/auth/signup`,
