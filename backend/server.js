@@ -8,6 +8,7 @@ const fs = require('fs');
 const pdfTemplate = require('./documents');
 require('dotenv').config();
 const functions = require('firebase-functions');
+import path from "path";
 
 // MongoDB
 mongoose
@@ -35,10 +36,15 @@ if (!fs.existsSync('./public/profile')) {
 
 const app = express();
 const port = process.env.port || 4444;
+const _dirname = path.resolve();
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-app.use(express.static('/public'));
+app.use(express.static(path.join(_dirname,"/frontend/dist")));
+
+app.get('*',(req,res)=>{
+  res.sendFile(path.resolve(_dirname,"frontend","build","index.html"))
+});
 
 // Setting up middlewares
 // const corsOptions = {
