@@ -8,7 +8,7 @@ const fs = require('fs');
 const pdfTemplate = require('./documents');
 require('dotenv').config();
 const functions = require('firebase-functions');
-import path from "path";
+const path = require("path");
 
 // MongoDB
 mongoose
