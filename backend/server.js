@@ -37,18 +37,18 @@ if (!fs.existsSync('./public/profile')) {
 const app = express();
 const port = process.env.port || 4444;
 // Resolve the absolute path to the `frontend/build` directory
-const buildPath = path.join(__dirname, "../frontend/build");
+// const buildPath = path.join(__dirname, "../frontend/build");
 
 // Serve static files from the `build` folder
-app.use(express.static(buildPath));
+// app.use(express.static(buildPath));
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // Catch-all route to serve `index.html` for all other requests
-app.get("*", (req, res) => {
-  res.sendFile(path.join(buildPath, "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(buildPath, "index.html"));
+// });
 
 // Setting up middlewares
 // const corsOptions = {

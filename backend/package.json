@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cd ../frontend && yarn install && npm run build && cd ../backend",
-    "start": "npx nodemon server.js"
+    "start": "npx nodemon server.js",
+    "build": "yarn install"
   },
   "author": "",
   "license": "ISC",
@@ -35,6 +34,7 @@
     "uuid": "^8.3.2"
   },
   "proxy": [
-    "http://localhost:3000","https://job-portal-internship.onrender.com"
+    "http://localhost:3000"
+
   ]
 }
