@@ -6,8 +6,8 @@
 
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon server.js",
-    "build": "yarn install"
+    "build": "cd ../frontend && yarn install && npm run build && cd ../backend",
+    "start": "npx nodemon server.js"
   },
   "author": "",
   "license": "ISC",
