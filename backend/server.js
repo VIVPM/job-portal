@@ -38,6 +38,7 @@ const port = process.env.port || 4444;
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use('/', express.static('/build'))
 
 // Setting up middlewares
 // const corsOptions = {
