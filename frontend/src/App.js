@@ -21,6 +21,7 @@ import ApplicationStatusPieChart from "./component/recruiter/ApplicationStatusPi
 import Context from './context/Context';
 // import JobStats from "./component/recruiter/JobStats";
 import Body from "./components/Body/Body";
+import Chatbot from "./component/Chatbot";
 import './App.css'
 
 import JobStatsAndTableWithDateFilter from './component/recruiter/JobStatsAndTableWithDateFilter';
@@ -58,6 +59,7 @@ function App() {
       <SetPopupContext.Provider value={setPopup}>
         <Grid container direction="column">
           <Grid item xs>
+            <Chatbot />
             <Navbar />
           </Grid>
           <Grid item className={classes.body}>
