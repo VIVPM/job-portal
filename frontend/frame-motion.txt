@@ -1,0 +1,34 @@
+import { motion } from "framer-motion";
+
+export default function Demo() {
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 overflow-hidden">
+      <div className="flex w-full overflow-hidden relative">
+        <motion.div
+          className="flex space-x-4"
+          initial={{ x: "0%" }}
+          animate={{ x: "-50%" }}
+          transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
+          style={{ display: "flex", whiteSpace: "nowrap" }}
+        >
+          {[...Array(10)].map((_, index) => (
+            <div
+              key={index}
+              className="w-32 h-32 bg-blue-500 flex items-center justify-center rounded-lg text-white font-bold"
+            >
+              Box {index + 1}
+            </div>
+          ))}
+          {[...Array(10)].map((_, index) => (
+            <div
+              key={index + 10}
+              className="w-32 h-32 bg-blue-500 flex items-center justify-center rounded-lg text-white font-bold"
+            >
+              Box {index + 1}
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </div>
+  );
+}

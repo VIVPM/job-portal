@@ -1,4 +1,5 @@
 import { Grid, Typography } from "@material-ui/core";
+import './Welcome.css';
 
 const Welcome = (props) => {
   return (
@@ -19,7 +20,7 @@ const Welcome = (props) => {
       >
         <Grid container item spacing={3} justifyContent="center">
           <Grid item xs={12} sm={4}>
-            <div style={{
+            <div className="company-card slide-in-left" style={{
               backgroundImage: `url('${require("../images/amazon.webp")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -28,7 +29,7 @@ const Welcome = (props) => {
             }} />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <div style={{
+            <div className="company-card slide-in-top" style={{
               backgroundImage: `url('${require("../images/juniper.jpg")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -37,7 +38,7 @@ const Welcome = (props) => {
             }} />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <div style={{
+            <div className="company-card slide-in-right" style={{
               backgroundImage: `url('${require("../images/texas.jpg")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -47,9 +48,7 @@ const Welcome = (props) => {
           </Grid>
         </Grid>
         <Grid container justifyContent="center">
-          <div style={{
-            // backgroundImage: `url('${require("../images/careerSpark.png")}')`,
-            backgroundColor:'',
+          <div className="title-container fade-in" style={{
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
@@ -57,22 +56,20 @@ const Welcome = (props) => {
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center' // Centers the box horizontally and vertically
+            justifyContent: 'center'
           }}>
-            <div style={{
-              // backgroundColor: '#e0e0e0', // Semi-transparent white background
+            <div className="title-box" style={{
               padding: '10px',
-              // borderRadius: '10px', // Rounded corners
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)', // Subtle shadow for depth
-              width: '1450px', // Limits the box width
-              textAlign: 'center' // Center the text inside the box
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
+              width: '1450px',
+              textAlign: 'center'
             }}>
-              <Typography variant="h5" style={{
+              <Typography variant="h5" className="main-title" style={{
                 fontSize: '60px', fontWeight: '500', color: '#1a237e' }}>
                 CareerSpark
               </Typography>
               <br />
-              <Typography variant="h5" style={{
+              <Typography variant="h5" className="sub-title" style={{
                 fontSize: '30px', fontWeight: '500', color: '#dd2c00' }}>
                 Ignite Your Career Path Today
               </Typography>
@@ -82,7 +79,7 @@ const Welcome = (props) => {
 
         <Grid container item spacing={3} justifyContent="center">
           <Grid item xs={12} sm={4}>
-            <div style={{
+            <div className="company-card slide-in-left delay" style={{
               backgroundImage: `url('${require("../images/infosys.jpg")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -91,7 +88,7 @@ const Welcome = (props) => {
             }} />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <div style={{
+            <div className="company-card slide-in-bottom delay" style={{
               backgroundImage: `url('${require("../images/accenture.webp")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -100,7 +97,7 @@ const Welcome = (props) => {
             }} />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <div style={{
+            <div className="company-card slide-in-right delay" style={{
               backgroundImage: `url('${require("../images/sony.jpg")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -113,10 +110,6 @@ const Welcome = (props) => {
     </div>
   );
 };
-
-
-
-
 
 export const ErrorPage = (props) => {
   return (

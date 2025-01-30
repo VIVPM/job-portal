@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import Rating from "@material-ui/lab/Rating";
+import emailjs from 'emailjs-com';
 import axios from "axios";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
@@ -360,6 +361,7 @@ const ApplicationTile = (props) => {
   const { application, getData } = props;
   const setPopup = useContext(SetPopupContext);
   const [open, setOpen] = useState(false);
+  const [userName, setUserName] = useState('');
   const appliedOn = new Date(application.dateOfApplication);
 
   const handleClose = () => {
@@ -367,11 +369,12 @@ const ApplicationTile = (props) => {
   };
 
   const [userEmail, setUserEmail] = useState('');
+  const [userEmail1, setUserEmail1] = useState('');
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const userId = application.jobApplicant.userId; 
+        const userId = application.jobApplicant.userId;
         const url = `${apiList.user}/${userId}`;
 
         const response = await axios.get(url, {
@@ -380,11 +383,9 @@ const ApplicationTile = (props) => {
           },
         });
 
-        
         setUserEmail(response.data.email);
       } catch (error) {
         console.error('Error fetching user details:', error);
-        
       }
     };
 
@@ -393,13 +394,36 @@ const ApplicationTile = (props) => {
     }
   }, [application.jobApplicant.userId]);
 
+  useEffect(() => {
+    const fetchUserDetails1 = async () => {
+      try {
+        const userId = application.recruiterId;
+        const url = `${apiList.user}/${userId}`;
+
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        setUserName(response.data.name);
+        setUserEmail1(response.data.email);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+
+    if (application.recruiterId) {
+      fetchUserDetails1();
+    }
+  }, [application.recruiterId]);
+
   const getFormattedNumber = (contactNumber) => {
     const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
     const countryCode = cleanedNumber.slice(0, -10);
     const lastTenDigits = cleanedNumber.slice(-10);
-    return `+${countryCode} ${lastTenDigits}`;
+    return `${countryCode} ${lastTenDigits}`;
   };
-
 
   const colorSet = {
     applied: "#3454D1",
@@ -444,34 +468,78 @@ const ApplicationTile = (props) => {
     }
   };
 
+  const generateFutureInterviewDate = () => {
+    const today = new Date();
+    const futureDate = new Date();
+
+    // Generate a random number of days ahead (between 1 and 10 days)
+    futureDate.setDate(today.getDate() + Math.floor(Math.random() * 10) + 1);
+
+    let hour;
+    while (true) {
+      // Generate a random hour between 9 AM and 9 PM
+      hour = Math.floor(Math.random() * 12) + 9; // 9 AM to 8 PM
+      if (hour < 13 || hour > 15) break; // Exclude 1 PM - 3 PM
+    }
+
+    const minute = Math.floor(Math.random() * 60); // Random minute
+
+    futureDate.setHours(hour, minute, 0, 0);
+
+    return futureDate.toLocaleString(); // Returns formatted date-time
+  };
+
+  const sendEmail = (templateId, userEmail, userName1, jobTitle, companyName, recruiterName) => {
+    const user = userName.split(" ")[0]
+    const templateParams = {
+      to_name: userName1,
+      to_email: userEmail,
+      from_email: userEmail1,
+      job_title: jobTitle,
+      company_name: companyName,
+      from_name: userName,
+      video_call: `https://zegocloud.github.io/zego_uikit_prebuilt_web/video_conference/index.html?roomID=${application._id}&role=${user}`,
+      date_time: generateFutureInterviewDate(),
+    };
+
+    emailjs.send('service_idabw9p', templateId, templateParams, 'g0P0a9XwiKARgTl2v')
+      .then((response) => {
+        console.log('Email successfully sent!', response);
+      })
+      .catch((err) => {
+        console.error('Failed to send email. Error:', err);
+      });
+  };
+
   const updateStatus = (status) => {
     const address = `${apiList.applications}/${application._id}`;
     const statusData = {
       status: status,
       dateOfJoining: new Date().toISOString(),
     };
-    axios
-      .put(address, statusData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+    axios.put(address, statusData, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
       .then((response) => {
-        setPopup({
-          open: true,
-          severity: "success",
-          message: response.data.message,
-        });
+        setPopup({ open: true, severity: 'success', message: response.data.message });
+        if (status === 'shortlisted') {
+          sendEmail('template_jt74lf6', userEmail, application.jobApplicant.name, application.job.title, application.job.companyName, userName);
+        } else if (status === 'rejected') {
+          sendEmail('template_h7djple', userEmail, application.jobApplicant.name, application.job.title, application.job.companyName, userName);
+        }
         getData();
       })
       .catch((err) => {
-        setPopup({
-          open: true,
-          severity: "error",
-          message: err.response.data.message,
-        });
+        setPopup({ open: true, severity: 'error', message: err.response.data.message });
         console.log(err.response);
       });
+  };
+
+  const handleVideoCall = () => {
+    const roomID = application._id; // Use the application ID as the room ID
+    const role = userName.split(" ")[0]; // Set the role as Host
+    const videoCallUrl = `https://zegocloud.github.io/zego_uikit_prebuilt_web/video_conference/index.html?roomID=${roomID}&role=${role}`;
+    window.open(videoCallUrl, "_blank");
   };
 
   const buttonSet = {
@@ -483,6 +551,7 @@ const ApplicationTile = (props) => {
             style={{
               background: colorSet["shortlisted"],
               color: "#ffffff",
+              width: "100%",
             }}
             onClick={() => updateStatus("shortlisted")}
           >
@@ -495,6 +564,7 @@ const ApplicationTile = (props) => {
             style={{
               background: colorSet["rejected"],
               color: "#ffffff",
+              width: "100%",
             }}
             onClick={() => updateStatus("rejected")}
           >
@@ -511,6 +581,7 @@ const ApplicationTile = (props) => {
             style={{
               background: colorSet["accepted"],
               color: "#ffffff",
+              width: "100%",
             }}
             onClick={() => updateStatus("accepted")}
           >
@@ -523,10 +594,26 @@ const ApplicationTile = (props) => {
             style={{
               background: colorSet["rejected"],
               color: "#ffffff",
+              width: "100%",
+              height:"200px"
             }}
             onClick={() => updateStatus("rejected")}
           >
             Reject
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            className={classes.statusBlock}
+            style={{
+              background: colorSet["shortlisted"],
+              color: "primary",
+              width: "100%",
+              height:"40px",
+            }}
+            onClick={handleVideoCall}
+          >
+            Video Call
           </Button>
         </Grid>
       </>
@@ -539,6 +626,7 @@ const ApplicationTile = (props) => {
             style={{
               background: colorSet["rejected"],
               color: "#ffffff",
+              width: "100%",
             }}
           >
             Rejected
@@ -554,6 +642,7 @@ const ApplicationTile = (props) => {
             style={{
               background: colorSet["accepted"],
               color: "#ffffff",
+              width: "100%",
             }}
           >
             Accepted
@@ -569,6 +658,7 @@ const ApplicationTile = (props) => {
             style={{
               background: colorSet["cancelled"],
               color: "#ffffff",
+              width: "100%",
             }}
           >
             Cancelled
@@ -584,6 +674,7 @@ const ApplicationTile = (props) => {
             style={{
               background: colorSet["finished"],
               color: "#ffffff",
+              width: "100%",
             }}
           >
             Finished
@@ -592,7 +683,6 @@ const ApplicationTile = (props) => {
       </>
     ),
   };
-
 
 
   return (

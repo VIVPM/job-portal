@@ -421,6 +421,10 @@ const ApplicationTile = (props) => {
   const [userEmail1, setUserEmail1] = useState('');
   const [userName,setUserName] = useState('');
   const [phoneNumber,setPhoneNumber] = useState('');
+  const [emailSent, setEmailSent] = useState(()=>{
+    return localStorage.getItem(`emailSent_${application._id}`) === "true";
+  });
+
 
   const appliedOn = new Date(application.dateOfApplication);
   const dateofJoining = new Date(application.dateOfJoining);
@@ -602,7 +606,7 @@ const ApplicationTile = (props) => {
     const cleanedNumber = contactNumber.replace(/(?!^\+)\D/g, '');
     const countryCode = cleanedNumber.slice(0, -10);
     const lastTenDigits = cleanedNumber.slice(-10);
-    return `+${countryCode} ${lastTenDigits}`;
+    return `${countryCode} ${lastTenDigits}`;
   };
 
   const sendEmail = () => {
@@ -634,6 +638,8 @@ const ApplicationTile = (props) => {
           severity: "success",
           message: "Email sent successfully",
         });
+        setEmailSent(true);
+        localStorage.setItem(`emailSent_${application._id}`, "true"); // Persist status
       }, (err) => {
         console.error('Failed to send email. Error: ', err);
         setPopup({
@@ -690,16 +696,6 @@ const ApplicationTile = (props) => {
           <Grid item>
             SOP: {" "}{application.sop !== "" ? application.sop : "Not Submitted"}
           </Grid>
-          {/* <Grid item> */}
-            {/* <div className={classes.sopBlock}> */}
-              {/* <Typography variant="body1" className={classes.sopLabel}> */}
-                {/* SOP:{" "} */}
-              {/* </Typography> */}
-              {/* <Typography variant="body1" className={classes.sopContent}> */}
-              {/* {application.sop !== "" ? application.sop : "Not Submitted"} */}
-              {/* </Typography> */}
-            {/* </div> */}
-          {/* </Grid> */}
           <Grid item>
             Skill sets:{" "} {application.jobApplicant.skills.map((skill,index) => (
               <Chip label={skill} style={{ marginRight: "2px" }} />
@@ -708,22 +704,17 @@ const ApplicationTile = (props) => {
         </Grid>
         <Grid item container direction="column" xs={3}>
           <Grid item>
-            {/* <Button
-              variant="contained"
-              className={classes.statusBlock}
-              color="primary"
-              onClick={() => getResume()}
-            >
-              Download Resume
-            </Button> */}
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.statusBlock}
-              onClick={sendEmail}
-            >
-              Send Email
-            </Button>
+            {!emailSent && (
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.statusBlock}
+                onClick={sendEmail}
+              >
+                Send Email
+              </Button>
+            )}
+
 
           </Grid>
           <Grid item container xs>
@@ -891,8 +882,6 @@ const AcceptedApplicants = (props) => {
         app.job.salary,
         app.job.duration !== 0 ? `${app.job.duration} months` : 'Flexible',
         app.status,
-        // applications.job.maxApplicants,
-        // applications.job.maxPositions - applications.job.acceptedCandidates,
         `"${skillsetString}"`
       ].join(",");
     }).join("\n");
@@ -931,9 +920,6 @@ const AcceptedApplicants = (props) => {
                     new TableCell({
                       children: [new Paragraph("Rating")],
                     }),
-                    // new TableCell({
-                    //   children: [new Paragraph("Resume Link")],
-                    // }),
                     new TableCell({
                       children: [new Paragraph("Job Title")],
                     }),

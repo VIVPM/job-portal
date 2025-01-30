@@ -15,7 +15,6 @@
     "docx": "^8.5.0",
     "emailjs-com": "^3.2.0",
     "file-saver": "^2.0.5",
-    "framer-motion": "7.2.1",
     "gh-pages": "^4.0.0",
     "jspdf": "^2.5.1",
     "material-ui-chip-input": "^1.1.0",
