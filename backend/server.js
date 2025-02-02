@@ -39,9 +39,9 @@ const port = process.env.port || 4444;
 
 app.use(express.static(path.join(__dirname, "build")));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
 // Resolve the absolute path to the `frontend/build` directory
 // const buildPath = path.join(__dirname, "../frontend/build");
 
