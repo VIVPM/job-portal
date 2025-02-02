@@ -39,29 +39,10 @@ const port = process.env.port || 4444;
 
 app.use(express.static(path.join(__dirname, "build")));
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
-// Resolve the absolute path to the `frontend/build` directory
-// const buildPath = path.join(__dirname, "../frontend/build");
-
-// Serve static files from the `build` folder
-// app.use(express.static(buildPath));
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-// Catch-all route to serve `index.html` for all other requests
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(buildPath, "index.html"));
-// });
-
-// Setting up middlewares
-// const corsOptions = {
-//   origin: 'http://localhost:3000',
-//   credentials: true,            //access-control-allow-credentials:true
-//   optionSuccessStatus: 200
-// }
 app.use(cors({ origin: true }));
 app.use(express.json());
 app.use(passportConfig.initialize());
@@ -71,6 +52,13 @@ app.use('/auth', require('./routes/authRoutes'));
 app.use('/api', require('./routes/apiRoutes'));
 app.use('/upload', require('./routes/uploadRoutes'));
 app.use('/host', require('./routes/downloadRoutes'));
+
+app.get("*", (req, res) => {
+  if (req.originalUrl.startsWith("/api") || req.originalUrl.startsWith("/auth") || req.originalUrl.startsWith("/upload")) {
+    return res.status(404).json({ message: "API route not found" });
+  }
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 exports.api = functions.https.onRequest(app);
 
