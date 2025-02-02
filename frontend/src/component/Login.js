@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 const Login = (props) => {
   const classes = useStyles();
   const setPopup = useContext(SetPopupContext);
-
+  const [redirectToForgotPassword, setRedirectToForgotPassword] = useState(false);
   const [loggedin, setLoggedin] = useState(isAuth());
 
   const [loginDetails, setLoginDetails] = useState({
@@ -133,6 +133,18 @@ const Login = (props) => {
             className={classes.inputBox}
           />
         </Grid>
+        <Grid item>
+            {redirectToForgotPassword && <Redirect to="/forgot-password" />}
+            <Typography
+              variant="body2"
+              color="primary"
+              style={{ cursor: "pointer", textDecoration: "underline" }}
+              onClick={() => setRedirectToForgotPassword(true)}
+            >
+              Forgot Password?
+            </Typography>
+        </Grid>
+
         <Grid item>
           <Button
             variant="contained"

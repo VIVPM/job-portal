@@ -29,13 +29,14 @@
     "mongoose": "8.3.4",
     "mongoose-type-email": "^1.1.2",
     "multer": "1.4.2",
+    "nodemailer": "^6.10.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "uuid": "^8.3.2"
   },
   "proxy": [
-    "http://localhost:3000","https://job-portal-internship.onrender.com"
-
+    "http://localhost:3000",
+    "https://job-portal-internship.onrender.com"
   ]
 }

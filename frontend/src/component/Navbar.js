@@ -1,114 +1,3 @@
-// import {
-//   AppBar,
-//   Toolbar,
-//   Typography,
-//   Button,
-//   makeStyles,
-// } from "@material-ui/core";
-// import { useHistory } from "react-router-dom";
-
-// import isAuth, { userType } from "../lib/isAuth";
-
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     flexGrow: 1,
-//   },
-//   menuButton: {
-//     marginRight: theme.spacing(2),
-//   },
-//   title: {
-//     flexGrow: 1,
-//   },
-// }));
-
-// const Navbar = (props) => {
-//   const classes = useStyles();
-//   let history = useHistory();
-
-//   const handleClick = (location) => {
-//     console.log(location);
-//     history.push(location);
-//   };
-
-//   return (
-//     <AppBar>
-//       <Toolbar>
-//         <Typography variant="h6" className={classes.title}>
-//           <Button color="inherit" onClick={() => handleClick("/")}>CareerSpark</Button>
-//         </Typography>
-//         {/* <Button color="inherit" onClick={() => handleClick("/")}>
-//           <Typography variant="h6" className={classes.title}>
-//             CareerSpark
-//           </Typography>
-//           </Button> */}
-          
-        
-//         {isAuth() ? (
-//           userType() === "recruiter" ? (
-//             <>
-//               {/* <Button color="inherit" onClick={() => handleClick("/home")}>
-//                 Home
-//               </Button> */}
-//               <Button color="inherit" onClick={() => handleClick("/addjob")}>
-//                 Add Jobs
-//               </Button>
-//               <Button color="inherit" onClick={() => handleClick("/myjobs")}>
-//                 My Jobs
-//               </Button>
-//               <Button color="inherit" onClick={() => handleClick("/employees")}>
-//                 Employees
-//               </Button>
-//               <Button color="inherit" onClick={() => handleClick("/analytics")}>
-//                 Analytics
-//               </Button>
-//               <Button color="inherit" onClick={() => handleClick("/profile")}>
-//                 Profile
-//               </Button>
-//               <Button color="inherit" onClick={() => handleClick("/logout")}>
-//                 Logout
-//               </Button>
-//             </>
-//           ) : (
-//             <>
-//               <Button color="inherit" onClick={() => handleClick("/home")}>
-//                 Find Jobs
-//               </Button>
-//               <Button
-//                 color="inherit"
-//                 onClick={() => handleClick("/applications")}
-//               >
-//                 Applications
-//               </Button>
-//                 <Button
-//                   color="inherit"
-//                   onClick={() => handleClick("/resume")}
-//                 >
-//                   Resume Builder
-//                 </Button>
-//               <Button color="inherit" onClick={() => handleClick("/profile")}>
-//                 Profile
-//               </Button>
-//               <Button color="inherit" onClick={() => handleClick("/logout")}>
-//                 Logout
-//               </Button>
-//             </>
-//           )
-//         ) : (
-//           <>
-//             <Button color="inherit" onClick={() => handleClick("/login")}>
-//               Login
-//             </Button>
-//             <Button color="inherit" onClick={() => handleClick("/signup")}>
-//               Signup
-//             </Button>
-//           </>
-//         )}
-//       </Toolbar>
-//     </AppBar>
-//   );
-// };
-
-// export default Navbar;
 import React, { useState } from "react";
 import {
   AppBar,
@@ -173,6 +62,7 @@ const Navbar = () => {
         { text: "Employees", path: "/employees" },
         { text: "Analytics", path: "/analytics" },
         { text: "Profile", path: "/profile" },
+        {text:"Contact",path:"/contact"},
         { text: "Logout", path: "/logout" },
       ]
       : [
@@ -180,11 +70,13 @@ const Navbar = () => {
         { text: "Applications", path: "/applications" },
         { text: "Resume Builder", path: "/resume" },
         { text: "Profile", path: "/profile" },
+        { text: "Contact", path: "/contact" },
         { text: "Logout", path: "/logout" },
       ]
     : [
       { text: "Login", path: "/login" },
       { text: "Signup", path: "/signup" },
+      {text:"Contact",path:"/contact"},
     ];
 
   const drawer = (

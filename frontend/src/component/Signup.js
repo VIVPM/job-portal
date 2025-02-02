@@ -10,6 +10,7 @@ import {
   // Input,
 } from "@material-ui/core";
 import axios from "axios";
+import { LinearProgress } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
 import ChipInput from "material-ui-chip-input";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -191,7 +192,7 @@ const Login = (props) => {
   const setPopup = useContext(SetPopupContext);
 
   const [loggedin, setLoggedin] = useState(isAuth());
-
+  const [passwordStrength, setPasswordStrength] = useState(0);
   const [signupDetails, setSignupDetails] = useState({
     type: "applicant",
     email: "",
@@ -209,6 +210,19 @@ const Login = (props) => {
 
   const [phone, setPhone] = useState("");
   // const [phone1,setPhone1] = useState("");
+
+  const getPasswordStrength = (password) => {
+    let strength = 0;
+
+    if (password.length > 5) strength += 25; // Minimum length
+    if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 25; // Upper & Lower case
+    if (password.match(/\d/)) strength += 25; // Numbers
+    if (password.match(/[@$!%*?&]/)) strength += 25; // Special characters
+
+    return strength;
+  };
+
+
 
   const [education, setEducation] = useState([
     {
@@ -238,18 +252,6 @@ const Login = (props) => {
       error: false,
       message: "",
     },
-    //  Company: {
-    //    untouched: true,
-    //    required: true,
-    //    error: false,
-    //    message: "",
-    //  },
-    //  YearsExperience: {
-    //    untouched: true,
-    //    required: false,
-    //    error: false,
-    //    message: "",
-    //  },
 
   });
 
@@ -259,12 +261,6 @@ const Login = (props) => {
       [key]: value,
     });
   };
-  // const handleInput = (key, value) => {
-  //   setSignupDetails(prevDetails => ({
-  //     ...prevDetails,
-  //     [key]: value,
-  //   }));
-  // };
 
 
   const handleInputError = (key, status, message) => {
@@ -308,17 +304,6 @@ const Login = (props) => {
           return obj;
         }),
     };
-    // if (phone !== "") {
-    //   updatedDetails = {
-    //     ...signupDetails,
-    //     contactNumber: `+${phone}`,
-    //   };
-    // } else {
-    //   updatedDetails = {
-    //     ...signupDetails,
-    //     contactNumber: "",
-    //   };
-    // }
 
     setSignupDetails(updatedDetails);
 
@@ -488,7 +473,10 @@ const Login = (props) => {
           <PasswordInput
             label="Password"
             value={signupDetails.password}
-            onChange={(event) => handleInput("password", event.target.value)}
+              onChange={(event) => {
+                handleInput("password", event.target.value);
+                setPasswordStrength(getPasswordStrength(event.target.value));
+              }}
             className={classes.inputBox}
             error={inputErrorHandler.password.error}
             helperText={inputErrorHandler.password.message}
@@ -501,6 +489,32 @@ const Login = (props) => {
             }}
           />
         </Grid>
+          <Grid item style={{ width: "100%" }}>
+            <LinearProgress
+              variant="determinate"
+              value={passwordStrength}
+              style={{
+                height: 8,
+                borderRadius: 5,
+                backgroundColor: "#ddd",
+              }}
+            />
+          </Grid>
+          <Grid item>
+            <Typography
+              variant="body2"
+              style={{
+                color: passwordStrength === 100 ? "green" : passwordStrength >= 50 ? "orange" : "red"
+              }}
+            >
+              {passwordStrength === 100
+                ? "Strong"
+                : passwordStrength >= 50
+                  ? "Medium"
+                  : "Weak"}
+            </Typography>
+          </Grid>
+
         {signupDetails.type === "applicant" ? (
           <>
             <MultifieldInput
@@ -531,13 +545,6 @@ const Login = (props) => {
                 className={classes.inputBox}
                 label="Resume (.pdf)"
                 icon={<DescriptionIcon />}
-                // value={files.resume}
-                // onChange={(event) =>
-                //   setFiles({
-                //     ...files,
-                //     resume: event.target.files[0],
-                //   })
-                // }
                 uploadTo={apiList.uploadResume}
                 handleInput={handleInput}
                 identifier={"resume"}
@@ -548,13 +555,6 @@ const Login = (props) => {
                 className={classes.inputBox}
                 label="Profile Photo (.jpg/.png)"
                 icon={<FaceIcon />}
-                // value={files.profileImage}
-                // onChange={(event) =>
-                //   setFiles({
-                //     ...files,
-                //     profileImage: event.target.files[0],
-                //   })
-                // }
                 uploadTo={apiList.uploadProfileImage}
                 handleInput={handleInput}
                 identifier={"profile"}
@@ -621,13 +621,6 @@ const Login = (props) => {
                 className={classes.inputBox}
                 label="Profile Photo (.jpg/.png)"
                 icon={<FaceIcon />}
-                // value={files.profileImage}
-                // onChange={(event) =>
-                //   setFiles({
-                //     ...files,
-                //     profileImage: event.target.files[0],
-                //   })
-                // }
                 uploadTo={apiList.uploadProfileImage}
                 handleInput={handleInput}
                 identifier={"profile"}

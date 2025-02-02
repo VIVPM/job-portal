@@ -1,109 +1,12 @@
-.image-container {
-    background-size: cover;
-    background-position: center;
-    height: 200px;
-    width: 100%;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 1s ease, transform 1s ease;
-}
+/* Add animations for smooth entrance */
 
-.amazon {
-    background-image: url('../images/amazon.webp');
-}
 
-.juniper {
-    background-image: url('../images/juniper.jpg');
-}
-
-.texas {
-    background-image: url('../images/texas.jpg');
-}
-
-.infosys {
-    background-image: url('../images/infosys.jpg');
-}
-
-.accenture {
-    background-image: url('../images/accenture.webp');
-}
-
-.sony {
-    background-image: url('../images/sony.jpg');
-}
-
-.text-container {
-    height: 200px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transform: translateY(50px);
-    transition: opacity 1s ease, transform 1s ease;
-}
-
-/* Add animation delay for each image */
-.image-container:nth-child(1) {
-    animation: fadeInScale 1s forwards;
-}
-
-.image-container:nth-child(2) {
-    animation: fadeInScale 1s forwards 0.2s;
-}
-
-.image-container:nth-child(3) {
-    animation: fadeInScale 1s forwards 0.4s;
-}
-
-.image-container:nth-child(4) {
-    animation: fadeInScale 1s forwards 0.8s;
-}
-
-.image-container:nth-child(5) {
-    animation: fadeInScale 1s forwards 1s;
-}
-
-.image-container:nth-child(6) {
-    animation: fadeInScale 1s forwards 1.2s;
-}
-
-.text-container {
-    animation: fadeInUp 1s forwards 0.6s;
-}
-
-@keyframes fadeInScale {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Base styles for company cards */
-.company-card {
-    transition: transform 0.3s ease;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.company-card:hover {
-    transform: scale(1.05);
-}
-
-/* Animation keyframes */
 @keyframes slideInLeft {
     from {
         transform: translateX(-100%);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -115,6 +18,7 @@
         transform: translateX(100%);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -126,6 +30,7 @@
         transform: translateY(-100%);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -137,6 +42,7 @@
         transform: translateY(100%);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -146,68 +52,47 @@
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: scale(0.9);
     }
+
     to {
         opacity: 1;
-        transform: scale(1);
     }
 }
 
-/* Animation classes */
+/* Apply animations */
 .slide-in-left {
-    animation: slideInLeft 1s ease forwards;
+    animation: slideInLeft 1s ease-out;
 }
 
 .slide-in-right {
-    animation: slideInRight 1s ease forwards;
+    animation: slideInRight 1s ease-out;
 }
 
 .slide-in-top {
-    animation: slideInTop 1s ease forwards;
+    animation: slideInTop 1s ease-out;
 }
 
 .slide-in-bottom {
-    animation: slideInBottom 1s ease forwards;
+    animation: slideInBottom 1s ease-out;
 }
 
 .fade-in {
-    animation: fadeIn 1.5s ease forwards;
+    animation: fadeIn 2s ease-in;
 }
 
-/* Delayed animations */
-.delay {
+/* Adding a slight delay for the second row */
+.slide-in-left.delay,
+.slide-in-right.delay,
+.slide-in-bottom.delay {
     animation-delay: 0.5s;
 }
 
-/* Title animations */
-.title-container {
-    perspective: 1000px;
-}
-
-.title-box {
-    animation: fadeIn 1.5s ease forwards;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 15px;
-}
-
-.main-title {
-    animation: fadeIn 2s ease forwards;
-}
-
-.sub-title {
-    animation: fadeIn 2.5s ease forwards;
-}
-
-/* Hover effects */
-.company-card:hover {
+/* Hover effect for a slight scale-up */
+/* .company-card:hover {
     transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-}
-
-.title-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-    transition: all 0.3s ease;
-} 
+    transition: transform 0.3s ease-in-out;
+    -webkit-transition: transform 0.3s ease-in-out;
+    -moz-transition: transform 0.3s ease-in-out;
+    -ms-transition: transform 0.3s ease-in-out;
+    -o-transition: transform 0.3s ease-in-out;
+} */

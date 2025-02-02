@@ -21,7 +21,10 @@ import ApplicationStatusPieChart from "./component/recruiter/ApplicationStatusPi
 import Context from './context/Context';
 // import JobStats from "./component/recruiter/JobStats";
 import Body from "./components/Body/Body";
-import Chatbot from "./component/Chatbot";
+import Chatbot from "./component/Chatbot_old";
+import Contact from "./component/Contact";
+import ForgotPassword from "./component/ForgotPassowrd";
+import ResetPassword from "./component/ResetPassword";
 import './App.css'
 
 import JobStatsAndTableWithDateFilter from './component/recruiter/JobStatsAndTableWithDateFilter';
@@ -32,8 +35,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    minHeight: "100vh",
-    paddingTop: "64px",
+    minHeight: "90vh",
+    // paddingTop: "64px",
     boxSizing: "border-box",
     margin:0,
     width: "100%",
@@ -79,6 +82,9 @@ function App() {
               <Route exact path="/home">
                 <Home />
               </Route>
+              <Route exact path="/contact">
+                <Contact />
+              </Route>
               <Route exact path="/applications">
                 <Applications />
               </Route>
@@ -95,13 +101,18 @@ function App() {
               </Route>
               <Route exact path = "/analytics">
                 <ApplicationStatusPieChart />
-                {/* <JobStats/>
-                <JobTableWithDateFilter/> */}
                 <JobStatsAndTableWithDateFilter/>
               </Route>
               <Route exact path="/myjobs">
                 <MyJobs />
               </Route>
+              <Route exact path="/forgot-password">
+                <ForgotPassword/>
+              </Route>
+              <Route exact path="/reset-password">
+                <ResetPassword />
+              </Route>
+
               <Route exact path="/job/applications/:jobId">
                 <JobApplications />
               </Route>
