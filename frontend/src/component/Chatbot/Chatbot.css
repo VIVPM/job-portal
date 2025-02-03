@@ -15,7 +15,7 @@ body {
 
 #chatbot-toggler {
     position: fixed;
-    bottom: 30px;
+    bottom: 8px;
     right: 35px;
     border: none;
     height: 50px;
@@ -51,10 +51,9 @@ body {
 .chatbot-popup {
     position: fixed;
     width: 420px;
-    height:580px;
     opacity: 0;
     right: 35px;
-    bottom: 90px;
+    bottom: 60px;
     pointer-events: none;
     transform: scale(0.2);
     overflow: hidden;
