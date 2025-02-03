@@ -4,13 +4,19 @@ Job Portal is a MERN Stack based web app which helps in streamlining the flow of
 
 Directory structure of the web app is as follows:
 
-```
+
 - backend/
+
+
 ![Screenshot 2025-02-03 210955](https://github.com/user-attachments/assets/f9ea5bd1-1a6d-49ab-9834-ef28754c7186)
+
 - frontend/
-   ![Screenshot 2025-02-03 211008](https://github.com/user-attachments/assets/87a518c3-ee9b-40de-af3f-3c4ab7c36fee)
+
+
+  ![Screenshot 2025-02-03 211008](https://github.com/user-attachments/assets/87a518c3-ee9b-40de-af3f-3c4ab7c36fee)
+
 - README.md
-```
+
 
 ## Instructions for initializing web app:
 
