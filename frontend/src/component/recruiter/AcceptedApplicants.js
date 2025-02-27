@@ -75,6 +75,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const formatISTDate = (dateInput) =>
+  new Date(dateInput).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" });
+
 const FilterPopup = (props) => {
   const classes = useStyles();
   const { open, handleClose, searchOptions, setSearchOptions, getData } = props;
@@ -626,8 +629,7 @@ const ApplicationTile = (props) => {
       from_phoneNumber:getFormattedNumber(phoneNumber),
       skills: skillsetString,
       jobDescription:application.job.jobDescription ,
-      dateOfJoining: dateofJoining.toLocaleDateString(),
-      
+      dateOfJoining: formatISTDate(dateofJoining),
     };
 
     emailjs.send('service_fvk9p8i', 'template_yidqktp', templateParams, '4ePreozVVNpMYU4ey')
@@ -691,7 +693,7 @@ const ApplicationTile = (props) => {
           <Grid item>Location: {application.job.location}</Grid>
           <Grid item>Company Name: {application.job.companyName}</Grid>
           <Grid item>Email: {userEmail}</Grid>
-          <Grid item>Applied On: {appliedOn.toLocaleDateString()}</Grid>
+          <Grid item>Applied On: formatISTDate({appliedOn})</Grid>
           <Grid item>Phone number: {getFormattedNumber(application.jobApplicant.contactNumber)}</Grid>
           <Grid item>
             SOP: {" "}{application.sop !== "" ? application.sop : "Not Submitted"}
@@ -872,7 +874,7 @@ const AcceptedApplicants = (props) => {
         index + 1,
         app.jobApplicant.name,
         `${getFormattedNumber(app.jobApplicant.contactNumber)}`,
-        dateofJoining.toLocaleDateString(),
+        formatISTDate(dateofJoining),
         app.jobApplicant.rating,
         app.jobApplicant.resume,
         app.job.title,
@@ -959,7 +961,7 @@ const AcceptedApplicants = (props) => {
                         children: [new Paragraph(`${getFormattedNumber(app.jobApplicant.contactNumber)}`)],
                       }),
                       new TableCell({
-                        children: [new Paragraph(new Date(app.dateOfJoining).toLocaleDateString())],
+                        children: [new Paragraph(formatISTDate(new Date(app.dateOfJoining)))],
                       }),
                       new TableCell({
                         children: [new Paragraph(`${app.jobApplicant.rating}`)],
