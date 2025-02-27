@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -41,12 +41,26 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detect screen size
-  let history = useHistory();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const history = useHistory();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  // Auto logout after 1 hour
+  useEffect(() => {
+    if (isAuth()) {
+      const timer = setTimeout(() => {
+        // Clear stored token and redirect to logout page
+        localStorage.removeItem("token");
+        localStorage.removeItem("type");
+        history.push("/logout");
+      }, 3600000); // 1 hour in milliseconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [history]);
+
   const handleClick = (location) => {
-    setDrawerOpen(false); // Close drawer when navigating
+    setDrawerOpen(false);
     history.push(location);
   };
 
@@ -62,7 +76,7 @@ const Navbar = () => {
         { text: "Employees", path: "/employees" },
         { text: "Analytics", path: "/analytics" },
         { text: "Profile", path: "/profile" },
-        {text:"Contact",path:"/contact"},
+        { text: "Contact", path: "/contact" },
         { text: "Logout", path: "/logout" },
       ]
       : [
@@ -76,7 +90,7 @@ const Navbar = () => {
     : [
       { text: "Login", path: "/login" },
       { text: "Signup", path: "/signup" },
-      {text:"Contact",path:"/contact"},
+      { text: "Contact", path: "/contact" },
     ];
 
   const drawer = (
