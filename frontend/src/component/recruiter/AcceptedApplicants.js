@@ -693,7 +693,7 @@ const ApplicationTile = (props) => {
           <Grid item>Location: {application.job.location}</Grid>
           <Grid item>Company Name: {application.job.companyName}</Grid>
           <Grid item>Email: {userEmail}</Grid>
-          <Grid item>Applied On: formatISTDate({appliedOn})</Grid>
+          <Grid item>Applied On: {formatISTDate(appliedOn)}</Grid>
           <Grid item>Phone number: {getFormattedNumber(application.jobApplicant.contactNumber)}</Grid>
           <Grid item>
             SOP: {" "}{application.sop !== "" ? application.sop : "Not Submitted"}
@@ -869,12 +869,12 @@ const AcceptedApplicants = (props) => {
     const csvHeader = "Sl. No,Applicant Name,Phone number,Date of Joining,Rating,Resume,Title,Company Name,Location,Role,Salary,Duration,Status,Skill sets\n";
     const csvRows = applications.map((app, index) => {
       const skillsetString = app.jobApplicant.skills.join(', ');
-      const dateofJoining = new Date(app.dateOfJoining);
+      const dateofJoining = formatISTDate(app.dateOfJoining);
       return [
         index + 1,
         app.jobApplicant.name,
         `${getFormattedNumber(app.jobApplicant.contactNumber)}`,
-        formatISTDate(dateofJoining),
+        dateofJoining,
         app.jobApplicant.rating,
         app.jobApplicant.resume,
         app.job.title,
@@ -961,7 +961,7 @@ const AcceptedApplicants = (props) => {
                         children: [new Paragraph(`${getFormattedNumber(app.jobApplicant.contactNumber)}`)],
                       }),
                       new TableCell({
-                        children: [new Paragraph(formatISTDate(new Date(app.dateOfJoining)))],
+                        children: [new Paragraph(formatISTDate(app.dateOfJoining))],
                       }),
                       new TableCell({
                         children: [new Paragraph(`${app.jobApplicant.rating}`)],
