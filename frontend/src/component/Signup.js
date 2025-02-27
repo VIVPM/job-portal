@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 const MultifieldInput = (props) => {
   const classes = useStyles();
   const { education, setEducation } = props;
+  const setPopup = useContext(SetPopupContext);
 
   const handleDeleteLastInstitution = () => {
     if (education.length <= 1) return; // Prevent deleting if only one entry exists
@@ -55,7 +56,11 @@ const MultifieldInput = (props) => {
       const updatedEducation = education.slice(0, -1);
       setEducation(updatedEducation);
     } else {
-      alert("The last entry is filled. Cannot delete a filled entry.");
+      setPopup({
+        open: true,
+        severity: "error",
+        message: "The last entry is filled. Cannot delete a filled entry.",
+      });
     }
   };
 
