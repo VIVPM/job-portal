@@ -89,7 +89,7 @@ const Navbar = () => {
       ]
     : [
       { text: "Login", path: "/login" },
-      { text: "Signup", path: "/signup" },
+      // { text: "Signup", path: "/signup" },
       { text: "Contact", path: "/contact" },
     ];
 
@@ -116,7 +116,7 @@ const Navbar = () => {
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Button color="inherit" onClick={() => handleClick("/")}>
-              CareerSpark
+              Billboard Management System
             </Button>
           </Typography>
           {isMobile ? (
