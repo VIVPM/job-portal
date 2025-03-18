@@ -116,8 +116,8 @@ const Navbar = () => {
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             <Button color="inherit" onClick={() => handleClick("/")}>
-              Billboard Management System
-            </Button>
+            CareerSpark
+          </Button>
           </Typography>
           {isMobile ? (
             <>

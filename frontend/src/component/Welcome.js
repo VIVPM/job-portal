@@ -21,7 +21,7 @@ const Welcome = (props) => {
         <Grid container item spacing={3} justifyContent="center">
           <Grid item xs={12} sm={4}>
             <div className="company-card slide-in-left" style={{
-              backgroundImage: `url('${require("../images/billboard1.jpeg")}')`,
+              backgroundImage: `url('${require("../images/amazon.webp")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               height: '200px',
@@ -30,7 +30,7 @@ const Welcome = (props) => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <div className="company-card slide-in-top" style={{
-              backgroundImage: `url('${require("../images/billboard2.jpeg")}')`,
+              backgroundImage: `url('${require("../images/accenture.webp")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               height: '200px',
@@ -39,7 +39,7 @@ const Welcome = (props) => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <div className="company-card slide-in-right" style={{
-              backgroundImage: `url('${require("../images/billboard3.jpeg")}')`,
+              backgroundImage: `url('${require("../images/juniper.jpg")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               height: '200px',
@@ -66,12 +66,12 @@ const Welcome = (props) => {
             }}>
               <Typography variant="h5" className="main-title" style={{
                 fontSize: '60px', fontWeight: '500', color: '#1a237e' }}>
-                Billboard Management System
+                CareerSpark              
               </Typography>
               <br />
               <Typography variant="h5" className="sub-title" style={{
                 fontSize: '30px', fontWeight: '500', color: '#dd2c00' }}>
-                Managing Billboards
+                Ignite your career path today
               </Typography>
             </div>
           </div>
@@ -80,7 +80,7 @@ const Welcome = (props) => {
         <Grid container item spacing={3} justifyContent="center">
           <Grid item xs={12} sm={4}>
             <div className="company-card slide-in-left delay" style={{
-              backgroundImage: `url('${require("../images/billboard4.jpeg")}')`,
+              backgroundImage: `url('${require("../images/infosys.jpg")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               height: '200px',
@@ -89,7 +89,7 @@ const Welcome = (props) => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <div className="company-card slide-in-bottom delay" style={{
-              backgroundImage: `url('${require("../images/billboard5.jpeg")}')`,
+              backgroundImage: `url('${require("../images/sony.jpg")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               height: '200px',
@@ -98,7 +98,7 @@ const Welcome = (props) => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <div className="company-card slide-in-right delay" style={{
-              backgroundImage: `url('${require("../images/billboard6.jpeg")}')`,
+              backgroundImage: `url('${require("../images/texas.jpg")}')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               height: '200px',
