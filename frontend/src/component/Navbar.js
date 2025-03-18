@@ -89,7 +89,7 @@ const Navbar = () => {
       ]
     : [
       { text: "Login", path: "/login" },
-      // { text: "Signup", path: "/signup" },
+      { text: "Signup", path: "/signup" },
       { text: "Contact", path: "/contact" },
     ];
 
