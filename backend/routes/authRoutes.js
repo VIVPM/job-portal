@@ -26,7 +26,7 @@ router.post("/forgot-password", async (req, res) => {
   resetTokens[email] = token; // Save token temporarily
 
   // Create a reset link
-  const resetLink = `https://billboard-management-system.com/reset-password?token=${token}&email=${email}`;
+  const resetLink = `https://job-portal-internship.onredner.com/reset-password?token=${token}&email=${email}`;
   // res.sendFile(path.join(__dirname, "build", "index.html"));
   const transporter = nodemailer.createTransport({
     service: "gmail",
