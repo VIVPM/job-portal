@@ -54,9 +54,9 @@ app.use('/upload', require('./routes/uploadRoutes'));
 app.use('/host', require('./routes/downloadRoutes'));
 
 app.get("*", (req, res) => {
-  // if (req.originalUrl.startsWith("/api") || req.originalUrl.startsWith("/auth") || req.originalUrl.startsWith("/upload")) {
-  //   return res.status(404).json({ message: "API route not found" });
-  // }
+  if (req.originalUrl.startsWith("/api") || req.originalUrl.startsWith("/auth") || req.originalUrl.startsWith("/upload")) {
+    return res.status(404).json({ message: "API route not found" });
+  }
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
