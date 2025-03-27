@@ -4,6 +4,8 @@ import ChatForm from "./ChatForm";
 import ChatMessage from "./ChatMessage";
 import { jobPortal } from "./JobPortal";
 import "./Chatbot.css";
+// require('dotenv').config();
+
 const Chatbot = () => {
     const chatBodyRef = useRef();
     const [showChatbot, setShowChatbot] = useState(false);
