@@ -15,61 +15,130 @@ const router = express.Router();
 let resetTokens = {}; // Temporary storage for reset tokens
 
 // Request Password Reset (Send Email)
+// router.post("/forgot-password", async (req, res) => {
+//   const { email } = req.body;
+//   const user = await User.findOne({ email }); // Check if the user exists
+
+//   if (!user) return res.status(404).json({ message: "User not found" });
+
+//   // Generate a reset token
+//   const token = crypto.randomBytes(32).toString("hex");
+//   resetTokens[email] = token; // Save token temporarily
+
+//   // Create a reset link
+//   const resetLink = `https://job-portal-internship.onredner.com/reset-password?token=${token}&email=${email}`;
+//   // res.sendFile(path.join(__dirname, "build", "index.html"));
+//   const transporter = nodemailer.createTransport({
+//     service: "gmail",
+//     auth: {
+//       user: process.env.email_user,
+//       pass: process.env.email_password, // Use App Password (not your real password)
+//     },
+//   });
+
+//   // Email Content
+//   const mailOptions = {
+//     from: process.env.email_user,
+//     to: email,
+//     subject: "Password Reset Request",
+//     text: `Click the link to reset your password: ${resetLink}`,
+//   };
+
+//   // Send Email
+//   transporter.sendMail(mailOptions, (err, info) => {
+//     if (err) {
+//       return res.status(500).json({ message: "Error sending email" });
+//     }
+//     res.json({ message: "Password reset email sent!" });
+//   });
+// });
+
 router.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
-  const user = await User.findOne({ email }); // Check if the user exists
-
-  if (!user) return res.status(404).json({ message: "User not found" });
-
-  // Generate a reset token
-  const token = crypto.randomBytes(32).toString("hex");
-  resetTokens[email] = token; // Save token temporarily
-
-  // Create a reset link
-  const resetLink = `https://job-portal-internship.onredner.com/reset-password?token=${token}&email=${email}`;
-  // res.sendFile(path.join(__dirname, "build", "index.html"));
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.email_user,
-      pass: process.env.email_password, // Use App Password (not your real password)
-    },
-  });
-
-  // Email Content
-  const mailOptions = {
-    from: process.env.email_user,
-    to: email,
-    subject: "Password Reset Request",
-    text: `Click the link to reset your password: ${resetLink}`,
-  };
-
-  // Send Email
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      return res.status(500).json({ message: "Error sending email" });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+    // Generate a reset token and expiration
+    const token = crypto.randomBytes(32).toString("hex");
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour expiration
+    await user.save();
+
+    // Create a reset link
+    const resetLink = `https://job-portal-internship.onrender.com/reset-password?token=${token}&email=${email}`;
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.email_user,
+        pass: process.env.email_password, // Use App Password for Gmail
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.email_user,
+      to: email,
+      subject: "Password Reset Request",
+      text: `Click the link to reset your password: ${resetLink}`,
+    };
+
+    // Send Email
+    await transporter.sendMail(mailOptions);
     res.json({ message: "Password reset email sent!" });
-  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error sending email" });
+  }
 });
 
 
+// router.post("/reset-password", async (req, res) => {
+//   const { email, token, newPassword } = req.body;
+
+//   if (!resetTokens[email] || resetTokens[email] !== token) {
+//     return res.status(400).json({ message: "Invalid or expired token" });
+//   }
+
+//   const user = await User.findOne({ email });
+//   if (!user) return res.status(404).json({ message: "User not found" });
+
+//   user.password = newPassword; // **Hash the password before saving**
+//   await user.save();
+
+//   delete resetTokens[email]; // Remove token after successful reset
+
+//   res.json({ message: "Password reset successful!" });
+// });
+
+// Reset Password
 router.post("/reset-password", async (req, res) => {
   const { email, token, newPassword } = req.body;
+  try {
+    const user = await User.findOne({
+      email,
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }, // Check if token is still valid
+    });
 
-  if (!resetTokens[email] || resetTokens[email] !== token) {
-    return res.status(400).json({ message: "Invalid or expired token" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ message: "Password reset successful!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
-
-  const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ message: "User not found" });
-
-  user.password = newPassword; // **Hash the password before saving**
-  await user.save();
-
-  delete resetTokens[email]; // Remove token after successful reset
-
-  res.json({ message: "Password reset successful!" });
 });
 
 

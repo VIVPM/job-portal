@@ -20,6 +20,8 @@ let schema = new mongoose.Schema(
       enum: ["recruiter", "applicant"],
       required: true,
     },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
   },
   { collation: { locale: "en" } }
 );
