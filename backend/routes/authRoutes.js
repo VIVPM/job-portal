@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const authKeys = require("../lib/authKeys");
