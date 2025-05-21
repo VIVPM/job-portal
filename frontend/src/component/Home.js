@@ -23,7 +23,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-
+import ResumeCheckerModal from "./ResumeCheckerModal";
 import { SetPopupContext } from "../App";
 
 import apiList from "../lib/apiList";
@@ -70,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
 const JobTile = (props) => {
   const classes = useStyles();
   const { job } = props;
+  const [checkerOpen, setCheckerOpen] = useState(false);
   const setPopup = useContext(SetPopupContext);
 
   const [open, setOpen] = useState(false);
@@ -114,7 +115,7 @@ const JobTile = (props) => {
       });
   };
 
-  const deadline = new Date(job.deadline).toLocaleDateString();
+  const deadline = new Date(job.deadline).toLocaleDateString('en-IN');
 
   return (
     <Paper className={classes.jobTileOuter} elevation={3}>
@@ -134,11 +135,25 @@ const JobTile = (props) => {
           </Grid>
           <Grid item>Posted By : {job.recruiter.name}</Grid>
           <Grid item>Application Deadline : {deadline}</Grid>
-          <Grid item>Job Description: {job.jobDescription}</Grid>
+          <Grid item sx={{ textAlign: 'justify' }}>Job Description: {job.jobDescription}</Grid>
           <Grid item>Skills Required: {" "}
             {job.skillsets.map((skill) => (
-              <Chip label={skill} style={{ marginRight: "2px" }} />
+              <Chip key={skill} label={skill} style={{ marginRight: "2px" }} />
             ))}
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              style={{ marginTop: 8 }}
+              onClick={() => setCheckerOpen(true)}
+            >
+              Resume Checker
+            </Button>
+            <ResumeCheckerModal
+              open={checkerOpen}
+              onClose={() => setCheckerOpen(false)}
+              jobDescription={job.jobDescription}
+            />
           </Grid>
         </Grid>
         <Grid item xs={3}>
@@ -170,7 +185,7 @@ const JobTile = (props) => {
           <TextField
             label="Write SOP (upto 250 words)"
             multiline
-            rows={8}
+            minRows={8}
             style={{ width: "100%", marginBottom: "30px" }}
             variant="outlined"
             value={sop}
@@ -219,7 +234,7 @@ const FilterPopup = (props) => {
               container
               item
               xs={9}
-              justify="space-around"
+              justifyContent="space-around"
               // alignItems="center"
             >
               <Grid item>
@@ -346,7 +361,7 @@ const FilterPopup = (props) => {
                 item
                 container
                 xs={4}
-                justify="space-around"
+                justifyContent="space-around"
                 alignItems="center"
                 style={{ border: "1px solid #D1D1D1", borderRadius: "5px" }}
               >
@@ -402,7 +417,7 @@ const FilterPopup = (props) => {
                 item
                 container
                 xs={4}
-                justify="space-around"
+                justifyContent="space-around"
                 alignItems="center"
                 style={{ border: "1px solid #D1D1D1", borderRadius: "5px" }}
               >
@@ -458,7 +473,7 @@ const FilterPopup = (props) => {
                 item
                 container
                 xs={4}
-                justify="space-around"
+                justifyContent="space-around"
                 alignItems="center"
                 style={{ border: "1px solid #D1D1D1", borderRadius: "5px" }}
               >
@@ -653,7 +668,7 @@ const Home = (props) => {
           item
           container
           direction="column"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
         >
           <Grid item xs>
@@ -676,7 +691,7 @@ const Home = (props) => {
               }}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment>
+                  <InputAdornment position="end">
                     <IconButton onClick={() => getData()}>
                       <SearchIcon />
                     </IconButton>
@@ -700,17 +715,10 @@ const Home = (props) => {
           xs
           direction="column"
           alignItems="stretch"
-          justify="center"
+          justifyContent="center"
         >
-          {jobs.length > 0 ? (
-            jobs.map((job) => {
-              return <JobTile job={job} />;
-            })
-          ) : (
-            <Typography variant="h5" style={{ textAlign: "center" }}>
-              No jobs found
-            </Typography>
-          )}
+          {jobs.length ? jobs.map(job => <JobTile key={job._id} job={job} />) : <Typography variant="h5" align="center">No jobs found</Typography>}
+
         </Grid>
         {/* <Grid item>
           <Pagination count={10} color="primary" />

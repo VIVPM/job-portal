@@ -923,7 +923,7 @@ const JobApplications = (props) => {
         >
           {applications.length > 0 ? (
             applications.map((obj) => (
-              <Grid item>
+              <Grid item key = {obj._id}>
                 {/* {console.log(obj)} */}
                 <ApplicationTile application={obj} getData={getData} />
               </Grid>

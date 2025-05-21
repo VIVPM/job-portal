@@ -175,13 +175,13 @@ const ApplicationTile = (props) => {
           </Grid>
           <Grid item>Skills Required: {" "}
             {application.job.skillsets.map((skill) => (
-              <Chip label={skill} style={{ marginRight: "2px" }} />
+              <Chip key={skill} label={skill} style={{ marginRight: "2px" }} />
             ))}
           </Grid>
-          <Grid item>Applied On: {appliedOn.toLocaleDateString()}</Grid>
+          <Grid item>Applied On: {appliedOn.toLocaleDateString("en-IN")}</Grid>
           {application.status === "accepted" ||
           application.status === "finished" ? (
-            <Grid item>Joined On: {joinedOn.toLocaleDateString()}</Grid>
+            <Grid item>Joined On: {joinedOn.toLocaleDateString("en-IN")}</Grid>
           ) : null}
         </Grid>
         <Grid item container direction="column" xs={3}>
@@ -301,7 +301,7 @@ const Applications = (props) => {
       >
         {applications.length > 0 ? (
           applications.map((obj) => (
-            <Grid item>
+            <Grid item key={obj._id}>
               <ApplicationTile application={obj} />
             </Grid>
           ))

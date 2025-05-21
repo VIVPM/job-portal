@@ -189,7 +189,7 @@ const JobTile = (props) => {
             Duration :{" "}
             {job.duration !== 0 ? `${job.duration} month(s)` : `Flexible`}
           </Grid>
-          <Grid item>Date Of Posting: {postedOn.toLocaleDateString()}</Grid>
+          <Grid item>Date Of Posting: {postedOn.toLocaleDateString('en-IN')}</Grid>
           <Grid item>Number of Applicants: {job.maxApplicants}</Grid>
           <Grid item>
             Remaining Number of Positions:{" "}
@@ -198,7 +198,7 @@ const JobTile = (props) => {
           <Grid item>
             Skills Required: {" "}
             {job.skillsets.map((skill) => (
-              <Chip label={skill} style={{ marginRight: "2px" }} />
+              <Chip key={skill} label={skill} style={{ marginRight: "2px" }} />
             ))}
           </Grid>
         </Grid>
@@ -1079,7 +1079,7 @@ const MyJobs = (props) => {
               }}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment>
+                  <InputAdornment position="end">
                     <IconButton onClick={() => getData()}>
                       <SearchIcon />
                     </IconButton>
@@ -1113,7 +1113,7 @@ const MyJobs = (props) => {
         >
           {jobs.length > 0 ? (
             jobs.map((job) => {
-              return <JobTile job={job} getData={getData} />;
+              return <JobTile key={job._id} job={job} getData={getData} />;
             })
           ) : (
             <Typography variant="h5" style={{ textAlign: "center" }}>

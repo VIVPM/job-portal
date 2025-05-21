@@ -1,26 +1,123 @@
+// import React, { useState, useEffect } from 'react';
+// import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+// import axios from 'axios';
+// import apiList  from '../../lib/apiList'; // Assuming apiConfig is the file name where apiList is defined
+
+
+// const ApplicationStatusPieChart = () => {
+
+//     const [applicationData, setApplicationData] = useState([]);
+//     useEffect(() => {
+//         axios.get(apiList.applications, {
+//             headers: {
+//                 Authorization: `Bearer ${localStorage.getItem('token')}`, // Replace with your actual token retrieval method
+//             },
+//         })
+//             .then((response) => {
+//                 setApplicationData(response.data);
+//                 console.log(response.data)
+//             })
+//             .catch((error) => {
+//                 console.error('Error fetching application data:', error);
+//             });
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//     }, []);
+
+//     const processData = (data) => {
+//         const statusCounts = { Accepted: 0, Rejected: 0, Pending: 0 };
+
+//         data.forEach(app => {
+//             switch (app.status) {
+//                 case 'accepted':
+//                     statusCounts.Accepted += 1;
+//                     break
+//                 case 'finished':
+//                     statusCounts.Accepted += 1;
+//                     break;
+//                 case 'rejected':
+//                     statusCounts.Rejected += 1;
+//                     break;
+//                 case 'cancelled':
+//                     statusCounts.Rejected += 1;
+//                     break;
+//                 case 'pending':
+//                     statusCounts.Pending += 1;
+//                     break
+//                 case 'shortlisted':
+//                     statusCounts.Pending += 1;
+//                     break;
+//                 default:
+//                     // console.warn('Unknown status:', app.status);
+//             }
+//         });
+
+//         return [
+//             { name: 'Accepted', value: statusCounts.Accepted },
+//             { name: 'Rejected', value: statusCounts.Rejected },
+//             { name: 'Pending', value: statusCounts.Pending },
+//         ];
+//     };
+
+//     const chartData = processData(applicationData);
+
+//     useEffect(() => {
+//         console.log("Processed Chart Data:", chartData);
+//     }, [chartData]);
+
+
+//     const COLORS = ['#0088FE', '#FF8042', '#FFBB28'];
+
+    
+//         return (
+//             <div style={{ textAlign: 'center' }}>
+//             <h1>Job Acceptance Statistics</h1> 
+//             <PieChart width={800} height={500}>
+//                 <Pie
+//                     data={chartData}
+//                     cx={400}
+//                     cy={250}
+//                     outerRadius={150}
+//                     fill="#8884d8"
+//                     dataKey="value"
+//                     label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+//                 >
+//                     {chartData.map((entry, index) => (
+//                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+//                     ))}
+//                 </Pie>
+//                 <Tooltip />
+//                 <Legend align="center" verticalAlign="bottom" layout="horizontal" />
+//             </PieChart>
+//         </div>
+//     );
+// };
+
+// export default ApplicationStatusPieChart;
+
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import axios from 'axios';
-import apiList  from '../../lib/apiList'; // Assuming apiConfig is the file name where apiList is defined
-
+import apiList from '../../lib/apiList';
 
 const ApplicationStatusPieChart = () => {
-
     const [applicationData, setApplicationData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         axios.get(apiList.applications, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`, // Replace with your actual token retrieval method
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         })
             .then((response) => {
                 setApplicationData(response.data);
-                console.log(response.data)
             })
             .catch((error) => {
                 console.error('Error fetching application data:', error);
+            })
+            .finally(() => {
+                setLoading(false);
             });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const processData = (data) => {
@@ -29,25 +126,19 @@ const ApplicationStatusPieChart = () => {
         data.forEach(app => {
             switch (app.status) {
                 case 'accepted':
-                    statusCounts.Accepted += 1;
-                    break
                 case 'finished':
                     statusCounts.Accepted += 1;
                     break;
                 case 'rejected':
-                    statusCounts.Rejected += 1;
-                    break;
                 case 'cancelled':
                     statusCounts.Rejected += 1;
                     break;
                 case 'pending':
-                    statusCounts.Pending += 1;
-                    break
                 case 'shortlisted':
                     statusCounts.Pending += 1;
                     break;
                 default:
-                    // console.warn('Unknown status:', app.status);
+                    break;
             }
         });
 
@@ -59,35 +150,37 @@ const ApplicationStatusPieChart = () => {
     };
 
     const chartData = processData(applicationData);
-
-    useEffect(() => {
-        console.log("Processed Chart Data:", chartData);
-    }, [chartData]);
-
-
+    const totalApplications = chartData.reduce((sum, item) => sum + item.value, 0);
     const COLORS = ['#0088FE', '#FF8042', '#FFBB28'];
 
-    
-        return (
+    return (
+        <div>
+            <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>Job Acceptance Statistics</h1>
             <div style={{ textAlign: 'center' }}>
-            <h1>Job Acceptance Statistics</h1> 
-            <PieChart width={800} height={500}>
-                <Pie
-                    data={chartData}
-                    cx={400}
-                    cy={250}
-                    outerRadius={150}
-                    fill="#8884d8"
-                    dataKey="value"
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                >
-                    {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                </Pie>
-                <Tooltip />
-                <Legend align="center" verticalAlign="bottom" layout="horizontal" />
-            </PieChart>
+                {loading ? (
+                    <p>Loading...</p>
+                ) : totalApplications === 0 ? (
+                    <p>No data exists</p>
+                ) : (
+                    <PieChart width={800} height={500}>
+                        <Pie
+                            data={chartData}
+                            cx={400}
+                            cy={250}
+                            outerRadius={150}
+                            fill="#8884d8"
+                            dataKey="value"
+                            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        >
+                            {chartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend align="center" verticalAlign="bottom" layout="horizontal" />
+                    </PieChart>
+                )}
+            </div>
         </div>
     );
 };

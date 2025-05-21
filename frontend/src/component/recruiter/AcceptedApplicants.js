@@ -700,7 +700,7 @@ const ApplicationTile = (props) => {
           </Grid>
           <Grid item>
             Skill sets:{" "} {application.jobApplicant.skills.map((skill,index) => (
-              <Chip label={skill} style={{ marginRight: "2px" }} />
+              <Chip key={skill} label={skill} style={{ marginRight: "2px" }} />
             ))}
           </Grid>
         </Grid>
@@ -1095,7 +1095,7 @@ const AcceptedApplicants = (props) => {
         >
           {applications.length > 0 ? (
             applications.map((obj) => (
-              <Grid item>
+              <Grid item key={obj._id}>
                 {/* {console.log(obj)} */}
                 <ApplicationTile application={obj} getData={getData} />
               </Grid>
