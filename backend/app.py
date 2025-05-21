@@ -5,6 +5,7 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from PyPDF2 import PdfReader
 import google.generativeai as genai
+from fastapi import Response
 import uvicorn
 
 # ------------------------------------------------------------------------------
@@ -100,8 +101,12 @@ Job description:
 # API endpoint
 # ------------------------------------------------------------------------------
 
+@app.head("/", include_in_schema=False)
+async def head_root():
+    return Response(status_code=200)
+
 @app.get("/", include_in_schema=False)
-async def read_root():
+async def health_check():
     return {"status": "ok", "service": "Resume Checker API"}
 
 @app.post("/api/resume-checker")
