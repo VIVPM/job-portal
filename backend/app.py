@@ -100,6 +100,10 @@ Job description:
 # API endpoint
 # ------------------------------------------------------------------------------
 
+@app.get("/", include_in_schema=False)
+async def read_root():
+    return {"status": "ok", "service": "Resume Checker API"}
+
 @app.post("/api/resume-checker")
 async def resume_checker(
     file: UploadFile = File(...),
