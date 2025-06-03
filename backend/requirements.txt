@@ -5,3 +5,4 @@ fastapi
 uvicorn
 PyPDF2
 python-multipart
+langchain_google_genai
