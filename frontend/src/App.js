@@ -25,6 +25,7 @@ import Chatbot from "./component/Chatbot/Chatbot";
 import Contact from "./component/Contact";
 import ForgotPassword from "./component/ForgotPassowrd";
 import ResetPassword from "./component/ResetPassword";
+import ColdMailGenerator from "./component/ColdEmailGenerator";
 import './App.css'
 
 import JobStatsAndTableWithDateFilter from './component/recruiter/JobStatsAndTableWithDateFilter';
@@ -112,7 +113,9 @@ function App() {
               <Route exact path="/reset-password">
                 <ResetPassword />
               </Route>
-
+              <Route exact path="/cold-email">
+                <ColdMailGenerator/>
+              </Route>
               <Route exact path="/job/applications/:jobId">
                 <JobApplications />
               </Route>

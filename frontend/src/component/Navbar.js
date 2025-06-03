@@ -83,6 +83,7 @@ const Navbar = () => {
         { text: "Find Jobs", path: "/home" },
         { text: "Applications", path: "/applications" },
         { text: "Resume Builder", path: "/resume" },
+        { text: "Cold Emailing", path: "/cold-email" },
         { text: "Profile", path: "/profile" },
         { text: "Contact", path: "/contact" },
         { text: "Logout", path: "/logout" },

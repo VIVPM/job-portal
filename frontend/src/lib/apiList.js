@@ -15,7 +15,8 @@ const apiList = {
   forgotPassword: `${server}/auth/forgot-password`,
   resetPassword: `${server}/auth/reset-password`,
   chatHistory: `${server}/api/chat-history`,
-  resumeChecker: `${server2}/api/resume-checker`
+  resumeChecker: `${server2}/api/resume-checker`,
+  coldEmail: `${server2}/api/generate-emails`
 };
 
 export default apiList;
