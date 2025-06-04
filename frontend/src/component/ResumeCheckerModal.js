@@ -1,8 +1,17 @@
 import { useState } from "react";
 import {
-    Dialog, DialogTitle, DialogContent, DialogActions,
-    Button, TextField, RadioGroup, FormControlLabel, Typography,
-    Radio, CircularProgress
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    TextField,
+    RadioGroup,
+    FormControlLabel,
+    Typography,
+    Radio,
+    CircularProgress,
+    Box,
 } from "@material-ui/core";
 import axios from "axios";
 import apiList from "../lib/apiList";
@@ -23,11 +32,9 @@ export default function ResumeCheckerModal({ open, onClose, jobDescription }) {
 
         setLoading(true);
         try {
-            const res = await axios.post(
-                apiList.resumeChecker,
-                data,
-                { headers: { "Content-Type": "multipart/form-data" } }
-            );
+            const res = await axios.post(apiList.resumeChecker, data, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
             setResult(res.data.result);
         } catch (e) {
             setResult("Error: " + (e.response?.data?.detail || e.message));
@@ -57,14 +64,30 @@ export default function ResumeCheckerModal({ open, onClose, jobDescription }) {
         <Dialog open={open} onClose={handleCloseModal} fullWidth maxWidth="md">
             <DialogTitle>Resume Checker</DialogTitle>
             <DialogContent dividers>
-                <input
-                    type="file"
-                    accept="application/pdf"
-                    onChange={e => setFile(e.target.files[0])}
-                />
-                <Typography variant="caption" color="textSecondary">
+                <Box display="flex" alignItems="center" mb={1}>
+                    <Button variant="contained" component="label">
+                        Choose File
+                        <input
+                            type="file"
+                            accept="application/pdf"
+                            hidden
+                            onChange={(e) => setFile(e.target.files[0])}
+                        />
+                    </Button>
+                    {file && (
+                        <Typography variant="body2" style={{ marginLeft: 12 }}>
+                            {file.name}
+                        </Typography>
+                    )}
+                </Box>
+                <Typography
+                    variant="caption"
+                    color="textSecondary"
+                    style={{ marginBottom: 16 }}
+                >
                     Max size: 200 MB
                 </Typography>
+
                 <TextField
                     label="Job Description"
                     fullWidth
@@ -74,11 +97,7 @@ export default function ResumeCheckerModal({ open, onClose, jobDescription }) {
                     value={jobDescription}
                     disabled
                 />
-                <RadioGroup
-                    row
-                    value={type}
-                    onChange={e => setType(e.target.value)}
-                >
+                <RadioGroup row value={type} onChange={(e) => setType(e.target.value)}>
                     <FormControlLabel
                         value="quick"
                         control={<Radio />}
@@ -96,7 +115,11 @@ export default function ResumeCheckerModal({ open, onClose, jobDescription }) {
                     />
                 </RadioGroup>
 
-                {loading && <CircularProgress />}
+                {loading && (
+                    <Box display="flex" justifyContent="center" my={2}>
+                        <CircularProgress />
+                    </Box>
+                )}
                 {cleanResult && (
                     <>
                         <TextField
