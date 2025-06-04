@@ -31,7 +31,7 @@ model = GoogleGenerativeAI(model="gemini-2.0-flash",temperature=0.6)
 # FastAPI setup
 # ------------------------------------------------------------------------------
 
-app = FastAPI(title="Resume Checker API")
+app = FastAPI(title="Backend Python API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000","https://job-portal-internship.onrender.com"],  # your React origin
@@ -135,8 +135,8 @@ async def resume_checker(
     pdf_text = read_pdf_bytes(contents)
 
     prompt = build_prompt(pdf_text, job_description, analysis_type)
-    response = model.generate_content([pdf_text, prompt])
-    return {"result": response.text}
+    response = model(prompt)
+    return {"result":response}
 
 
 # -----------------------------
