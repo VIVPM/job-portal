@@ -116,13 +116,9 @@ Job description:
 async def head_root():
     return Response(status_code=200)
 
-@app.get("/", include_in_schema=False)
-async def read_root():
-    return {
-        "status": "ok",
-        "service": "Resume Checker API",
-        "message": "Conversation logger API up and running"
-    }
+@app.get("/")
+def read_root():
+    return {"message": "Conversation logger API up and running"}
 
 
 
