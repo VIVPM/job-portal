@@ -117,7 +117,7 @@ async def head_root():
     return Response(status_code=200)
 
 @app.get("/")
-def read_root():
+async def read_root():
     return {"message": "Conversation logger API up and running"}
 
 
