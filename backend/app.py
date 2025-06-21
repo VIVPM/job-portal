@@ -18,7 +18,7 @@ from chains import Chain
 from utils import clean_text, extract_text_from_file
 from resume_parser import ResumeParser
 
-JOBPORTAL_PATH = Path(__file__).parent / "JobPortal.js"
+JOBPORTAL_PATH = Path(__file__).parent / "https://job-portal-internship-docker.onrender.com/app/JobPortal.js"
 
 # ------------------------------------------------------------------------------
 # Load environment & configure Gemini API
@@ -37,7 +37,7 @@ model = GoogleGenerativeAI(model="gemini-2.0-flash",temperature=0.6)
 app = FastAPI(title="Backend Python API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000","https://job-portal-internship.onrender.com"],  # your React origin
+    allow_origins=["http://localhost:3000","https://job-portal-internship.onrender.com","https://job-portal-internship-docker.onrender.com"],  # your React origin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
