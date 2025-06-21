@@ -8,6 +8,7 @@ from langchain_google_genai import GoogleGenerativeAI
 from fastapi import Response
 import uvicorn
 from typing import List
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
@@ -16,6 +17,8 @@ from langchain_community.document_loaders import WebBaseLoader
 from chains import Chain
 from utils import clean_text, extract_text_from_file
 from resume_parser import ResumeParser
+
+JOBPORTAL_PATH = Path(__file__).parent / "JobPortal.js"
 
 # ------------------------------------------------------------------------------
 # Load environment & configure Gemini API
@@ -114,8 +117,14 @@ async def head_root():
     return Response(status_code=200)
 
 @app.get("/", include_in_schema=False)
-async def health_check():
-    return {"status": "ok", "service": "Resume Checker API"}
+async def read_root():
+    return {
+        "status": "ok",
+        "service": "Resume Checker API",
+        "message": "Conversation logger API up and running"
+    }
+
+
 
 @app.post("/api/resume-checker")
 async def resume_checker(
@@ -137,6 +146,37 @@ async def resume_checker(
     prompt = build_prompt(pdf_text, job_description, analysis_type)
     response = model(prompt)
     return {"result":response}
+
+class ConversationItem(BaseModel):
+    role: str   # "user" or "model"
+    text: str
+
+@app.get("/api/jobportal")
+def get_jobportal():
+    try:
+        return {"jobPortal": JOBPORTAL_PATH.read_text(encoding="utf-8")}
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+@app.post("/api/conversation")
+def append_conversation(item: ConversationItem):
+    """
+    Appends a line into the JS template literal in JobPortal.js.
+    """
+    try:
+        content = JOBPORTAL_PATH.read_text(encoding="utf-8")
+        # Find the closing backtick of the template literal
+        parts = content.rsplit("`;", 1)
+        if len(parts) != 2:
+            raise ValueError("Unable to find the template literal boundary.")
+        body, tail = parts
+        # Append new line(s)
+        new_line = f"\n\n// {item.role} @ {item.role.upper()}:\n{item.text}"
+        updated = body + new_line + "`;" + tail
+        JOBPORTAL_PATH.write_text(updated, encoding="utf-8")
+        return {"status": "ok"}
+    except Exception as e:
+        raise HTTPException(500, str(e))
 
 
 # -----------------------------

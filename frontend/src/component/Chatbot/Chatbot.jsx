@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import ChatbotIcon from "./ChatbotIcon";
 import ChatForm from "./ChatForm";
 import ChatMessage from "./ChatMessage";
-import { jobPortal as initialJobPortal } from "./JobPortal"; // Import initial value
 import "./Chatbot.css";
+import apiList from "../../lib/apiList";
 
 const Chatbot = () => {
     const chatBodyRef = useRef();
     const [showChatbot, setShowChatbot] = useState(false);
-    const [jobPortal, setJobPortal] = useState(initialJobPortal); // Manage as state
+    const [jobPortal, setJobPortal] = useState(""); // Manage as state
     const [chatHistory, setChatHistory] = useState([
         {
             hideInChat: true,
@@ -16,6 +16,7 @@ const Chatbot = () => {
             text: jobPortal,
         },
     ]);
+
 
     const generateBotResponse = async (history) => {
         const apiKey = process.env.REACT_APP_API_KEY;
@@ -27,6 +28,11 @@ const Chatbot = () => {
             // Append bot response to jobPortal
             if (!isError) {
                 setJobPortal((prev) => `${prev}\n\nUser response appended: ${text}`);
+                fetch(apiList.conversation, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ role: "model", text }),
+                });
             }
         };
 
@@ -57,12 +63,17 @@ const Chatbot = () => {
 
     // Sync jobPortal changes back to chatHistory's hidden entry
     useEffect(() => {
-        setChatHistory((prev) =>
-            prev.map((msg) =>
-                msg.hideInChat ? { ...msg, text: jobPortal } : msg
-            )
-        );
-    }, [jobPortal]);
+        fetch(apiList.jobportal)
+                      .then(res => res.json())
+                      .then(data => {
+                            setJobPortal(data.jobPortal);
+                            setChatHistory([{
+                            hideInChat: true,
+                            role: "model",
+                            text: data.jobPortal,
+                        }]);
+                  });
+    }, []);
 
     return (
         <div className={`container ${showChatbot ? "show-chatbot" : ""}`}>

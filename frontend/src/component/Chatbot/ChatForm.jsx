@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import apiList from "../../lib/apiList";
 const ChatForm = ({ chatHistory, setChatHistory, generateBotResponse }) => {
     const inputRef = useRef();
     const handleFormSubmit = (e) => {
@@ -8,6 +9,13 @@ const ChatForm = ({ chatHistory, setChatHistory, generateBotResponse }) => {
         inputRef.current.value = "";
         // Update chat history with the user's message
         setChatHistory((history) => [...history, { role: "user", text: userMessage }]);
+
+        fetch(apiList.conversation, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ role: "user", text: userMessage }),
+            });
+
         // Delay 600 ms before showing "Thinking..." and generating response
         setTimeout(() => {
             // Add a "Thinking..." placeholder for the bot's response
