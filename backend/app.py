@@ -20,6 +20,8 @@ from resume_parser import ResumeParser
 
 JOBPORTAL_PATH = Path("/app/JobPortal.js")
 
+
+
 # ------------------------------------------------------------------------------
 # Load environment & configure Gemini API
 # ------------------------------------------------------------------------------
