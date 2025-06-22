@@ -18,7 +18,7 @@ from chains import Chain
 from utils import clean_text, extract_text_from_file
 from resume_parser import ResumeParser
 
-JOBPORTAL_PATH = Path("/app/JobPortal.js")
+JOBPORTAL_PATH =  Path(__file__).parent / "JobPortal.js"
 
 
 

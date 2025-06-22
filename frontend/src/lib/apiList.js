@@ -2,7 +2,6 @@
 // export const server2 = "http://localhost:8000";
 export const server =  "https://job-portal-internship.onrender.com";
 export const server2 = "https://job-portal-python-tdu1.onrender.com";
-// export const server3 = "https://job-portal-internship-docker.onrender.com";
 const apiList = {
   login: `${server}/auth/login`,
   signup: `${server}/auth/signup`,
