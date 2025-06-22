@@ -2,6 +2,7 @@
 // export const server2 = "http://localhost:8000";
 export const server =  "https://job-portal-internship.onrender.com";
 export const server2 = "https://job-portal-python-tdu1.onrender.com";
+export const server3 = "https://job-portal-internship-docker.onrender.com";
 const apiList = {
   login: `${server}/auth/login`,
   signup: `${server}/auth/signup`,
@@ -17,8 +18,8 @@ const apiList = {
   chatHistory: `${server}/api/chat-history`,
   resumeChecker: `${server2}/api/resume-checker`,
   coldEmail: `${server2}/api/generate-emails`,
-  conversation: `${server2}/api/conversation`,
-  jobportal: `${server2}/api/jobportal`,
+  conversation: `${server3}/api/conversation`,
+  jobportal: `${server3}/api/jobportal`,
 };
 
 export default apiList;
