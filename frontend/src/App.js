@@ -21,7 +21,7 @@ import ApplicationStatusPieChart from "./component/recruiter/ApplicationStatusPi
 import Context from './context/Context';
 // import JobStats from "./component/recruiter/JobStats";
 import Body from "./components/Body/Body";
-import Chatbot from "./component/Chatbot/Chatbot";
+// import Chatbot from "./component/Chatbot/Chatbot";
 import Contact from "./component/Contact";
 import ForgotPassword from "./component/ForgotPassowrd";
 import ResetPassword from "./component/ResetPassword";
@@ -63,7 +63,7 @@ function App() {
       <SetPopupContext.Provider value={setPopup}>
         <Grid container direction="column">
           <Grid item xs>
-            <Chatbot />
+            {/* <Chatbot /> */}
             <Navbar />
           </Grid>
           <Grid item className={classes.body}>

@@ -29,8 +29,8 @@ router.post("/forgot-password", async (req, res) => {
     await user.save();
 
     // Create a reset link
-    const resetLink = `https://job-portal-internship.onrender.com/reset-password?token=${token}&email=${email}`;
-    // const resetLink = `http://localhost:3000/reset-password?token=${token}&email=${email}`;
+    // const resetLink = `https://job-portal-internship.onrender.com/reset-password?token=${token}&email=${email}`;
+    const resetLink = `http://localhost:3000/reset-password?token=${token}&email=${email}`;
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -71,11 +71,12 @@ router.post("/reset-password", async (req, res) => {
     }
 
     // Hash the new password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    console.log("DEBUG: Setting new password (plain text) in route...");
+    user.password = newPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
+    console.log("DEBUG: User saved with new password.");
 
     res.json({ message: "Password reset successful!" });
   } catch (error) {
@@ -98,24 +99,24 @@ router.post("/signup", (req, res) => {
       const userDetails =
         user.type == "recruiter"
           ? new Recruiter({
-              userId: user._id,
-              name: data.name,
-              contactNumber: data.contactNumber,
-              profile: data.profile,
-              Company:data.Company,
-              YearsExperience:data.YearsExperience,
-              bio: data.bio,
-            })
+            userId: user._id,
+            name: data.name,
+            contactNumber: data.contactNumber,
+            profile: data.profile,
+            Company: data.Company,
+            YearsExperience: data.YearsExperience,
+            bio: data.bio,
+          })
           : new JobApplicant({
-              userId: user._id,
-              name: data.name,
-              education: data.education,
-              contactNumber: data.contactNumber,
-              skills: data.skills,
-              rating: data.rating,
-              resume: data.resume,
-              profile: data.profile,
-            });
+            userId: user._id,
+            name: data.name,
+            education: data.education,
+            contactNumber: data.contactNumber,
+            skills: data.skills,
+            rating: data.rating,
+            resume: data.resume,
+            profile: data.profile,
+          });
 
       userDetails
         .save()
@@ -131,7 +132,7 @@ router.post("/signup", (req, res) => {
           user
             .delete()
             .then(() => {
-              res.status(400).json({ message: "User already exists",err});
+              res.status(400).json({ message: "User already exists", err });
             })
             .catch((err) => {
               res.json({ error: err });
@@ -141,7 +142,7 @@ router.post("/signup", (req, res) => {
     })
     .catch((err) => {
       // res.status(400).json(err);
-         res.status(400).json({ message: "User already exists", error: err });
+      res.status(400).json({ message: "User already exists", error: err });
     });
 });
 
