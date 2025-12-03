@@ -5,7 +5,7 @@ fastapi
 uvicorn
 PyPDF2
 python-multipart
-langchain_core
+langchain_core==0.2.40
 langchain_community
 langchain_google_genai
 langchain_groq
