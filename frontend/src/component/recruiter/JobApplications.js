@@ -1,19 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import {
   Button,
-  // Chip,
   Grid,
   IconButton,
-  // InputAdornment,
   makeStyles,
   Paper,
-  // TextField,
   Typography,
   Modal,
-  // Slider,
   FormControlLabel,
-  // FormGroup,
-  // MenuItem,
   Checkbox,
   Avatar,
 } from "@material-ui/core";
@@ -23,7 +17,6 @@ import emailjs from 'emailjs-com';
 import axios from "axios";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-// import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/material.css";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 

@@ -3,18 +3,10 @@ import {
   Button,
   Chip,
   Grid,
-  // IconButton,
-  // InputAdornment,
   makeStyles,
   Paper,
-  // TextField,
   Typography,
   Modal,
-  // Slider,
-  // FormControlLabel,
-  // FormGroup,
-  // MenuItem,
-  // Checkbox,
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
 import axios from "axios";
@@ -48,26 +40,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
 }));
-
-// function JobDescription({ description }) {
-//   if (!description) {
-//     // Return some default UI or null if no description
-//     return <p>No job description available.</p>;
-//   }
-
-//   // Use the splitting logic only if description is a valid string
-//   const points = description.split(/(?<=\d\.) /);
-
-//   return (
-//     <Grid container direction="column">
-//       {points.map((point, index) => (
-//         <Grid item key={index}>
-//           {point.trim()}
-//         </Grid>
-//       ))}
-//     </Grid>
-//   );
-// }
 
 const ApplicationTile = (props) => {
   const classes = useStyles();
@@ -269,7 +241,6 @@ const Applications = (props) => {
         setApplications(response.data);
       })
       .catch((err) => {
-        // console.log(err.response);
         console.log(err.response.data);
         setPopup({
           open: true,

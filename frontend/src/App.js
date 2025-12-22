@@ -17,11 +17,8 @@ import RecruiterProfile from "./component/recruiter/Profile";
 import MessagePopup from "./lib/MessagePopup";
 import { userType } from "./lib/isAuth";
 import ApplicationStatusPieChart from "./component/recruiter/ApplicationStatusPieChart";
-// import JobTableWithDateFilter from './component/recruiter/JobTableWithDateFilter';
 import Context from './context/Context';
-// import JobStats from "./component/recruiter/JobStats";
 import Body from "./components/Body/Body";
-// import Chatbot from "./component/Chatbot/Chatbot";
 import Contact from "./component/Contact";
 import ForgotPassword from "./component/ForgotPassowrd";
 import ResetPassword from "./component/ResetPassword";
@@ -41,9 +38,6 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: "border-box",
     margin:0,
     width: "100%",
-    // backgroundImage: `url('${require("../src/images/job.jpeg")}')`,
-    // backgroundSize: 'cover',  // Ensures the background covers the entire element area
-    // backgroundPosition: 'center',  // Centers the background image
     backgroundRepeat: 'no-repeat',  // Prevents repeating the background image
     backgroundColor: '#bbdefb',
   },
@@ -63,7 +57,6 @@ function App() {
       <SetPopupContext.Provider value={setPopup}>
         <Grid container direction="column">
           <Grid item xs>
-            {/* <Chatbot /> */}
             <Navbar />
           </Grid>
           <Grid item className={classes.body}>

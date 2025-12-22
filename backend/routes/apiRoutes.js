@@ -58,14 +58,6 @@ router.get("/jobs", jwtAuth, (req, res) => {
   let findParams = {};
   let sortParams = {};
 
-  // const page = parseInt(req.query.page) ? parseInt(req.query.page) : 1;
-  // const limit = parseInt(req.query.limit) ? parseInt(req.query.limit) : 10;
-  // const skip = page - 1 >= 0 ? (page - 1) * limit : 0;
-
-  // const page = parseInt(req.query.page) || 1; // Default to first page
-  // const limit = parseInt(req.query.limit) || 20; // Default limit to 10 items
-  // const skip = (page - 1) * limit; // Calculate skip value
-
   // to list down jobs posted by a particular recruiter
   if (user.type === "recruiter" && req.query.myjobs) {
     findParams = {
@@ -218,10 +210,6 @@ router.get("/jobs", jwtAuth, (req, res) => {
   console.log(findParams);
   console.log(sortParams);
 
-  // Job.find(findParams).collation({ locale: "en" }).sort(sortParams);
-  // .skip(skip)
-  // .limit(limit)
-
   let arr = [
     {
       $lookup: {
@@ -252,9 +240,6 @@ router.get("/jobs", jwtAuth, (req, res) => {
       },
     ];
   }
-
-  // arr.push({ $skip: skip });
-  // arr.push({ $limit: limit});
 
   console.log(arr);
 
@@ -333,147 +318,6 @@ router.delete("/jobs/:id", jwtAuth, async (req, res) => {
   }
 });
 
-// get user's personal details
-// router.get("/user", jwtAuth, (req, res) => {
-//   const user = req.user;
-//   if (user.type === "recruiter") {
-//     Recruiter.findOne({ userId: user._id })
-//       .then((recruiter) => {
-//         if (recruiter == null) {
-//           res.status(404).json({
-//             message: "User does not exist",
-//           });
-//           return;
-//         }
-//         res.json(recruiter);
-//       })
-//       .catch((err) => {
-//         res.status(400).json(err);
-//       });
-//   } else {
-//     JobApplicant.findOne({ userId: user._id })
-//       .then((jobApplicant) => {
-//         if (jobApplicant == null) {
-//           res.status(404).json({
-//             message: "User does not exist",
-//           });
-//           return;
-//         }
-//         res.json(jobApplicant);
-//       })
-//       .catch((err) => {
-//         res.status(400).json(err);
-//       });
-//   }
-// });
-
-// get user details from id
-// router.get("/user/:id", jwtAuth, (req, res) => {
-//   User.findOne({ _id: req.params.id })
-//     .then((userData) => {
-//       if (userData === null) {
-//         res.status(404).json({
-//           message: "User does not exist",
-//         });
-//         return;
-//       }
-
-//       if (userData.type === "recruiter") {
-//         Recruiter.findOne({ userId: userData._id })
-//           .then((recruiter) => {
-//             if (recruiter === null) {
-//               res.status(404).json({
-//                 message: "User does not exist",
-//               });
-//               return;
-//             }
-//             res.json(recruiter);
-//           })
-//           .catch((err) => {
-//             res.status(400).json(err);
-//           });
-//       } else {
-//         JobApplicant.findOne({ userId: userData._id })
-//           .then((jobApplicant) => {
-//             if (jobApplicant === null) {
-//               res.status(404).json({
-//                 message: "User does not exist",
-//               });
-//               return;
-//             }
-//             res.json(jobApplicant);
-//           })
-//           .catch((err) => {
-//             res.status(400).json(err);
-//           });
-//       }
-//     })
-//     .catch((err) => {
-//       res.status(400).json(err);
-//     });
-// });
-
-// router.get("/user/:id", jwtAuth, (req, res) => {
-//   User.findOne({ _id: req.params.id })
-//     .then((userData) => {
-//       if (userData === null) {
-//         res.status(404).json({
-//           message: "User does not exist",
-//         });
-//         return;
-//       }
-
-//       const userInfo = {
-//         email: userData.email,
-//         type: userData.type,
-//         // Include any other user details you want to send, but exclude sensitive information like passwords
-//       };
-
-//       if (userData.type === "recruiter") {
-//         Recruiter.findOne({ userId: userData._id })
-//           .then((recruiter) => {
-//             if (recruiter === null) {
-//               res.status(404).json({
-//                 message: "Recruiter profile does not exist",
-//               });
-//               return;
-//             }
-//             // Merge user info with recruiter details and send the combined data
-//             const response = {
-//               ...userInfo,
-//               ...recruiter.toObject(), // Convert the Mongoose document to a plain JavaScript object
-//             };
-//             res.json(response);
-//           })
-//           .catch((err) => {
-//             res.status(400).json(err);
-//           });
-//       } else {
-//         JobApplicant.findOne({ userId: userData._id })
-//           .then((jobApplicant) => {
-//             if (jobApplicant === null) {
-//               res.status(404).json({
-//                 message: "Job applicant profile does not exist",
-//               });
-//               return;
-//             }
-//             // Merge user info with job applicant details and send the combined data
-//             const response = {
-//               ...userInfo,
-//               ...jobApplicant.toObject(), // Convert the Mongoose document to a plain JavaScript object
-//             };
-//             res.json(response);
-//           })
-//           .catch((err) => {
-//             res.status(400).json(err);
-//           });
-//       }
-//     })
-//     .catch((err) => {
-//       res.status(400).json(err);
-//     });
-// });
-
 // Helper function to fetch and merge user details
 async function fetchAndMergeUserDetails(userId, callback) {
   try {
@@ -523,107 +367,6 @@ router.get("/user", jwtAuth, (req, res) => {
     }
   });
 });
-
-
-// update user details
-// router.put("/user", jwtAuth, (req, res) => {
-//   const user = req.user;
-//   const data = req.body;
-//   // console.log(data)
-//   if (user.type == "recruiter") {
-//     Recruiter.findOne({ userId: user._id })
-//       .then((recruiter) => {
-//         if (recruiter == null) {
-//           res.status(404).json({
-//             message: "User does not exist",
-//           });
-//           return;
-//         }
-//         if (data.name) {
-//           recruiter.name = data.name;
-//         }
-//         if(data.email){
-//           recruiter.email = data.email
-//         }
-//         if (data.contactNumber) {
-//           recruiter.contactNumber = data.contactNumber;
-//         }
-//         if (data.profile) {
-//           recruiter.profile = data.profile;
-//         }
-//         if (data.Company){
-//           recruiter.Company = data.Company
-//         }
-//         if (data.YearsExperience){
-//           recruiter.YearsExperience = data.YearsExperience
-//         }
-//         if (data.bio) {
-//           recruiter.bio = data.bio;
-//         }
-//         recruiter
-//           .save()
-//           .then(() => {
-//             res.json({
-//               message: "User information updated successfully",
-//             });
-//           })
-//           .catch((err) => {
-//             res.status(400).json(err);
-//           });
-//       })
-//       .catch((err) => {
-//         res.status(400).json(err);
-//       });
-//   } else {
-//     JobApplicant.findOne({ userId: user._id })
-//       .then((jobApplicant) => {
-//         if (jobApplicant == null) {
-//           res.status(404).json({
-//             message: "User does not exist",
-//           });
-//           return;
-//         }
-//         if (data.name) {
-//           jobApplicant.name = data.name;
-//         }
-//         if (data.email){
-//           console.log("yes")
-//           jobApplicant.email = data.email
-//         }
-//         // if (data.contactNumber) {
-//         //   jobApplicant.contactNumber = data.contactNumber;
-//         // }
-//         if (data.education) {
-//           jobApplicant.education = data.education;
-//         }
-//         if (data.skills) {
-//           jobApplicant.skills = data.skills;
-//         }
-//         if (data.resume) {
-//           jobApplicant.resume = data.resume;
-//         }
-//         if (data.profile) {
-//           jobApplicant.profile = data.profile;
-//         }
-//         console.log(jobApplicant.email);
-//         jobApplicant
-//           .save()
-//           .then(() => {
-//             console.log("Heavy")
-//             res.json({
-//               message: "User information updated successfully",
-//             });
-//           })
-//           .catch((err) => {
-//             res.status(400).json(err);
-//           });
-//       })
-//       .catch((err) => {
-//         res.status(400).json(err);
-//       });
-//   }
-// });
-
 
 router.put("/user", jwtAuth, async (req, res) => {
   const user = req.user;
@@ -762,10 +505,6 @@ router.get("/jobs/:id/applications", jwtAuth, (req, res) => {
   }
   const jobId = req.params.id;
 
-  // const page = parseInt(req.query.page) ? parseInt(req.query.page) : 1;
-  // const limit = parseInt(req.query.limit) ? parseInt(req.query.limit) : 10;
-  // const skip = page - 1 >= 0 ? (page - 1) * limit : 0;
-
   let findParams = {
     jobId: jobId,
     recruiterId: user._id,
@@ -783,8 +522,6 @@ router.get("/jobs/:id/applications", jwtAuth, (req, res) => {
   Application.find(findParams)
     .collation({ locale: "en" })
     .sort(sortParams)
-    // .skip(skip)
-    // .limit(limit)
     .then((applications) => {
       res.json(applications);
     })
@@ -796,10 +533,6 @@ router.get("/jobs/:id/applications", jwtAuth, (req, res) => {
 // recruiter/applicant gets all his applications [pagination]
 router.get("/applications", jwtAuth, (req, res) => {
   const user = req.user;
-
-  // const page = parseInt(req.query.page) ? parseInt(req.query.page) : 1;
-  // const limit = parseInt(req.query.limit) ? parseInt(req.query.limit) : 10;
-  // const skip = page - 1 >= 0 ? (page - 1) * limit : 0;
 
   Application.aggregate([
     {
@@ -1228,39 +961,5 @@ router.get("/rating", jwtAuth, async (req, res) => {
     res.status(500).json({ message: "An error occurred while fetching the rating." });
   }
 });
-
-
-// Application.findOne({
-//   _id: id,
-//   userId: user._id,
-// })
-//   .then((application) => {
-//     application.status = status;
-//     application
-//       .save()
-//       .then(() => {
-//         res.json({
-//           message: `Application ${status} successfully`,
-//         });
-//       })
-//       .catch((err) => {
-//         res.status(400).json(err);
-//       });
-//   })
-//   .catch((err) => {
-//     res.status(400).json(err);
-//   });
-
-// router.get("/jobs", (req, res, next) => {
-//   passport.authenticate("jwt", { session: false }, function (err, user, info) {
-//     if (err) {
-//       return next(err);
-//     }
-//     if (!user) {
-//       res.status(401).json(info);
-//       return;
-//     }
-//   })(req, res, next);
-// });
 
 module.exports = router;

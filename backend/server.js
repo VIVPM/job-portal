@@ -3,22 +3,13 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passportConfig = require('./lib/passportConfig');
 const cors = require('cors');
-// const pdf = require('html-pdf');
 const fs = require('fs');
-// const pdfTemplate = require('./documents');
 require('dotenv').config();
-// const functions = require('firebase-functions');
 const path = require("path");
 
 // MongoDB
 mongoose
   .connect(process.env.mongo_url
-    // ,{
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  //   useCreateIndex: true,
-  //   useFindAndModify: false
-  // }
   )
   .then((res) => console.log('Connected to DB'))
   .catch((err) => console.log(err));
@@ -59,8 +50,6 @@ app.get("*", (req, res) => {
   }
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
-
-// exports.api = functions.https.onRequest(app);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}!`);

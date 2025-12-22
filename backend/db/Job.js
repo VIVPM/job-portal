@@ -42,12 +42,6 @@ let schema = new mongoose.Schema(
     },
     jobDescription:{
       type:String,
-      // validate: {
-      //   validator: function (v) {
-      //     return v.split(" ").filter((ele) => ele != "").length <= 250;
-      //   },
-      //   msg: "Job Description should not be greater than 250 words",
-      // },
     },
     activeApplications: {
       type: Number,

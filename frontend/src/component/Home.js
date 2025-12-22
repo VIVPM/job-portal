@@ -17,7 +17,6 @@ import {
   Checkbox,
 } from "@material-ui/core";
 import Rating from "@material-ui/lab/Rating";
-// import Pagination from "@material-ui/lab/Pagination";
 import axios from "axios";
 import SearchIcon from "@material-ui/icons/Search";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -50,22 +49,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
 }));
-
-// function JobDescription({ jobDescriptions }) {
-//   return (
-//     <Grid container spacing={2}>
-//       <Grid item xs={12}>
-//         <strong>Job Description:</strong>
-//       </Grid>
-//       {jobDescriptions.map((desc, index) => (
-//         <Grid item xs={12} key={index}>
-//           {index + 1}. {desc}.
-//         </Grid>
-//       ))}
-//     </Grid>
-//   );
-// }
-
 
 const JobTile = (props) => {
   const classes = useStyles();

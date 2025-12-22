@@ -231,15 +231,6 @@ const Profile = (props) => {
       });
   };
 
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
-
-  // const editDetails = () => {
-  //   setOpen(true);
-  // };
-
   const handleUpdate = () => {
     console.log(profileDetails);
 
@@ -255,18 +246,6 @@ const Profile = (props) => {
           return obj;
         }),
     };
-    // if (phone !== "") {
-    //   updatedDetails = {
-    //     ...profileDetails,
-    //     contactNumber: `+${phone}`,
-    //   };
-    // } else {
-    //   updatedDetails = {
-    //     ...profileDetails,
-    //     contactNumber: "",
-    //   };
-    // }
-    // console.log(profileDetails)
     console.log(updatedDetails)
     axios
       .put(apiList.user, updatedDetails, {
@@ -463,9 +442,6 @@ const Profile = (props) => {
           </Paper>
         </Grid>
       </Grid>
-      {/* <Modal open={open} onClose={handleClose} className={classes.popupDialog}> */}
-
-      {/* </Modal> */}
     </>
   );
 };

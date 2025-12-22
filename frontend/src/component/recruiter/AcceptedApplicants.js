@@ -5,20 +5,13 @@ import {
   Chip,
   Grid,
   IconButton,
-  // InputAdornment,
   makeStyles,
   Paper,
-  // TextField,
   Typography,
   Modal,
-  // Slider,
-  // FormControlLabel,
-  // FormGroup,
-  // MenuItem,
   Checkbox,
   Avatar,
 } from "@material-ui/core";
-// import { useParams } from "react-router-dom";
 import Rating from "@material-ui/lab/Rating";
 import { saveAs } from 'file-saver';
 import axios from "axios";
@@ -91,79 +84,6 @@ const FilterPopup = (props) => {
         }}
       >
         <Grid container direction="column" alignItems="center" spacing={3}>
-          {/* <Grid container item alignItems="center">
-            <Grid item xs={3}>
-              Application Status
-            </Grid>
-            <Grid
-              container
-              item
-              xs={9}
-              justifyContent="space-around"
-              // alignItems="center"
-            >
-              <Grid item>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="rejected"
-                      checked={searchOptions.status.rejected}
-                      onChange={(event) => {
-                        setSearchOptions({
-                          ...searchOptions,
-                          status: {
-                            ...searchOptions.status,
-                            [event.target.name]: event.target.checked,
-                          },
-                        });
-                      }}
-                    />
-                  }
-                  label="Rejected"
-                />
-              </Grid>
-              <Grid item>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="applied"
-                      checked={searchOptions.status.applied}
-                      onChange={(event) => {
-                        setSearchOptions({
-                          ...searchOptions,
-                          status: {
-                            ...searchOptions.status,
-                            [event.target.name]: event.target.checked,
-                          },
-                        });
-                      }}
-                    />
-                  }
-                  label="Applied"
-                />
-              </Grid>
-              <Grid item>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name="shortlisted"
-                      checked={searchOptions.status.shortlisted}
-                      onChange={(event) => {
-                        setSearchOptions({
-                          ...searchOptions,
-                          status: {
-                            ...searchOptions.status,
-                            [event.target.name]: event.target.checked,
-                          },
-                        });
-                      }}
-                    />
-                  }
-                  label="Shortlisted"
-                />
-              </Grid>
-            </Grid>
-          </Grid> */}
           <Grid container item alignItems="center">
             <Grid item xs={3}>
               Sort
@@ -475,49 +395,6 @@ const ApplicationTile = (props) => {
   const handleCloseEndJob = () => {
     setOpenEndJob(false);
   };
-
-  // const colorSet = {
-  //   applied: "#3454D1",
-  //   shortlisted: "#DC851F",
-  //   accepted: "#09BC8A",
-  //   rejected: "#D1345B",
-  //   deleted: "#B49A67",
-  //   cancelled: "#FF8484",
-  //   finished: "#4EA5D9",
-  // };
-
-  // const getResume = () => {
-  //   if (
-  //     application.jobApplicant.resume &&
-  //     application.jobApplicant.resume !== ""
-  //   ) {
-  //     const address = `${application.jobApplicant.resume}`;
-  //     console.log(address);
-  //     axios(address, {
-  //       method: "GET",
-  //       responseType: "blob",
-  //     })
-  //       .then((response) => {
-  //         const file = new Blob([response.data], { type: "application/pdf" });
-  //         const fileURL = URL.createObjectURL(file);
-  //         window.open(fileURL);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         setPopup({
-  //           open: true,
-  //           severity: "error",
-  //           message: "Error",
-  //         });
-  //       });
-  //   } else {
-  //     setPopup({
-  //       open: true,
-  //       severity: "error",
-  //       message: "No resume found",
-  //     });
-  //   }
-  // };
 
   const updateStatus = (status) => {
     const address = `${apiList.applications}/${application._id}`;

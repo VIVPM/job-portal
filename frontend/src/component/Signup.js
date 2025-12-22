@@ -131,26 +131,6 @@ const MultifieldInput = (props) => {
           </Grid>
         </Grid>
       ))}
-      {/* <Grid item>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() =>
-            setEducation([
-              ...education,
-              {
-                institutionName: "",
-                startYear: "",
-                endYear: "",
-                Percentage:"",
-              },
-            ])
-          }
-          className={classes.inputBox}
-        >
-          Add another institution details
-        </Button>
-      </Grid> */}
       <Grid item container style={{ justifyContent: "center" }}>
         <Grid item>
           <Button
@@ -214,8 +194,6 @@ const Login = (props) => {
   });
 
   const [phone, setPhone] = useState("");
-  // const [phone1,setPhone1] = useState("");
-
   const getPasswordStrength = (password) => {
     let strength = 0;
 
