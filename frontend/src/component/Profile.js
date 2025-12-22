@@ -3,7 +3,6 @@ import {
   Button,
   Grid,
   Typography,
-  // Modal,
   Paper,
   makeStyles,
   TextField,
@@ -25,15 +24,12 @@ const useStyles = makeStyles((theme) => ({
   body: {
     backgroundColor: '#64b5f6',
     height: "100%",
-    
-    // width:"200px"
   },
   popupDialog: {
     height: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    // padding: "30px",
   },
   avatar: {
     width: theme.spacing(17), // 136px
@@ -165,8 +161,6 @@ const MultifieldInput = (props) => {
 const Profile = (props) => {
   const classes = useStyles();
   const setPopup = useContext(SetPopupContext);
-  // const [userData, setUserData] = useState();
-  // const [setOpen] = useState(false);
   const [phone, setPhone] = useState("");
   const [profileDetails, setProfileDetails] = useState({
     name: "",
@@ -207,7 +201,6 @@ const Profile = (props) => {
         },
       })
       .then((response) => {
-        // console.log(response.data);
         setProfileDetails(response.data);
         if (response.data.education.length > 0) {
           setEducation(
@@ -269,7 +262,6 @@ const Profile = (props) => {
         });
         console.log(err.response);
       });
-    // setOpen(false);
   };
 
 
@@ -323,7 +315,6 @@ const Profile = (props) => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              // backgroundColor: '#64b5f6',
             }}
           >
             <Avatar

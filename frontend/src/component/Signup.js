@@ -29,7 +29,6 @@ import isAuth from "../lib/isAuth";
 const useStyles = makeStyles((theme) => ({
   body: {
     padding: "60px 60px",
-    // backgroundColor: '#64b5f6',
   },
   inputBox: {
     width: "400px",
@@ -134,7 +133,6 @@ const MultifieldInput = (props) => {
       <Grid item container style={{ justifyContent: "center" }}>
         <Grid item>
           <Button
-            // style = {{blockSize:"5px"}}
             variant="contained"
             color="secondary"
             onClick={() =>

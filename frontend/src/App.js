@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     minHeight: "90vh",
-    // paddingTop: "64px",
     boxSizing: "border-box",
     margin:0,
     width: "100%",

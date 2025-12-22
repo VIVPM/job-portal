@@ -115,7 +115,6 @@ const CreateJobs = (props) => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                // backgroundColor: '#64b5f6',
               }}
             >
               <Grid

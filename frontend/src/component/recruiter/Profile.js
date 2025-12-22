@@ -3,7 +3,6 @@ import {
   Button,
   Grid,
   Typography,
-  // Modal,
   Paper,
   makeStyles,
   Avatar,
@@ -28,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    // padding: "30px",
   },
   avatar: {
     width: theme.spacing(17), // 136px
@@ -148,8 +146,6 @@ const Profile = (props) => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              // backgroundColor: '#64b5f6',
-              //   width: "60%",
             }}
           >
             <Avatar
@@ -172,9 +168,6 @@ const Profile = (props) => {
               </Grid>
               <Grid item>
                 <TextField
-                  // style={{
-                  //   marginTop: "5px"
-                  // }}
                   label="Email"
                   value={profileDetails.email}
                   onChange={(event) => handleInput("email", event.target.value)}
@@ -187,7 +180,6 @@ const Profile = (props) => {
                 item
                 container
                 className={classes.inputBox}
-                // style={{ paddingLeft: 0, paddingRight: 0 }}
               >
                   <Grid item xs= {6}>
                     <TextField
