@@ -26,11 +26,11 @@ JOBPORTAL_PATH =  Path(__file__).parent / "JobPortal.js"
 # Load environment & configure Gemini API
 # ------------------------------------------------------------------------------
 
-load_dotenv()  # expects GOOGLE_API_KEY in your .env
-api_key = os.getenv("GOOGLE_API_KEY")
+load_dotenv()  # expects GEMINI_API_KEY in your .env
+api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
-    raise RuntimeError("GOOGLE_API_KEY not set in environment")
-model = GoogleGenerativeAI(model="gemini-2.0-flash",temperature=0.6)
+    raise RuntimeError("GEMINI_API_KEY not set in environment")
+model = GoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.4)
 
 # ------------------------------------------------------------------------------
 # FastAPI setup
@@ -148,6 +148,52 @@ async def resume_checker(
 class ConversationItem(BaseModel):
     role: str   # "user" or "model"
     text: str
+
+# ── Chatbot endpoint ──────────────────────────────────────────────────────────
+
+class ChatRequest(BaseModel):
+    message: str
+    history: List[ConversationItem] = []  # previous turns for context
+
+class ChatResponse(BaseModel):
+    reply: str
+
+@app.post("/api/chat", response_model=ChatResponse)
+def chat(req: ChatRequest):
+    """
+    Stateless chatbot endpoint.
+    - Reads the JobPortal system context from JobPortal.js.
+    - Builds a full prompt with conversation history.
+    - Calls Gemini and returns the reply.
+    Frontend only sends the message + history; all LLM logic lives here.
+    """
+    try:
+        system_context = JOBPORTAL_PATH.read_text(encoding="utf-8")
+        # Extract just the template literal content (strip JS export boilerplate)
+        if 'const jobPortal = `' in system_context:
+            system_context = system_context.split('const jobPortal = `', 1)[1]
+            system_context = system_context.rsplit('`', 1)[0].strip()
+    except Exception:
+        system_context = "You are a helpful assistant for a job portal."
+
+    # Build conversation history string
+    history_text = ""
+    for turn in req.history[-10:]:  # keep last 10 turns to avoid token overflow
+        prefix = "User" if turn.role == "user" else "Assistant"
+        history_text += f"{prefix}: {turn.text}\n"
+
+    prompt = f"""You are a helpful assistant for the following job portal. Only answer questions related to it.
+
+Context:
+{system_context}
+
+Conversation so far:
+{history_text}
+User: {req.message}
+Assistant:"""
+
+    reply = model(prompt)
+    return ChatResponse(reply=reply.strip())
 
 @app.get("/api/jobportal")
 def get_jobportal():

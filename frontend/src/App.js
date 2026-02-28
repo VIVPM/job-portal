@@ -23,6 +23,7 @@ import Contact from "./component/Contact";
 import ForgotPassword from "./component/ForgotPassowrd";
 import ResetPassword from "./component/ResetPassword";
 import ColdMailGenerator from "./component/ColdEmailGenerator";
+import Chatbot from "./component/Chatbot";
 import './App.css'
 
 import JobStatsAndTableWithDateFilter from './component/recruiter/JobStatsAndTableWithDateFilter';
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     minHeight: "90vh",
     boxSizing: "border-box",
-    margin:0,
+    margin: 0,
     width: "100%",
     backgroundRepeat: 'no-repeat',  // Prevents repeating the background image
     backgroundColor: '#bbdefb',
@@ -64,7 +65,7 @@ function App() {
                 <Welcome />
               </Route>
               <Route exact path="/login" >
-                <Login/>
+                <Login />
               </Route>
               <Route exact path="/signup">
                 <Signup />
@@ -92,21 +93,21 @@ function App() {
               <Route exact path="/addjob">
                 <CreateJobs />
               </Route>
-              <Route exact path = "/analytics">
+              <Route exact path="/analytics">
                 <ApplicationStatusPieChart />
-                <JobStatsAndTableWithDateFilter/>
+                <JobStatsAndTableWithDateFilter />
               </Route>
               <Route exact path="/myjobs">
                 <MyJobs />
               </Route>
               <Route exact path="/forgot-password">
-                <ForgotPassword/>
+                <ForgotPassword />
               </Route>
               <Route exact path="/reset-password">
                 <ResetPassword />
               </Route>
               <Route exact path="/cold-email">
-                <ColdMailGenerator/>
+                <ColdMailGenerator />
               </Route>
               <Route exact path="/job/applications/:jobId">
                 <JobApplications />
@@ -114,9 +115,9 @@ function App() {
               <Route exact path="/employees">
                 <AcceptedApplicants />
               </Route>
-              <Route exact path = "/resume">
+              <Route exact path="/resume">
                 <Context>
-                <Body/>
+                  <Body />
                 </Context>
               </Route>
               <Route>
@@ -136,6 +137,7 @@ function App() {
           severity={popup.severity}
           message={popup.message}
         />
+        <Chatbot />
       </SetPopupContext.Provider>
     </BrowserRouter>
   );
