@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from PyPDF2 import PdfReader
-from langchain_google_genai import GoogleGenerativeAI
+from google import genai
 from fastapi import Response
 import uvicorn
 from typing import List
@@ -30,7 +30,17 @@ load_dotenv()  # expects GEMINI_API_KEY in your .env
 api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise RuntimeError("GEMINI_API_KEY not set in environment")
-model = GoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.4)
+
+gemini_client = genai.Client(api_key=api_key)
+GEMINI_MODEL = "gemini-2.0-flash"
+
+def call_gemini(prompt: str) -> str:
+    """Single helper to call Gemini and return the text response."""
+    response = gemini_client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=prompt,
+    )
+    return response.text
 
 # ------------------------------------------------------------------------------
 # FastAPI setup
@@ -142,8 +152,8 @@ async def resume_checker(
     pdf_text = read_pdf_bytes(contents)
 
     prompt = build_prompt(pdf_text, job_description, analysis_type)
-    response = model(prompt)
-    return {"result":response}
+    response = call_gemini(prompt)
+    return {"result": response}
 
 class ConversationItem(BaseModel):
     role: str   # "user" or "model"
@@ -192,7 +202,7 @@ Conversation so far:
 User: {req.message}
 Assistant:"""
 
-    reply = model(prompt)
+    reply = call_gemini(prompt)
     return ChatResponse(reply=reply.strip())
 
 @app.get("/api/jobportal")
