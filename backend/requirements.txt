@@ -1,5 +1,6 @@
 streamlit
 google-generativeai
+google-genai
 python-dotenv
 fastapi
 uvicorn
@@ -10,5 +11,4 @@ langchain_community
 langchain_google_genai
 langchain_groq
 python-docx
-python-dotenv
 bs4
