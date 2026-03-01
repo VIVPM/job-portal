@@ -22,7 +22,6 @@ import SearchIcon from "@material-ui/icons/Search";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import ResumeCheckerModal from "./ResumeCheckerModal";
 import { SetPopupContext } from "../App";
 
 import apiList from "../lib/apiList";
@@ -53,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
 const JobTile = (props) => {
   const classes = useStyles();
   const { job } = props;
-  const [checkerOpen, setCheckerOpen] = useState(false);
   const setPopup = useContext(SetPopupContext);
 
   const [open, setOpen] = useState(false);
@@ -124,20 +122,7 @@ const JobTile = (props) => {
               <Chip key={skill} label={skill} style={{ marginRight: "2px" }} />
             ))}
           </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              style={{ marginTop: 8 }}
-              onClick={() => setCheckerOpen(true)}
-            >
-              Resume Checker
-            </Button>
-            <ResumeCheckerModal
-              open={checkerOpen}
-              onClose={() => setCheckerOpen(false)}
-              jobDescription={job.jobDescription}
-            />
-          </Grid>
+
         </Grid>
         <Grid item xs={3}>
           <Button
@@ -218,7 +203,7 @@ const FilterPopup = (props) => {
               item
               xs={9}
               justifyContent="space-around"
-              // alignItems="center"
+            // alignItems="center"
             >
               <Grid item>
                 <FormControlLabel
@@ -558,7 +543,7 @@ const Home = (props) => {
   const setPopup = useContext(SetPopupContext);
   useEffect(() => {
     getData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getData = () => {

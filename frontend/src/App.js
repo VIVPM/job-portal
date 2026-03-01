@@ -22,8 +22,6 @@ import Body from "./components/Body/Body";
 import Contact from "./component/Contact";
 import ForgotPassword from "./component/ForgotPassowrd";
 import ResetPassword from "./component/ResetPassword";
-import ColdMailGenerator from "./component/ColdEmailGenerator";
-import Chatbot from "./component/Chatbot";
 import './App.css'
 
 import JobStatsAndTableWithDateFilter from './component/recruiter/JobStatsAndTableWithDateFilter';
@@ -82,6 +80,9 @@ function App() {
               <Route exact path="/applications">
                 <Applications />
               </Route>
+              <Route exact path="/job/applications/:jobId">
+                <JobApplications />
+              </Route>
               <Route exact path="/profile">
                 {userType() === "recruiter" ? (
 
@@ -106,12 +107,8 @@ function App() {
               <Route exact path="/reset-password">
                 <ResetPassword />
               </Route>
-              <Route exact path="/cold-email">
-                <ColdMailGenerator />
-              </Route>
-              <Route exact path="/job/applications/:jobId">
-                <JobApplications />
-              </Route>
+
+
               <Route exact path="/employees">
                 <AcceptedApplicants />
               </Route>
@@ -137,9 +134,8 @@ function App() {
           severity={popup.severity}
           message={popup.message}
         />
-        <Chatbot />
       </SetPopupContext.Provider>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 }
 
