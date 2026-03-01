@@ -1,6 +1,6 @@
 # 💼 Job Portal
 
-A MERN stack job portal with **AI-powered features** — resume analysis, ATS scoring, and cold email generation. Supports two user roles: **Applicants** and **Recruiters**, with persistent login sessions and JWT-secured REST APIs.
+A MERN stack job portal. Supports two user roles: **Applicants** and **Recruiters**, with persistent login sessions and JWT-secured REST APIs.
 
 ---
 
@@ -14,8 +14,6 @@ graph TB
             JobSearch["Job Search + Fuzzy Filter"]
             Applications["My Applications"]
             ApplicantProfile["Profile + Resume Upload"]
-            ResumeChecker["AI Resume Checker"]
-            EmailGen["Cold Email Generator"]
         end
         subgraph RecruiterViews["Recruiter Views"]
             PostJob["Post / Edit / Delete Jobs"]
@@ -31,29 +29,19 @@ graph TB
         DownloadAPI["/host — File Serving"]
     end
 
-    subgraph PythonBackend["Python Backend (FastAPI + AI)"]
-        ResumeAPI["/api/resume-checker\nGemini 2.0 Flash"]
-        EmailAPI["/api/generate-emails\nGroq + LangChain"]
-        ConvAPI["/api/conversation\nChat Logger"]
-    end
 
     subgraph Services["Services"]
         MongoDB[("MongoDB")]
         Cloudinary["Cloudinary\n(Profile Photos)"]
         LocalFS["Local File System\n(Resumes)"]
-        Gemini["Google Gemini\n(Resume Analysis)"]
-        Groq["Groq + LangChain\n(Email Generation)"]
     end
 
     Frontend -->|JWT REST| NodeBackend
-    Frontend -->|AI Features| PythonBackend
     AuthAPI --> MongoDB
     MainAPI --> MongoDB
     UploadAPI --> Cloudinary
     UploadAPI --> LocalFS
     DownloadAPI --> LocalFS
-    ResumeAPI --> Gemini
-    EmailAPI --> Groq
 ```
 
 ---
@@ -66,11 +54,6 @@ graph TB
 - **Application Tracking** — View status of all submitted applications
 - **Resume Upload** — Upload and manage resume (PDF)
 - **Profile Photo** — Upload profile picture (Cloudinary)
-- **AI Resume Checker** — Upload resume (PDF) + optional job description → get instant AI feedback:
-  - Quick Scan (3 strengths, 2 improvements, ATS score)
-  - Detailed Analysis (section-by-section review, 5 dimensions scored out of 10)
-  - ATS Optimization (keyword analysis, tailoring advice, ATS compatibility score)
-- **Cold Email Generator** — Paste a job listing URL + upload your resume → AI generates a personalized cold email per role found on the page
 
 ### 🏢 Recruiter Features
 - **Post Jobs** — Create job listings with title, description, type, salary, skills, duration
@@ -107,16 +90,7 @@ graph TB
 | Cloudinary | Profile photo storage |
 | nodemailer | Email support |
 
-### Python AI Backend
-| Tool | Purpose |
-|---|---|
-| FastAPI + Uvicorn | AI API server (port 8000) |
-| Google Gemini 2.0 Flash | Resume analysis & ATS scoring |
-| Groq + LangChain | Job extraction & cold email generation |
-| PyPDF2 / python-docx | Resume text extraction |
-| LangChain WebBaseLoader | Job listing page scraping |
 
----
 
 ## 📁 Project Structure
 
@@ -130,12 +104,7 @@ job-portal-internship/
 │   │   └── downloadRoutes.js  # File serving
 │   ├── db/                    # Mongoose models
 │   ├── lib/                   # Passport config, helpers
-│   ├── server.js              # Express app entry point (port 4444)
-│   ├── app.py                 # FastAPI AI server (port 8000)
-│   ├── chains.py              # LangChain chains (job extraction, email writing)
-│   ├── resume_parser.py       # Groq-powered resume skill/experience extractor
-│   ├── utils.py               # Text cleaning, file extraction helpers
-│   └── requirements.txt       # Python dependencies
+│   └── server.js              # Express app entry point (port 4444)
 ├── frontend/
 │   └── src/
 │       ├── component/         # Applicant-specific views
@@ -177,22 +146,7 @@ yarn dev    # development
 yarn start  # production
 ```
 
-### Python AI Backend (Port 8000)
 
-```bash
-cd backend
-pip install -r requirements.txt
-```
-
-Add to `.env`:
-```env
-GOOGLE_API_KEY=your_gemini_api_key
-GROQ_API_KEY=your_groq_api_key
-```
-
-```bash
-python app.py
-```
 
 ### Frontend (Port 3000)
 
@@ -215,13 +169,7 @@ yarn start
 | `/upload` | Resume PDF and profile photo upload |
 | `/host` | Serve uploaded files (resumes, photos) |
 
-### Python AI Server (`http://localhost:8000`)
 
-| Endpoint | Description |
-|---|---|
-| `POST /api/resume-checker` | Analyse PDF resume; quick/detailed/ATS modes |
-| `POST /api/generate-emails` | Scrape job URL + parse resume → cold emails |
-| `POST /api/conversation` | Append to conversation log |
 
 ---
 
