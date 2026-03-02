@@ -28,7 +28,7 @@ if (!fs.existsSync('./public/profile')) {
 const app = express();
 const port = process.env.port || 4444;
 
-app.use(express.static(path.join(__dirname, "build")));
+// app.use(express.static(path.join(__dirname, "build")));
 
 
 app.use(bodyParser.json()); // support json encoded bodies
@@ -44,12 +44,12 @@ app.use('/api', require('./routes/apiRoutes'));
 app.use('/upload', require('./routes/uploadRoutes'));
 app.use('/host', require('./routes/downloadRoutes'));
 
-app.get("*", (req, res) => {
-  if (req.originalUrl.startsWith("/api") || req.originalUrl.startsWith("/auth") || req.originalUrl.startsWith("/upload")) {
-    return res.status(404).json({ message: "API route not found" });
-  }
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+// app.get("*", (req, res) => {
+//   if (req.originalUrl.startsWith("/api") || req.originalUrl.startsWith("/auth") || req.originalUrl.startsWith("/upload")) {
+//     return res.status(404).json({ message: "API route not found" });
+//   }
+//   res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}!`);
